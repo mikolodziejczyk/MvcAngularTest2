@@ -13,7 +13,7 @@ export class FormActionsComponent implements OnInit {
   ngOnInit() {
   }
 
-  columnClass = BootstrapHtmlHelpers.editLabelOffsetClass + " " + BootstrapHtmlHelpers.editLabelClass;
+  columnClass = BootstrapHtmlHelpers.editLabelOffsetClass + " " + BootstrapHtmlHelpers.editValueClass;
 
   @Input() saveText: string = "Zapisz";
   @Input() cancelText: string = "Anuluj"

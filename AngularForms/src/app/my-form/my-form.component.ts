@@ -28,7 +28,7 @@ export class MyFormComponent implements OnInit {
   }
 
   async loadMetadata() {
-    this.formMetadata = await this.metadataService.getMetadata("assets/my-form-metadata.json");
+    this.formMetadata = await this.metadataService.getMetadata("/assets/my-form-metadata.json");
     this.controlMetadata = this.formMetadata.controls;
     this.createForm();
   }

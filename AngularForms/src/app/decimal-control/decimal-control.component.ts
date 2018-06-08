@@ -6,6 +6,7 @@ import { localeParseInt, localePaseFloat } from '../numberHelpers/localeNumberPa
 import { formatNumberPlain, formatNumber } from '../numberHelpers/localeNumberFormat';
 import { roundAwayFromZero } from '../numberHelpers/numberHelpers';
 import { DecimalControlMetadata } from './decimalControlMetadata';
+import { sprintf } from  "sprintf-js"
 
 @Component({
   selector: 'mko-decimal-control',

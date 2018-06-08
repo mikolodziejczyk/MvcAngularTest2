@@ -26,5 +26,12 @@ namespace McvAngularTest2.Controllers
 
             return View();
         }
+
+        public ActionResult Edit()
+        {
+            return View();
+        }
+
+
     }
 }
