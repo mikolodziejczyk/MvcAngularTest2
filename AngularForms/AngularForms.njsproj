@@ -1,0 +1,248 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>AngularForms</Name>
+    <RootNamespace>AngularForms</RootNamespace>
+    <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>359e9d53-150c-4c48-b0ee-c1f2b5d4a220</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>
+    </StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <NodejsPort>1337</NodejsPort>
+    <StartWebBrowser>true</StartWebBrowser>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="dist\" />
+    <Folder Include="dist\assets\" />
+    <Folder Include="e2e\" />
+    <Folder Include="src\" />
+    <Folder Include="src\app\" />
+    <Folder Include="src\app\another-component\" />
+    <Folder Include="src\app\checkbox-control\" />
+    <Folder Include="src\app\decimal-control\" />
+    <Folder Include="src\app\editor-form-row\" />
+    <Folder Include="src\app\errorMessages\" />
+    <Folder Include="src\app\form-actions\" />
+    <Folder Include="src\app\form-errors\" />
+    <Folder Include="src\app\form-row\" />
+    <Folder Include="src\app\formhelpers\" />
+    <Folder Include="src\app\generalControl\" />
+    <Folder Include="src\app\integer-control-old\" />
+    <Folder Include="src\app\integer-control\" />
+    <Folder Include="src\app\my-component\" />
+    <Folder Include="src\app\my-form\" />
+    <Folder Include="src\app\number-control\" />
+    <Folder Include="src\app\numberHelpers\" />
+    <Folder Include="src\app\operation-failed\" />
+    <Folder Include="src\app\overlay\" />
+    <Folder Include="src\app\string-component\" />
+    <Folder Include="src\app\textInputControlBase\" />
+    <Folder Include="src\app\validation-errors\" />
+    <Folder Include="src\assets\" />
+    <Folder Include="src\environments\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".angular-cli.json" />
+    <Content Include=".editorconfig" />
+    <Content Include=".gitignore" />
+    <Content Include="dist\3rdpartylicenses.txt" />
+    <Content Include="dist\assets\cancelled.html" />
+    <Content Include="dist\assets\done.html" />
+    <Content Include="dist\assets\my-form-metadata.json" />
+    <Content Include="dist\favicon.ico" />
+    <Content Include="dist\index.html" />
+    <Content Include="dist\inline.bundle.js.map" />
+    <Content Include="dist\main.bundle.js.map" />
+    <Content Include="dist\polyfills.bundle.js.map" />
+    <Content Include="dist\styles.bundle.css" />
+    <Content Include="dist\styles.bundle.css.map" />
+    <Content Include="e2e\tsconfig.e2e.json" />
+    <Content Include="package.json" />
+    <Content Include="README.md" />
+    <Content Include="src\app\another-component\another-component.component.css" />
+    <Content Include="src\app\another-component\another-component.component.html" />
+    <Content Include="src\app\app.component.css" />
+    <Content Include="src\app\app.component.html" />
+    <Content Include="src\app\checkbox-control\checkbox-control.component.css" />
+    <Content Include="src\app\checkbox-control\checkbox-control.component.html" />
+    <Content Include="src\app\decimal-control\decimal-control.component.css" />
+    <Content Include="src\app\decimal-control\decimal-control.component.html" />
+    <Content Include="src\app\editor-form-row\editor-form-row.component.css" />
+    <Content Include="src\app\editor-form-row\editor-form-row.component.html" />
+    <Content Include="src\app\form-actions\form-actions.component.html" />
+    <Content Include="src\app\form-actions\form-actions.component.less" />
+    <Content Include="src\app\form-errors\form-errors.component.html" />
+    <Content Include="src\app\form-errors\form-errors.component.less" />
+    <Content Include="src\app\form-row\form-row.component.html" />
+    <Content Include="src\app\form-row\form-row.component.less" />
+    <Content Include="src\app\integer-control-old\integer-control.component.spec.xts" />
+    <Content Include="src\app\integer-control-old\integer-control.component.xcss" />
+    <Content Include="src\app\integer-control-old\integer-control.component.xts" />
+    <Content Include="src\app\integer-control-old\integer-control.component.xxxhtml" />
+    <Content Include="src\app\integer-control\integer-control.component.css" />
+    <Content Include="src\app\integer-control\integer-control.component.html" />
+    <Content Include="src\app\my-component\my-component.component.css" />
+    <Content Include="src\app\my-component\my-component.component.html" />
+    <Content Include="src\app\my-form\my-form.component.css" />
+    <Content Include="src\app\my-form\my-form.component.html" />
+    <Content Include="src\app\number-control\number-control.component.css" />
+    <Content Include="src\app\number-control\number-control.component.html" />
+    <Content Include="src\app\operation-failed\operation-failed.component.css" />
+    <Content Include="src\app\operation-failed\operation-failed.component.html" />
+    <Content Include="src\app\overlay\overlay.component.html" />
+    <Content Include="src\app\overlay\overlay.component.less" />
+    <Content Include="src\app\string-component\string-control.component.css" />
+    <Content Include="src\app\string-component\string-control.component.html" />
+    <Content Include="src\app\textInputControlBase\textInputControlBase.md" />
+    <Content Include="src\app\validation-errors\validation-errors.component.html" />
+    <Content Include="src\app\validation-errors\validation-errors.component.less" />
+    <Content Include="src\assets\.gitkeep" />
+    <Content Include="src\assets\cancelled.html" />
+    <Content Include="src\assets\done.html" />
+    <Content Include="src\assets\my-form-metadata.json" />
+    <Content Include="src\favicon.ico" />
+    <Content Include="src\index.html" />
+    <Content Include="src\styles.css" />
+    <Content Include="src\tsconfig.app.json" />
+    <Content Include="src\tsconfig.spec.json" />
+    <Content Include="tsconfig.json" />
+    <Content Include="tslint.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="e2e\app.e2e-spec.ts" />
+    <TypeScriptCompile Include="e2e\app.po.ts" />
+    <TypeScriptCompile Include="src\app\another-component\another-component.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\another-component\another-component.component.ts" />
+    <TypeScriptCompile Include="src\app\app.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\app.component.ts" />
+    <TypeScriptCompile Include="src\app\app.module.ts" />
+    <TypeScriptCompile Include="src\app\bootstrapHtmlHelpers.ts" />
+    <TypeScriptCompile Include="src\app\checkbox-control\checkbox-control.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\checkbox-control\checkbox-control.component.ts" />
+    <TypeScriptCompile Include="src\app\checkbox-control\checkboxControlMetadata.ts" />
+    <TypeScriptCompile Include="src\app\decimal-control\decimal-control.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\decimal-control\decimal-control.component.ts" />
+    <TypeScriptCompile Include="src\app\decimal-control\decimalControlMetadata.ts" />
+    <TypeScriptCompile Include="src\app\editor-form-row\editor-form-row.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\editor-form-row\editor-form-row.component.ts" />
+    <TypeScriptCompile Include="src\app\errorMessages\errorMessageFormatter.spec.ts" />
+    <TypeScriptCompile Include="src\app\errorMessages\errorMessageFormatter.ts" />
+    <TypeScriptCompile Include="src\app\errorMessages\formattableError.ts" />
+    <TypeScriptCompile Include="src\app\errorMessages\validationErrorMessages.spec.ts" />
+    <TypeScriptCompile Include="src\app\errorMessages\validationErrorMessages.ts" />
+    <TypeScriptCompile Include="src\app\form-actions\form-actions.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\form-actions\form-actions.component.ts" />
+    <TypeScriptCompile Include="src\app\form-errors\form-errors.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\form-errors\form-errors.component.ts" />
+    <TypeScriptCompile Include="src\app\form-metadata.service.ts" />
+    <TypeScriptCompile Include="src\app\form-row\form-row.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\form-row\form-row.component.ts" />
+    <TypeScriptCompile Include="src\app\formhelpers\errorsToErrorObject.ts" />
+    <TypeScriptCompile Include="src\app\formhelpers\formHelpers.ts" />
+    <TypeScriptCompile Include="src\app\formhelpers\multilineTextToHtml.ts" />
+    <TypeScriptCompile Include="src\app\formMetadata.ts" />
+    <TypeScriptCompile Include="src\app\formSaveReply.ts" />
+    <TypeScriptCompile Include="src\app\generalControl\generalControl.ts" />
+    <TypeScriptCompile Include="src\app\generalControl\generalControlMetadata.ts" />
+    <TypeScriptCompile Include="src\app\integer-control\integer-control.component.ts" />
+    <TypeScriptCompile Include="src\app\integer-control\integerControlMetadata.ts" />
+    <TypeScriptCompile Include="src\app\integer-control\interger-control.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\my-component\my-component.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\my-component\my-component.component.ts" />
+    <TypeScriptCompile Include="src\app\my-form\my-form-data.ts" />
+    <TypeScriptCompile Include="src\app\my-form\my-form-save.service.ts" />
+    <TypeScriptCompile Include="src\app\my-form\my-form.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\my-form\my-form.component.ts" />
+    <TypeScriptCompile Include="src\app\number-control\number-control.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\number-control\number-control.component.ts" />
+    <TypeScriptCompile Include="src\app\numberHelpers\localeNumberFormat.ts" />
+    <TypeScriptCompile Include="src\app\numberHelpers\localeNumberParse.ts" />
+    <TypeScriptCompile Include="src\app\numberHelpers\numberFormat.ts" />
+    <TypeScriptCompile Include="src\app\numberHelpers\numberHelpers.ts" />
+    <TypeScriptCompile Include="src\app\operation-failed\operation-failed.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\operation-failed\operation-failed.component.ts" />
+    <TypeScriptCompile Include="src\app\overlay\overlay.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\overlay\overlay.component.ts" />
+    <TypeScriptCompile Include="src\app\string-component\string-control.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\string-component\string-control.component.ts" />
+    <TypeScriptCompile Include="src\app\string-component\stringControlMetadata.ts" />
+    <TypeScriptCompile Include="src\app\textInputControlBase\textInputControlBase.ts" />
+    <TypeScriptCompile Include="src\app\textInputControlBase\textInputControlBaseMetadata.ts" />
+    <TypeScriptCompile Include="src\app\uniqueControlIdGenerator.ts" />
+    <TypeScriptCompile Include="src\app\validation-errors\validation-errors.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\validation-errors\validation-errors.component.ts" />
+    <TypeScriptCompile Include="src\app\validationErrorHelpers.ts" />
+    <TypeScriptCompile Include="src\environments\environment.prod.ts" />
+    <TypeScriptCompile Include="src\environments\environment.ts" />
+    <TypeScriptCompile Include="src\main.ts" />
+    <TypeScriptCompile Include="src\polyfills.ts" />
+    <TypeScriptCompile Include="src\test.ts" />
+    <TypeScriptCompile Include="src\typings.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="dist\inline.bundle.js" />
+    <Compile Include="dist\main.bundle.js" />
+    <Compile Include="dist\polyfills.bundle.js" />
+    <Compile Include="karma.conf.js" />
+    <Compile Include="protractor.conf.js" />
+  </ItemGroup>
+  <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

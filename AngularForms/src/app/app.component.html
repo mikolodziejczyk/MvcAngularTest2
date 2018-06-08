@@ -1,0 +1,105 @@
+<app-my-form></app-my-form>
+
+<!-- The content below is only a placeholder and can be replaced.
+<h1 uniqueId>This should use a shared library</h1>
+<sample-component uniqueId></sample-component>
+<p uniqueId>This should have an unique id.</p>
+<app-my-component></app-my-component> -->
+<!-- 
+<div class="container-fluid">
+    <form class="form-horizontal" [formGroup]="myForm" novalidate (ngSubmit)="onSubmit()">
+
+        <mko-form-row [generalControl]="numberComponent">
+            <mko-decimal-control [id]="'secondNumber'" #numberComponent formControlName="secondNumber" [control]="secondNumber" label="Cena jedn."
+                [isRequired]="true" min=-10 max=103320.45 maxDecimalDigits=2 controlSize="medium" help="Cena jednostkowa za towar bez uwzględnienia rabatów. Szczegóły <small><a href='http://global-solutions.pl'>Pomoc 21342</a></small>">
+            </mko-decimal-control>
+        </mko-form-row>
+        <mko-form-row [generalControl]="fromComponent">
+            <mko-decimal-control [id]="'from'" #fromComponent formControlName="from" [control]="from" label="Wartość od" [isRequired]="true"
+                min=0 max=99999 maxDecimalDigits=2 placeholder="I've got a placeholder">
+            </mko-decimal-control>
+        </mko-form-row>
+        <mko-form-row [generalControl]="toComponent">
+            <mko-integer-control [id]="'to'" #toComponent formControlName="to" [control]="to" label="Wartość do" [isRequired]="true"
+                min=-10 max=103320.45 maxDecimalDigits=2 help="Maksymalna wartość w zakresie, lorem ipsum.">
+            </mko-integer-control>
+        </mko-form-row>
+        <mko-form-row [generalControl]="yearComponent">
+            <mko-integer-control [id]="'year'" #yearComponent formControlName="year" [control]="year" label="Rok" [isRequired]="true"
+                min=1900 max=2100 maxDecimalDigits=2 help="Podaj tutaj rok, lorem ipsum.">
+                <input type="text" class="form-control" placeholder="From a specified template" />
+            </mko-integer-control>
+        </mko-form-row>
+        <mko-form-row [generalControl]="monthComponent">
+            <mko-decimal-control [id]="'month'" #monthComponent formControlName="month" [control]="month" label="Miesiąc" [isRequired]="true"
+                min=1 max=12 help="Podaj tutaj miesiąc, lorem ipsum." maxLength=2>
+
+            </mko-decimal-control>
+        </mko-form-row>
+        <mko-form-row [generalControl]="firstNameomponent">
+            <mko-string-control [id]="'firstname'" #firstNameomponent [formControl]="firstName" [control]="firstName" label="Imię" [isRequired]="true"
+                minLength=3 help="Podaj tutaj miesiąc, lorem ipsum." maxLength=20 controlSize="medium">
+
+            </mko-string-control>
+        </mko-form-row> 
+
+        <mko-editor-form-row [boundFormControl]="anotherNumber" [metadata]="formMetadata['unitPrice']">
+        </mko-editor-form-row>
+        <mko-editor-form-row [boundFormControl]="startYear" [metadata]="formMetadata['startYear']">
+        </mko-editor-form-row>
+        <mko-editor-form-row [boundFormControl]="lastName" [metadata]="formMetadata['lastName']">
+        </mko-editor-form-row>
+        <mko-editor-form-row [boundFormControl]="notifyViaMail" [metadata]="formMetadata['notifyViaMail']">
+        </mko-editor-form-row>
+
+        <div class="form-group">
+           <label class="control-label col-sm-4" [for]="numberComponent.id">{{ numberComponent.label }}</label>
+            <div class="col-sm-8">
+                <mko-number-control [id]="'secondNumber'" #numberComponent formControlName="secondNumber" [control]="secondNumber" label="Cena jedn." [isRequired]="true"
+                    min=-10 max=103320.45 maxDecimalDigits=2></mko-number-control>
+                <mko-validation-errors [control]="secondNumber" [label]="numberComponent.label"></mko-validation-errors>
+                 <div *ngIf="secondNumber.invalid && (secondNumber.dirty || secondNumber.touched)">
+                    <div *ngIf="secondNumber.errors.required" class="error-message">
+                        A value is required.
+                    </div>
+                    <div *ngIf="secondNumber.errors.notANumber" class="error-message">
+                        {{ secondNumber.errors.notANumber }}
+                    </div>
+                    <div *ngIf="secondNumber.errors.min" class="error-message">
+                        {{ secondNumber.errors.min }}
+                    </div>
+                    <div *ngIf="secondNumber.errors.max" class="error-message">
+                        {{ secondNumber.errors.max }}
+                    </div>
+                    <div *ngIf="secondNumber.errors.maxDecimalDigits" class="error-message">
+                        {{ secondNumber.errors.maxDecimalDigits }}
+                    </div>
+                </div> 
+            </div> 
+
+
+        </div>
+
+        <mko-form-errors [control]="myForm"></mko-form-errors>
+
+        <div class="form-group">
+            <div class="col-sm-8 col-sm-offset-4">
+                <div class="alert alert-danger" *ngIf="myForm.errors">
+                    <mko-validation-errors [control]="myForm">
+                    </mko-validation-errors>
+
+                </div>
+            </div>
+        </div> 
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-4">
+                <button class="btn btn-success" type="submit">Save</button>
+                <button class="btn btn-success" type="button" id="setValue" (click)="setValue();">Set value</button>
+            </div>
+        </div> 
+
+        <mko-form-actions (save)="onSubmit();" (cancel)="onCancel();" ></mko-form-actions>
+    </form>
+</div>
+-->
