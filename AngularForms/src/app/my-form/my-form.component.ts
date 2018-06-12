@@ -10,6 +10,8 @@ import { errorsToErrorObject } from '../formhelpers/errorsToErrorObject';
 import { MyFormData } from './my-form-data';
 import { FormMetadataService } from '../form-metadata.service';
 import { MyFormSaveService } from './my-form-save.service';
+import { FormEnvironment } from '../formEnvironment/formEnvironment';
+import { getFormEnvironment } from '../formEnvironment/getFormEnvironment';
 
 
 @Component({
@@ -20,7 +22,6 @@ import { MyFormSaveService } from './my-form-save.service';
 export class MyFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private metadataService: FormMetadataService, private saveService: MyFormSaveService) {
-
     this.loadMetadata();
   }
 
@@ -28,10 +29,18 @@ export class MyFormComponent implements OnInit {
   }
 
   async loadMetadata() {
-    this.formMetadata = await this.metadataService.getMetadata("/assets/my-form-metadata.json");
+    let formMetadataUrl = "/assets/my-form-metadata.json"; // fallback value
+    let dataElement = (<HTMLInputElement>document.getElementById("formMetadataUrl"));
+    if (dataElement) {
+      formMetadataUrl = dataElement.value;
+    }
+
+    console.log(`Form metadata url: ${formMetadataUrl}`);
+    this.formMetadata = await this.metadataService.getMetadata(formMetadataUrl);
     this.controlMetadata = this.formMetadata.controls;
     this.createForm();
   }
+
 
 
   myForm: FormGroup;

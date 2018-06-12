@@ -83,10 +83,6 @@ MIT
 MIT
 MIT
 
-third-lib@0.1.0
-MIT
-MIT
-
 css-loader@0.28.11
 MIT
 Copyright JS Foundation and other contributors
