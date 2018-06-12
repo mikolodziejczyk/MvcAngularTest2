@@ -16,6 +16,12 @@ namespace McvAngularTest2
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            // remove default implementation    
+            ValueProviderFactories.Factories.Remove(ValueProviderFactories.Factories.OfType<JsonValueProviderFactory>().FirstOrDefault());
+            // add our custom one
+            ValueProviderFactories.Factories.Add(new JsonNetValueProviderFactory());
+
         }
     }
 }

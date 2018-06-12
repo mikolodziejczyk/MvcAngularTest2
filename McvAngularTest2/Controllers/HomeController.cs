@@ -1,6 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using McvAngularTest2.Models;
+using MkoForms;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -30,10 +33,11 @@ namespace McvAngularTest2.Controllers
 
         public ActionResult Edit()
         {
-            FormEnvironment fe = new FormEnvironment() {
+            FormEnvironment fe = new FormEnvironment()
+            {
                 rootUrl = Url.Content("~/"),
                 formMetadataUrl = Url.Content("~/assets/my-form-metadata.json"),
-                saveUrl = Url.Action("Save","Home"),
+                saveUrl = Url.Action("Save", "Home"),
                 okUrl = Url.Action("About"),
                 cancelUrl = Url.Action("Index")
             };
@@ -44,6 +48,34 @@ namespace McvAngularTest2.Controllers
             return View();
         }
 
+        public ActionResult Save(MyFormData data)
+        {
+            var r = new FormSaveReply();
+
+            if (data.lastName == "Fail")
+            {
+                r.isFailure = true;
+                r.failureMessage = "Nie udało się zapisać zmian, błąd na żądanie użytkownika.";
+
+            }
+            else if (data.lastName == "Error")
+            {
+                r.isError = true;
+                r.errors = new string[] { "Wartość jest niewystarczająca.", "Podane wartości są bez sensu!" };
+            }
+            else
+            {
+                r.isSuccess = true;
+            }
+
+
+            var rs = JsonConvert.SerializeObject(r, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+            return Content(rs, "application/json");
+
+        }
 
     }
 }

@@ -1,42 +1,24 @@
 import { Injectable } from '@angular/core';
 import { FormSaveReply } from '../formSaveReply';
 import { MyFormData } from './my-form-data';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class MyFormSaveService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  async save(data: MyFormData): Promise<FormSaveReply> {
+  async save(url: string, data: MyFormData): Promise<FormSaveReply> {
 
+    let r: FormSaveReply;
 
-    let p: Promise<FormSaveReply> = new Promise<FormSaveReply>((resolve, reject) => {
-
-      window.setTimeout(() => {
-
-        console.log(`Form data: ${JSON.stringify(data)}`)
-
-        let r: FormSaveReply = {};
-
-        if (data.lastName == "Fail") {
-          r.isFailure = true;
-          r.failureMessage = "Nie udało się zapisać zmian, błąd na żądanie użytkownika.";
-
-        } else if (data.lastName == "Error") {
-          r.isError = true;
-          r.errors = ["Wartość jest niewystarczająca.", "Podane wartości są bez sensu!"];
-        }
-        else {
-          r.isSuccess = true;
-        }
-
-        resolve(r);
-      }, 3000);
-
-    });
-
-    let r : FormSaveReply = await p;
-
+    try {
+      let o = this.http.post<FormSaveReply>(url, data);
+      r = await o.toPromise();
+    }
+    catch (e) {
+      r = { isFailure: true };
+    }
     return r;
   }
 

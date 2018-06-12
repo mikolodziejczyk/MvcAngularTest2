@@ -93,7 +93,7 @@ export class MyFormComponent implements OnInit {
     // convert form value into the format suitable for submitting, here no changes are neccessary.
     let formData: MyFormData = this.myForm.value;
 
-    let r: FormSaveReply = await this.saveService.save(this.myForm.value);
+    let r: FormSaveReply = await this.saveService.save(this.formMetadata.saveUrl, this.myForm.value);
     this.isSaving = false;
 
 
@@ -104,6 +104,7 @@ export class MyFormComponent implements OnInit {
       let errors: ValidationErrors = errorsToErrorObject(r.errors);
       this.myForm.setErrors(errors);
     } else if (r.isFailure) {
+      this.isFailure = true;
       this.failureMessage = r.failureMessage || "Nie udało sie zapisać zmian. Spróbuj ponownie.";
     }
 
