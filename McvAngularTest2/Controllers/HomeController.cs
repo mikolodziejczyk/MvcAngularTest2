@@ -1,5 +1,6 @@
 ﻿using McvAngularTest2.Models;
 using MkoForms;
+using MkoForms.ControlMetadata;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -51,6 +52,21 @@ namespace McvAngularTest2.Controllers
 
         public ActionResult FormMetadata()
         {
+            FormMetadata fd = new FormMetadata();
+            fd.controls = new Dictionary<string, GeneralControlMetadata>();
+            fd.controls.Add("something", new TextInputControlBaseMetadata()
+            {
+                type = "string",
+                label = "hello",
+                placeholder = "myPlaceholder"
+            });
+            fd.navigation = new Navigation() { okUrl = "ok", cancelUrl = "cancel" };
+
+            var rs = JsonConvert.SerializeObject(fd, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+
             string path = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, @"assets\my-form-metadata.json");
             return File(path, "application/json");
         }

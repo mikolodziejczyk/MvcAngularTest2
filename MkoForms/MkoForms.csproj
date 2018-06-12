@@ -39,7 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControlMetadata\TextInputControlBaseMetadata.cs" />
+    <Compile Include="FormMetadata.cs" />
     <Compile Include="FormSaveReply.cs" />
+    <Compile Include="ControlMetadata\GeneralControlMetadata.cs" />
+    <Compile Include="Navigation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
