@@ -28,10 +28,12 @@ export class MyFormComponent implements OnInit {
   }
 
   async loadMetadata() {
-    let formMetadataUrl = "/assets/my-form-metadata.json"; // fallback value
+    let formMetadataUrl = "/api/home/FormMetadata"; // fallback value
     let dataElement = (<HTMLInputElement>document.getElementById("formMetadataUrl"));
     if (dataElement) {
+      
       formMetadataUrl = dataElement.value;
+      console.log(`Form metadata element found.`);
     }
 
     console.log(`Form metadata url: ${formMetadataUrl}`);

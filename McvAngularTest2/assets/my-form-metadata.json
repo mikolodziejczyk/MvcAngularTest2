@@ -37,7 +37,7 @@
       "additionalLabel": "Powiadomienia e-mail"
     }
   },
-  "saveUrl": "/Home/Save",
+  "saveUrl": "/api/Home/Save",
   "navigation": {
     "cancelUrl": "/Home/Index",
     "okUrl": "/Home/About"

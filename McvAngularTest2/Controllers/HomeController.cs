@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 
 namespace McvAngularTest2.Controllers
@@ -43,9 +44,15 @@ namespace McvAngularTest2.Controllers
             };
 
             // ViewBag.formEnvironment = JsonConvert.SerializeObject(fe);
-            ViewBag.formMetadataUrl = Url.Content("~/assets/my-form-metadata.json");
+            ViewBag.formMetadataUrl = Url.RouteUrl("api", new { controller = "Home", action = "FormMetadata" });
 
             return View();
+        }
+
+        public ActionResult FormMetadata()
+        {
+            string path = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, @"assets\my-form-metadata.json");
+            return File(path, "application/json");
         }
 
         public ActionResult Save(MyFormData data)
