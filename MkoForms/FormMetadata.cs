@@ -8,8 +8,14 @@ namespace MkoForms
 {
     public class FormMetadata
     {
+        public FormMetadata()
+        {
+            this.controls = new Dictionary<string, GeneralControlMetadata>();
+        }
+
         public Dictionary<string, GeneralControlMetadata> controls;
         public string saveUrl;
-        public Navigation navigation;
+        public string okUrl;
+        public string cancelUrl;
     }
 }

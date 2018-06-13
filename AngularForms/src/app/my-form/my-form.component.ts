@@ -100,7 +100,7 @@ export class MyFormComponent implements OnInit {
 
 
     if (r.isSuccess) {
-      window.location.href = this.formMetadata.navigation.okUrl;
+      window.location.href = this.formMetadata.okUrl;
     } else if (r.isError) {
 
       let errors: ValidationErrors = errorsToErrorObject(r.errors);
@@ -116,7 +116,7 @@ export class MyFormComponent implements OnInit {
 
   onCancel = () => {
     this.isCancelling = true;
-    window.location.href = this.formMetadata.navigation.cancelUrl;
+    window.location.href = this.formMetadata.cancelUrl;
   }
 
 
