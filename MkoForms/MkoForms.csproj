@@ -46,11 +46,17 @@
     <Compile Include="ControlMetadata\TextInputControlBaseMetadata.cs" />
     <Compile Include="ControlValidators\IControlValidator.cs" />
     <Compile Include="ControlValidators\GeneralControlValidator.cs" />
+    <Compile Include="ControlValidators\DecimalControlValidator.cs" />
+    <Compile Include="ControlValidators\IntegerControlValidator.cs" />
+    <Compile Include="ControlValidators\StringControlValidator.cs" />
+    <Compile Include="ControlValidators\TextInputControlBaseValidator.cs" />
     <Compile Include="FormMetadata.cs" />
     <Compile Include="FormSaveReply.cs" />
     <Compile Include="ControlMetadata\GeneralControlMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validators\ControlValidatorCache.cs" />
     <Compile Include="Validators\ObjectValidator.cs" />
+    <Compile Include="ValidatorTypeAttribute.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

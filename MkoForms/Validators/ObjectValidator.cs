@@ -23,7 +23,8 @@ namespace MkoForms.Validators
             foreach (var control in controls)
             {
                 Type controlMetadataType = control.Item2.GetType();
-                IControlValidator controlValidator = new GeneralControlValidator();
+                Type validatorType = ControlValidatorCache.GetValidator(controlMetadataType);
+                IControlValidator controlValidator = (IControlValidator)Activator.CreateInstance(validatorType);
 
                 object value = modelType.GetProperty(control.Item1).GetValue(model, null);
                 GeneralControlMetadata metadata = control.Item2;
