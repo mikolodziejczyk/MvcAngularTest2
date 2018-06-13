@@ -7,7 +7,7 @@
 
     <form class="form-horizontal" [formGroup]="myForm" novalidate (ngSubmit)="onSubmit()">
 
-      <mko-editor-form-row [boundFormControl]="anotherNumber" [metadata]="controlMetadata['unitPrice']">
+      <mko-editor-form-row [boundFormControl]="unitPrice" [metadata]="controlMetadata['unitPrice']">
       </mko-editor-form-row>
       <mko-editor-form-row [boundFormControl]="startYear" [metadata]="controlMetadata['startYear']">
       </mko-editor-form-row>

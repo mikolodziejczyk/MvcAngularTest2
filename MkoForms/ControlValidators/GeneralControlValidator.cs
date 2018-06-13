@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MkoForms.ControlValidators
 {
-    public class GeneralControlValidator
+    public class GeneralControlValidator : IControlValidator
     {
         public virtual void Validate(object value, GeneralControlMetadata metadata)
         {

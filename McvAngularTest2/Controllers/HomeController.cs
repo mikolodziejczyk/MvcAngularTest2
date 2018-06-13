@@ -56,6 +56,11 @@ namespace McvAngularTest2.Controllers
 
         public ActionResult Save(MyFormData data)
         {
+            FormMetadata fd = MyFormMetadata.GetMetadata();
+
+            MkoForms.Validators.ObjectValidator.ValidateObject(data, fd);
+
+
             var r = new FormSaveReply();
 
             if (data.lastName == "Fail")

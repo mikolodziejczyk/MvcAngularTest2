@@ -7,8 +7,8 @@ namespace McvAngularTest2.Models
 {
     public class MyFormData
     {
-        public decimal? anotherNumber { get; set; }
-        public decimal startYear { get; set; }
+        public decimal? unitPrice { get; set; }
+        public int startYear { get; set; }
         public string lastName { get; set; }
         public bool notifyViaMail { get; set; }
     }

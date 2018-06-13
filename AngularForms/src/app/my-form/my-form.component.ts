@@ -45,7 +45,7 @@ export class MyFormComponent implements OnInit {
 
 
   myForm: FormGroup;
-  anotherNumber: FormControl;
+  unitPrice: FormControl;
   startYear: FormControl;
   lastName: FormControl;
   notifyViaMail: FormControl;
@@ -60,14 +60,14 @@ export class MyFormComponent implements OnInit {
 
   createForm() {
     this.myForm = this.fb.group({
-      anotherNumber: [123],
+      unitPrice: [123],
       startYear: [2000],
       lastName: ["Smith"],
       notifyViaMail: [false]
     });
 
 
-    this.anotherNumber = <FormControl>this.myForm.controls["anotherNumber"];
+    this.unitPrice = <FormControl>this.myForm.controls["unitPrice"];
     this.startYear = <FormControl>this.myForm.controls["startYear"];
     this.lastName = <FormControl>this.myForm.controls["lastName"];
     this.notifyViaMail = <FormControl>this.myForm.controls["notifyViaMail"];
