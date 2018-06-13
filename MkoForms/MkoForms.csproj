@@ -44,10 +44,12 @@
     <Compile Include="ControlMetadata\IntegerControlMetadata.cs" />
     <Compile Include="ControlMetadata\StringControlMetadata.cs" />
     <Compile Include="ControlMetadata\TextInputControlBaseMetadata.cs" />
+    <Compile Include="ControlValidators\GeneralControlValidator.cs" />
     <Compile Include="FormMetadata.cs" />
     <Compile Include="FormSaveReply.cs" />
     <Compile Include="ControlMetadata\GeneralControlMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
