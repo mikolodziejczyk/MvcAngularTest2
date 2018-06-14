@@ -35,11 +35,20 @@ namespace McvAngularTest2.Controllers
 
         public ActionResult Edit()
         {
+            MyFormData data = new MyFormData() {
+                id = 234,
+                locationId = 1,
 
-            // ViewBag.formEnvironment = JsonConvert.SerializeObject(fe);
+                unitPrice = 321.12m,
+                startYear = 2001,
+                notifyViaMail = true
+            };
+
+            string initialData = JsonConvert.SerializeObject(data);
+            
             ViewBag.formMetadataUrl = Url.RouteUrl("api", new { controller = "Home", action = "FormMetadata" });
 
-            return View();
+            return View((object)initialData);
         }
 
         public ActionResult FormMetadata()

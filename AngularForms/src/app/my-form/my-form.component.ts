@@ -21,19 +21,28 @@ import { MyFormSaveService } from './my-form-save.service';
 export class MyFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private metadataService: FormMetadataService, private saveService: MyFormSaveService) {
+    this.getInitialData();
     this.loadMetadata();
   }
 
   ngOnInit() {
   }
 
+  getInitialData(): void {
+    let dataElement = (<HTMLInputElement>document.getElementById("initialData"));
+    if (dataElement) {
+      this.initialData = JSON.parse(dataElement.value);
+    }
+    else {
+      this.initialData = <MyFormData>{};
+    }
+  }
+
   async loadMetadata() {
     let formMetadataUrl = "/api/home/FormMetadata"; // fallback value
     let dataElement = (<HTMLInputElement>document.getElementById("formMetadataUrl"));
     if (dataElement) {
-      
       formMetadataUrl = dataElement.value;
-      console.log(`Form metadata element found.`);
     }
 
     console.log(`Form metadata url: ${formMetadataUrl}`);
@@ -43,6 +52,7 @@ export class MyFormComponent implements OnInit {
   }
 
 
+  initialData: MyFormData;
 
   myForm: FormGroup;
   unitPrice: FormControl;
@@ -60,10 +70,10 @@ export class MyFormComponent implements OnInit {
 
   createForm() {
     this.myForm = this.fb.group({
-      unitPrice: [123],
-      startYear: [2000],
-      lastName: ["Smith"],
-      notifyViaMail: [false]
+      unitPrice: (this.initialData.unitPrice || null),
+      startYear: [(this.initialData.startYear || null)],
+      lastName: [(this.initialData.lastName || null)],
+      notifyViaMail: [(this.initialData.notifyViaMail || false)]
     });
 
 
@@ -94,6 +104,8 @@ export class MyFormComponent implements OnInit {
 
     // convert form value into the format suitable for submitting, here no changes are neccessary.
     let formData: MyFormData = this.myForm.value;
+    formData.id = this.initialData.id;
+    formData.locationId = this.initialData.locationId;
 
     let r: FormSaveReply = await this.saveService.save(this.formMetadata.saveUrl, this.myForm.value);
     this.isSaving = false;
