@@ -16,16 +16,30 @@ namespace MkoForms.ControlValidators
             {
                 var v = Convert.ToDecimal(value);
 
-                if (v < m.min)
+                if (m.min.HasValue)
                 {
-                    throw new InvalidOperationException(String.Format("The minimum value is {0} and the actual is {1}.", m.min, v));
+                    if (v < m.min.Value)
+                    {
+                        throw new InvalidOperationException(String.Format("The minimum value is {0} and the actual is {1}.", m.min, v));
+                    }
                 }
 
-                if (v > m.max)
+                if (m.max.HasValue)
                 {
-                    throw new InvalidOperationException(String.Format("The maximum value is {0} and the actual is {1}.", m.max, v));
+                    if (v > m.max.Value)
+                    {
+                        throw new InvalidOperationException(String.Format("The maximum value is {0} and the actual is {1}.", m.max, v));
+                    }
                 }
 
+
+                if (m.maxDecimalDigits.HasValue)
+                {
+                    if (v != Decimal.Round(v, m.maxDecimalDigits.Value, MidpointRounding.AwayFromZero))
+                    {
+                        throw new InvalidOperationException(String.Format("The maximum number of digits after the decimal point is {0} and the actual is greater.", m.maxDecimalDigits));
+                    }
+                }
 
                 base.Validate(value, metadata);
             }

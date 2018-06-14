@@ -18,6 +18,6 @@ namespace MkoForms.ControlMetadata
 
         public decimal? min;
         public decimal? max;
-        public decimal? maxDecimalDigits;
+        public int? maxDecimalDigits;
     }
 }

@@ -16,14 +16,20 @@ namespace MkoForms.ControlValidators
             {
                 var i = Convert.ToInt32(value);
 
-                if (i < m.min)
+                if (m.min.HasValue)
                 {
-                    throw new InvalidOperationException(String.Format("The minimum value is {0} and the actual is {1}.", m.min, i));
+                    if (i < m.min.Value)
+                    {
+                        throw new InvalidOperationException(String.Format("The minimum value is {0} and the actual is {1}.", m.min, i));
+                    }
                 }
 
-                if (i > m.max)
+                if (m.max.HasValue)
                 {
-                    throw new InvalidOperationException(String.Format("The maximum value is {0} and the actual is {1}.", m.max, i));
+                    if (i > m.max)
+                    {
+                        throw new InvalidOperationException(String.Format("The maximum value is {0} and the actual is {1}.", m.max, i));
+                    }
                 }
 
 
