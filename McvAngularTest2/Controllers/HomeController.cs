@@ -38,6 +38,7 @@ namespace McvAngularTest2.Controllers
             MyFormData data = new MyFormData() {
                 id = 234,
                 locationId = 1,
+                displayName = "Wpis próbny",
 
                 unitPrice = 321.12m,
                 startYear = 2001,

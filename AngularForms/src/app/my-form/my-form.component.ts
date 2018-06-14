@@ -22,6 +22,7 @@ export class MyFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private metadataService: FormMetadataService, private saveService: MyFormSaveService) {
     this.getInitialData();
+    this.isNew = !this.initialData.id;
     this.loadMetadata();
   }
 
@@ -53,6 +54,7 @@ export class MyFormComponent implements OnInit {
 
 
   initialData: MyFormData;
+  isNew: boolean;
 
   myForm: FormGroup;
   unitPrice: FormControl;

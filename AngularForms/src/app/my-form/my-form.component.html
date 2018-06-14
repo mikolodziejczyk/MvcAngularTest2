@@ -1,6 +1,9 @@
 <div class="container-fluid">
   <div class="page-header">
-    <h1>Przykładowy formularz</h1>
+    <h1>
+      <ng-container *ngIf="isNew">Dodawanie nowego elementu</ng-container>
+      <ng-container *ngIf="!isNew">Edycja elementu <b>{{ initialData.displayName }}</b></ng-container>
+    </h1>
   </div>
 
   <ng-container *ngIf="formMetadata && !isFailure">

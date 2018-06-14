@@ -9,6 +9,7 @@ namespace McvAngularTest2.Models
     {
         public int? id { get; set; }
         public int locationId { get; set; }
+        public string displayName { get; set; }
 
         public decimal? unitPrice { get; set; }
         public int startYear { get; set; }
