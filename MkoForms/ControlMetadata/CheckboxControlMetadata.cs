@@ -1,4 +1,5 @@
 ﻿using MkoForms.ControlValidators;
+using MkoForms.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace MkoForms.ControlMetadata
     {
         const string type_string = "checkbox";
 
-        public CheckboxControlMetadata()
+        public CheckboxControlMetadata() 
+            : base(type_string)
         {
-            type = type_string;
         }
 
         public string additionalLabel;

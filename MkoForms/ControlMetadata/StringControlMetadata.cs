@@ -12,8 +12,8 @@ namespace MkoForms.ControlMetadata
         const string type_string = "string";
 
         public StringControlMetadata()
+            : base(type_string)
         {
-            type = type_string;
         }
 
 

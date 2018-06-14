@@ -1,6 +1,7 @@
 ﻿using McvAngularTest2.Models;
 using MkoForms;
 using MkoForms.ControlMetadata;
+using MkoForms.Metadata;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -54,7 +55,7 @@ namespace McvAngularTest2.Controllers
 
         public ActionResult FormMetadata()
         {
-            FormMetadata fd = MyFormMetadata.GetMetadata();
+            IControlGroup fd = MyFormMetadata.GetMetadata();
 
              var rs = JsonConvert.SerializeObject(fd, new JsonSerializerSettings
             {
@@ -66,9 +67,9 @@ namespace McvAngularTest2.Controllers
 
         public ActionResult Save(MyFormData data)
         {
-            FormMetadata fd = MyFormMetadata.GetMetadata();
+            IControlGroup fd = MyFormMetadata.GetMetadata();
 
-            MkoForms.Validators.ObjectValidator.ValidateObject(data, fd);
+            MkoForms.Validators.ControlGroupValidator.Validate(data, fd);
 
 
             var r = new FormSaveReply();

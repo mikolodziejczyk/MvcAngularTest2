@@ -12,8 +12,9 @@ namespace MkoForms.ControlMetadata
         const string type_string = "decimal";
 
         public DecimalControlMetadata()
+            : base(type_string)
         {
-            type = type_string;
+
         }
 
         public decimal? min;

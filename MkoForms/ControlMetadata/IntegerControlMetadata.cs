@@ -12,8 +12,8 @@ namespace MkoForms.ControlMetadata
         const string type_string = "integer";
 
         public IntegerControlMetadata()
+            : base(type_string)
         {
-            type = type_string;
         }
 
         public int? min;
