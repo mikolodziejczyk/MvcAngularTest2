@@ -1,10 +1,12 @@
-﻿using System;
+﻿using MkoForms.Validators;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace MkoForms.Metadata
 {
+    [ValidatorType(typeof(FormArrayValidator))]
     public class FormArrayMetadata : GeneralControlMetadata
     {
         const string type_string = "form_array";
