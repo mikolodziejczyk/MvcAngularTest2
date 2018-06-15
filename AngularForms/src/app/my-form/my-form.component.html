@@ -21,19 +21,26 @@
       <mko-editor-form-row [boundFormControl]="notifyViaMail" [metadata]="controlMetadata['notifyViaMail']">
       </mko-editor-form-row>
 
-      <mko-form-row [formGroup]='extraPerson' [control]="extraPerson" [label]="controlMetadata['extraPerson']?.label" [help]="controlMetadata['extraPerson']?.help">
+      <mko-form-row [formGroup]='extraPerson' [control]="extraPerson"
+       [label]="controlMetadata['extraPerson']?.label" [help]="controlMetadata['extraPerson']?.help" [id]="extraPersonFirstName.id">
         <div class="row">
-          <!-- <div class="col-sm-6">
-            <mko-string-control [formControl]="extraPerson['firstName']"
-              [control]="extraPerson['firstName']" [metadata]="controlMetadata['extraPerson'].controls['firstName']" >
+          <div class="col-sm-6">
+            <mko-string-control #extraPersonFirstName [formControl]="extraPerson.controls['firstName']" [control]="extraPerson.controls['firstName']"
+              [metadata]="controlMetadata['extraPerson'].controls['firstName']">
             </mko-string-control>
           </div>
           <div class="col-sm-6">
-            <mko-string-control [formControl]="extraPerson['lastName']" [control]="extraPerson['lastName']"  [metadata]="controlMetadata['extraPerson'].controls['lastName']"
-              >
+            <mko-string-control #extraPersonLastName [formControl]="extraPerson.controls['lastName']" [control]="extraPerson.controls['lastName']"
+              [metadata]="controlMetadata['extraPerson'].controls['lastName']">
             </mko-string-control>
-          </div> -->
+          </div>
         </div>
+
+        <mko-validation-errors [control]="extraPerson.controls['firstName']" [label]="controlMetadata['extraPerson'].controls['firstName'].label"
+          [id]="extraPersonFirstName.id"></mko-validation-errors>
+        <mko-validation-errors [control]="extraPerson.controls['lastName']" [label]="controlMetadata['extraPerson'].controls['lastName'].label"
+          [id]="extraPersonLastName.id"></mko-validation-errors>
+
       </mko-form-row>
 
 
