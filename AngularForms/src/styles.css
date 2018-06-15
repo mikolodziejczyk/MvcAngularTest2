@@ -18,3 +18,9 @@ div.error-message {
 {
     width: 100%;
 }
+
+
+/* Override .has-error for individual controls in a group which .has-error */
+.has-error .ng-valid .form-control {
+    border-color: #3c763d;
+}
