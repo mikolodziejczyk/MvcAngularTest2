@@ -83,10 +83,10 @@ export class IntegerControlComponent extends TextInputControlBase implements OnI
     }
     if (failed) {
       let message = sprintf("Wartość w '%s' musi być większa lub równa %s.", this.label, formatNumberPlain(this.min));
-      setControlError(this.control, IntegerControlComponent.error_min, message);
+      this.internalControlErrors.setControlError(IntegerControlComponent.error_min, message);
     }
     else {
-      removeControlError(this.control, IntegerControlComponent.error_min);
+      this.internalControlErrors.removeControlError(IntegerControlComponent.error_min);
     }
   }
 
@@ -101,10 +101,10 @@ export class IntegerControlComponent extends TextInputControlBase implements OnI
 
     if (failed) {
       let message = sprintf("Wartość w '%s' musi być mniejsza lub równa %s.", this.label, formatNumberPlain(this.max));
-      setControlError(this.control, IntegerControlComponent.error_max, message);
+      this.internalControlErrors.setControlError(IntegerControlComponent.error_max, message);
     }
     else {
-      removeControlError(this.control, IntegerControlComponent.error_max);
+      this.internalControlErrors.removeControlError(IntegerControlComponent.error_max);
     }
   }
 
@@ -116,7 +116,7 @@ export class IntegerControlComponent extends TextInputControlBase implements OnI
 
     if (!this.isNumber) {
       let message = sprintf("Wartość w polu '%s' musi być liczbą.", this.label);
-      setControlError(this.control, IntegerControlComponent.error_NaN, message);
+      this.internalControlErrors.setControlError(IntegerControlComponent.error_NaN, message);
     }
 
     this.checkMin();

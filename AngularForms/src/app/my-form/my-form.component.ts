@@ -35,7 +35,7 @@ export class MyFormComponent implements OnInit {
       this.initialData = JSON.parse(dataElement.value);
     }
     else {
-      this.initialData = <MyFormData>{};
+      this.initialData = <MyFormData>JSON.parse('{"id":234,"locationId":1,"displayName":"Wpis próbny","unitPrice":321.12,"startYear":2001,"lastName":null,"notifyViaMail":true,"extraPerson":{"firstName":"John","lastName":"Doe"}}');
     }
   }
 
@@ -61,6 +61,7 @@ export class MyFormComponent implements OnInit {
   startYear: FormControl;
   lastName: FormControl;
   notifyViaMail: FormControl;
+  extraPerson: FormGroup;
 
   formMetadata: FormMetadata;
   controlMetadata: ControlsMetadata;
@@ -75,7 +76,11 @@ export class MyFormComponent implements OnInit {
       unitPrice: (this.initialData.unitPrice || null),
       startYear: [(this.initialData.startYear || null)],
       lastName: [(this.initialData.lastName || null)],
-      notifyViaMail: [(this.initialData.notifyViaMail || false)]
+      notifyViaMail: [(this.initialData.notifyViaMail || false)],
+      extraPerson: this.fb.group({
+        firstName: (this.initialData.extraPerson.firstName || null),
+        lastName: (this.initialData.extraPerson.lastName || null)
+      })
     });
 
 
@@ -83,6 +88,7 @@ export class MyFormComponent implements OnInit {
     this.startYear = <FormControl>this.myForm.controls["startYear"];
     this.lastName = <FormControl>this.myForm.controls["lastName"];
     this.notifyViaMail = <FormControl>this.myForm.controls["notifyViaMail"];
+    this.extraPerson = <FormGroup>this.myForm.controls["extraPerson"];
   }
 
 

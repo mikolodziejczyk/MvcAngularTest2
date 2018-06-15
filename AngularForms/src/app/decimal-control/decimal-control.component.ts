@@ -98,10 +98,10 @@ export class DecimalControlComponent extends TextInputControlBase implements OnI
     }
     if (failed) {
       let message = sprintf("Wartość w '%s' musi być większa lub równa %s.", this.label, formatNumberPlain(this.min));
-      setControlError(this.control, DecimalControlComponent.error_min, message);
+      this.internalControlErrors.setControlError(DecimalControlComponent.error_min, message);
     }
     else {
-      removeControlError(this.control, DecimalControlComponent.error_min);
+      this.internalControlErrors.removeControlError(DecimalControlComponent.error_min);
     }
   }
 
@@ -116,10 +116,10 @@ export class DecimalControlComponent extends TextInputControlBase implements OnI
 
     if (failed) {
       let message = sprintf("Wartość w '%s' musi być mniejsza lub równa %s.", this.label, formatNumberPlain(this.max));
-      setControlError(this.control, DecimalControlComponent.error_max, message);
+      this.internalControlErrors.setControlError(DecimalControlComponent.error_max, message);
     }
     else {
-      removeControlError(this.control, DecimalControlComponent.error_max);
+      this.internalControlErrors.removeControlError(DecimalControlComponent.error_max);
     }
   }
 
@@ -134,10 +134,10 @@ export class DecimalControlComponent extends TextInputControlBase implements OnI
     }
     if (maxDecimalDigitsFailed) {
       let message = sprintf("W '%s' możesz podać do %d miejsc po przecinku.", this.label, this.maxDecimalDigits);
-      setControlError(this.control, DecimalControlComponent.error_maxDecimalDigits, message);
+      this.internalControlErrors.setControlError(DecimalControlComponent.error_maxDecimalDigits, message);
     }
     else {
-      removeControlError(this.control, DecimalControlComponent.error_maxDecimalDigits);
+      this.internalControlErrors.removeControlError(DecimalControlComponent.error_maxDecimalDigits);
     }
   }
 
@@ -150,7 +150,7 @@ export class DecimalControlComponent extends TextInputControlBase implements OnI
 
     if (!this.isNumber) {
       let message = sprintf("Wartość w polu '%s' musi być liczbą.", this.label);
-      setControlError(this.control, DecimalControlComponent.error_NaN, message);
+      this.internalControlErrors.setControlError(DecimalControlComponent.error_NaN, message);
     }
 
     this.checkMin();

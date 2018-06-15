@@ -155,6 +155,7 @@
     <Compile Include="JsonNetValueProvider.cs" />
     <Compile Include="Models\MyFormData.cs" />
     <Compile Include="Models\MyFormMetadata.cs" />
+    <Compile Include="Models\PersonNameVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

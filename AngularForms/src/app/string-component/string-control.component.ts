@@ -72,10 +72,10 @@ export class StringControlComponent extends TextInputControlBase implements OnIn
 
     if (failed) {
       let message = sprintf("Wartość w '%s' musi mieć co najmniej %d znaków.", this.label, this.minLength);
-      setControlError(this.control, StringControlComponent.error_min_length, message);
+      this.internalControlErrors.setControlError(StringControlComponent.error_min_length, message);
     }
     else {
-      removeControlError(this.control, StringControlComponent.error_min_length);
+      this.internalControlErrors.removeControlError(StringControlComponent.error_min_length);
     }
   }
 

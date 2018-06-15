@@ -2,7 +2,9 @@
   <div class="page-header">
     <h1>
       <ng-container *ngIf="isNew">Dodawanie nowego elementu</ng-container>
-      <ng-container *ngIf="!isNew">Edycja elementu <b>{{ initialData.displayName }}</b></ng-container>
+      <ng-container *ngIf="!isNew">Edycja elementu
+        <b>{{ initialData.displayName }}</b>
+      </ng-container>
     </h1>
   </div>
 
@@ -18,6 +20,23 @@
       </mko-editor-form-row>
       <mko-editor-form-row [boundFormControl]="notifyViaMail" [metadata]="controlMetadata['notifyViaMail']">
       </mko-editor-form-row>
+
+      <mko-form-row [formGroup]='extraPerson' [control]="extraPerson" [label]="controlMetadata['extraPerson']?.label" [help]="controlMetadata['extraPerson']?.help">
+        <div class="row">
+          <!-- <div class="col-sm-6">
+            <mko-string-control [formControl]="extraPerson['firstName']"
+              [control]="extraPerson['firstName']" [metadata]="controlMetadata['extraPerson'].controls['firstName']" >
+            </mko-string-control>
+          </div>
+          <div class="col-sm-6">
+            <mko-string-control [formControl]="extraPerson['lastName']" [control]="extraPerson['lastName']"  [metadata]="controlMetadata['extraPerson'].controls['lastName']"
+              >
+            </mko-string-control>
+          </div> -->
+        </div>
+      </mko-form-row>
+
+
 
       <mko-form-errors [control]="myForm"></mko-form-errors>
 

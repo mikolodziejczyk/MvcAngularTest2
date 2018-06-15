@@ -5,6 +5,7 @@ import { GeneralControl } from "../generalControl/generalControl";
 import { GeneralControlMetadata } from "../generalControl/generalControlMetadata";
 import { uniqueControlIdGenerator } from "../uniqueControlIdGenerator";
 import { TextInputControlBaseMetadata } from "./textInputControlBaseMetadata";
+import { InternalControlErrors } from "../internalControlErrors";
 
 export class TextInputControlBase implements OnDestroy, ControlValueAccessor, GeneralControl {
     constructor(protected host: ElementRef) { }
@@ -140,10 +141,20 @@ export class TextInputControlBase implements OnDestroy, ControlValueAccessor, Ge
 
     // #region GeneralControl interface
 
+    protected _control: FormControl;
+
     /**
      * Reference to FormControl, needs to be injected into this control.
-     */
-    @Input() control: FormControl;
+    */
+    @Input() public set control(value: FormControl) {
+        this._control = value;
+        this.internalControlErrors.control = value;
+    }
+
+    public get control(): FormControl {
+        return this._control;
+    }
+
 
 
     /**
@@ -303,14 +314,17 @@ export class TextInputControlBase implements OnDestroy, ControlValueAccessor, Ge
      */
     updateInternalValidators() {
         if (this.isEmpty && this.isRequired) {
-            setControlError(this.control, "required", true);
+            this.internalControlErrors.setControlError("required", true);
         }
         else {
-            removeControlError(this.control, "required");
+            this.internalControlErrors.removeControlError("required");
         }
 
 
     }
+
+    internalControlErrors: InternalControlErrors = new InternalControlErrors();
+
 
     /**
     * Updates the value of the control from a raw or cooked value, returns the new value.

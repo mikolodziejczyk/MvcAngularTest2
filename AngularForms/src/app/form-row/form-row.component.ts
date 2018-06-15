@@ -35,12 +35,12 @@ export class FormRowComponent implements OnInit, AfterViewInit {
 
   @Input() set label(v: string) { this._label = v; };
   get label(): string {
-    return this._label || this.generalControl ? this.generalControl.label : null;
+    return this._label || (this.generalControl ? this.generalControl.label : null);
   }
 
   @Input() set id(v: string) { this._id = v; };
   get id(): string {
-    return this._id || this.generalControl ? this.generalControl.id : null;
+    return this._id || (this.generalControl ? this.generalControl.id : null);
   }
 
   @Input() set help(v: string) { 
@@ -48,7 +48,7 @@ export class FormRowComponent implements OnInit, AfterViewInit {
     this.updatePopoverIfNeeded();
   };
   get help(): string {
-    return this._help || this.generalControl ? this.generalControl.help : null;
+    return this._help || (this.generalControl ? this.generalControl.help : null);
   }
 
   @Input() set control(v: FormControl) { 
@@ -56,7 +56,7 @@ export class FormRowComponent implements OnInit, AfterViewInit {
     this.updatePopoverIfNeeded();
    };
   get control(): FormControl {
-    return this._control || this.generalControl ? this.generalControl.control : null;
+    return this._control || (this.generalControl ? this.generalControl.control : null);
   }
 
   _generalControl: GeneralControl;

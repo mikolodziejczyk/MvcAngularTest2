@@ -36,18 +36,20 @@ namespace McvAngularTest2.Controllers
 
         public ActionResult Edit()
         {
-            MyFormData data = new MyFormData() {
+            MyFormData data = new MyFormData()
+            {
                 id = 234,
                 locationId = 1,
                 displayName = "Wpis próbny",
 
                 unitPrice = 321.12m,
                 startYear = 2001,
-                notifyViaMail = true
+                notifyViaMail = true,
+                extraPerson = new PersonNameVM() { firstName = "John", lastName = "Doe" }
             };
 
             string initialData = JsonConvert.SerializeObject(data);
-            
+
             ViewBag.formMetadataUrl = Url.RouteUrl("api", new { controller = "Home", action = "FormMetadata" });
 
             return View((object)initialData);
@@ -57,7 +59,7 @@ namespace McvAngularTest2.Controllers
         {
             IControlGroup fd = MyFormMetadata.GetMetadata();
 
-             var rs = JsonConvert.SerializeObject(fd, new JsonSerializerSettings
+            var rs = JsonConvert.SerializeObject(fd, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore
             });

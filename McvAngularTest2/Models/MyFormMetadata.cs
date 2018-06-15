@@ -62,6 +62,32 @@ namespace McvAngularTest2.Models
                 additionalLabel = "Powiadomienia e-mail"
             });
 
+            FormGroupMetadata extraPersonMetadata = new FormGroupMetadata()
+            {
+                label = "Dodatkowa osoba",
+                help = "Podaj tutaj dane dodatkowej osoby.",
+                isRequired = true
+            };
+
+            extraPersonMetadata.controls.Add("firstName", new StringControlMetadata()
+            {
+                label = "Imię",
+                placeholder = "Imię",
+                isRequired = true,
+                maxLength = 20,
+                minLength = 2
+            });
+
+            extraPersonMetadata.controls.Add("lastName", new StringControlMetadata()
+            {
+                label = "Nazwisko",
+                placeholder = "Nazwisko",
+                isRequired = true,
+                maxLength = 20,
+                minLength = 2
+            });
+
+            fd.controls.Add("extraPerson", extraPersonMetadata);
 
             return fd;
         }

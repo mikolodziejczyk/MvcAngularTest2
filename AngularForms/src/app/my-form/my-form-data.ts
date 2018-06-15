@@ -1,3 +1,5 @@
+import { PersonNameVM } from "./PersonNameVM";
+
 export interface MyFormData {
     id: number | null; // null for add
     locationId: number; // data to preserve
@@ -7,4 +9,7 @@ export interface MyFormData {
     startYear: number;
     lastName: string;
     notifyViaMail: boolean;
+
+    extraPerson: PersonNameVM;
+
 }

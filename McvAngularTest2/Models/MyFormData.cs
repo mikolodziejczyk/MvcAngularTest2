@@ -15,5 +15,7 @@ namespace McvAngularTest2.Models
         public int startYear { get; set; }
         public string lastName { get; set; }
         public bool notifyViaMail { get; set; }
+
+        public PersonNameVM extraPerson { get; set; }
     }
 }
