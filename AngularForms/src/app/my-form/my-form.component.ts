@@ -1,5 +1,5 @@
 import { Component, OnDestroy, ViewChild, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, ValidationErrors, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
 import { HttpClient } from '@angular/common/http';
@@ -24,9 +24,12 @@ export class MyFormComponent implements OnInit {
     this.getInitialData();
     this.isNew = !this.initialData.id;
     this.loadMetadata();
+
   }
 
   ngOnInit() {
+    
+
   }
 
   getInitialData(): void {
@@ -35,7 +38,7 @@ export class MyFormComponent implements OnInit {
       this.initialData = JSON.parse(dataElement.value);
     }
     else {
-      this.initialData = <MyFormData>JSON.parse('{"id":234,"locationId":1,"displayName":"Wpis próbny","unitPrice":321.12,"startYear":2001,"lastName":null,"notifyViaMail":true,"extraPerson":{"firstName":"John","lastName":"Doe"}}');
+      this.initialData = <MyFormData>JSON.parse('{"id":234,"locationId":1,"displayName":"Wpis próbny","unitPrice":321.12,"startYear":2001,"lastName":null,"notifyViaMail":true,"extraPerson":{"firstName":"John","lastName":"Doe"},"recipients":["tom","john","another"]}');
     }
   }
 
@@ -62,6 +65,7 @@ export class MyFormComponent implements OnInit {
   lastName: FormControl;
   notifyViaMail: FormControl;
   extraPerson: FormGroup;
+  recipients: FormArray;
 
   formMetadata: FormMetadata;
   controlMetadata: ControlsMetadata;
@@ -80,7 +84,8 @@ export class MyFormComponent implements OnInit {
       extraPerson: this.fb.group({
         firstName: (this.initialData.extraPerson.firstName || null),
         lastName: (this.initialData.extraPerson.lastName || null)
-      })
+      }),
+      recipients: this.fb.array([])
     });
 
 
@@ -89,6 +94,12 @@ export class MyFormComponent implements OnInit {
     this.lastName = <FormControl>this.myForm.controls["lastName"];
     this.notifyViaMail = <FormControl>this.myForm.controls["notifyViaMail"];
     this.extraPerson = <FormGroup>this.myForm.controls["extraPerson"];
+    this.recipients = <FormArray>this.myForm.controls["recipients"];
+        
+    for (let mail of this.initialData.recipients)
+    {
+      this.addRecipient(mail);
+    }
   }
 
 
@@ -139,11 +150,11 @@ export class MyFormComponent implements OnInit {
     window.location.href = this.formMetadata.cancelUrl;
   }
 
-
-
-
-
-
-
+  addRecipient = (mail: string): void => {
+    let c: FormControl = new FormControl(mail);
+    this.recipients.push(c);
+  }
 
 }
+
+

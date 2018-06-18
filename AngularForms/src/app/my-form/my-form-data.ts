@@ -11,5 +11,6 @@ export interface MyFormData {
     notifyViaMail: boolean;
 
     extraPerson: PersonNameVM;
+    recipients: string[];
 
 }

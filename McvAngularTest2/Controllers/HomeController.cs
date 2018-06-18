@@ -45,7 +45,8 @@ namespace McvAngularTest2.Controllers
                 unitPrice = 321.12m,
                 startYear = 2001,
                 notifyViaMail = true,
-                extraPerson = new PersonNameVM() { firstName = "John", lastName = "Doe" }
+                extraPerson = new PersonNameVM() { firstName = "John", lastName = "Doe" },
+                recipients = new string[] { "tom@gmail.com", "john@somewhere.com", "harry@nowhere.com" }
             };
 
             string initialData = JsonConvert.SerializeObject(data);

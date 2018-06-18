@@ -43,7 +43,17 @@
 
       </mko-form-row>
 
-
+      <mko-form-row  formArrayName="recipients" [control]="recipients"
+       [label]="controlMetadata['recipients']?.label" [help]="controlMetadata['recipients']?.help">
+        <div class="row" *ngFor="let recipient of this.recipients.controls; let i = index">
+          <div class="col-sm-6" >
+            <mko-string-control [formControl]="recipients.controls[i]" [control]="recipients.controls[i]"
+            [metadata]="controlMetadata['recipients'].itemMetadata">
+          </mko-string-control>
+          <mko-validation-errors [control]="recipients.controls[i]" [label]="controlMetadata['recipients'].itemMetadata.label"></mko-validation-errors>
+          </div>
+        </div>
+      </mko-form-row>
 
       <mko-form-errors [control]="myForm"></mko-form-errors>
 

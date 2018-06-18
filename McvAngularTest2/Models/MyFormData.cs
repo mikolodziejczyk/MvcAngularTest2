@@ -17,5 +17,7 @@ namespace McvAngularTest2.Models
         public bool notifyViaMail { get; set; }
 
         public PersonNameVM extraPerson { get; set; }
+
+        public string[] recipients { get; set; }
     }
 }

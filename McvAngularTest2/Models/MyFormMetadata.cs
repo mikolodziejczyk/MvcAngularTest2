@@ -89,6 +89,21 @@ namespace McvAngularTest2.Models
 
             fd.controls.Add("extraPerson", extraPersonMetadata);
 
+            fd.controls.Add("recipients", new FormArrayMetadata()
+            {
+                label = "Odbiorcy",
+                help = "Wpisz tutaj odbiorców powiadomień, w każdej linii odrębnie.",
+                itemMetadata = new StringControlMetadata()
+                {
+                    label = "Odbiorca",
+                    placeholder = "odbiorca",
+                    isRequired = true,
+                    minLength = 2,
+                    maxLength = 50
+                }
+            });
+
+
             return fd;
         }
     }
