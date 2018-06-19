@@ -10,7 +10,7 @@ export class ArrayLengthValidators {
                 if (Array.isArray(control.value)) {
                     let actualLength = control.value.length;
                     if (actualLength < minLength) {
-                        let message: string = `Minimalna ilość wpisów w %s to ${minLength}, bieżąca to ${actualLength}.`;
+                        let message: string = `W %s musisz wprowadzić co najmniej ${minLength} pozycji.`;
                         r = { "minArrayLength": message }
                     }
                 }
@@ -31,7 +31,7 @@ export class ArrayLengthValidators {
                 if (Array.isArray(control.value)) {
                     let actualLength = control.value.length;
                     if (actualLength > maxLength) {
-                        let message: string = `Maksymalna ilość wpisów w %s to ${maxLength}, bieżąca to ${actualLength}.`;
+                        let message: string = `W %s możesz wprowadzić co najwyżej ${maxLength} pozycji.`;
                         r = { "maxArrayLength": message }
                     }
                 }
