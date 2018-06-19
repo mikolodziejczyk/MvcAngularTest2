@@ -63,8 +63,35 @@
             <button type="button" class="btn btn-success" (click)="addRecipient(null)">New</button>
           </div>
         </div>
-
       </mko-form-row>
+
+      <mko-form-row formArrayName="contacts" [control]="contacts" [label]="controlMetadata['contacts']?.label" [help]="controlMetadata['contacts']?.help">
+          <ng-container *ngFor="let contact of this.contacts.controls; let i = index">
+            <div class="row array-entry-row">
+              <div class="col-sm-4">
+                <mko-string-control #firstNameStringControl [formControl]="contacts.controls[i].controls.firstName" [control]="contacts.controls[i].controls.firstName" [metadata]="controlMetadata['contacts'].itemMetadata.controls.firstName">
+                </mko-string-control>
+              </div>
+              <div class="col-sm-4">
+                  <mko-string-control #lastNameStringControl [formControl]="contacts.controls[i].controls.lastName" [control]="contacts.controls[i].controls.lastName" [metadata]="controlMetadata['contacts'].itemMetadata.controls.lastName">
+                  </mko-string-control>
+                </div>
+  
+              <div class="col-sm-3 col-sm-offset-1">
+                <button type="button" class="btn btn-danger" (click)="removeContact(i)">Remove</button>
+              </div>
+              <div class="col-sm-12">
+                <mko-validation-errors [control]="contacts.controls[i].controls.firstName" [label]="controlMetadata['contacts'].itemMetadata.controls.firstName.label" [id]="firstNameStringControl.id"></mko-validation-errors>
+                <mko-validation-errors [control]="contacts.controls[i].controls.lastName" [label]="controlMetadata['contacts'].itemMetadata.controls.lastName.label" [id]="lastNameStringControl.id"></mko-validation-errors>
+              </div>
+            </div>
+          </ng-container>
+          <div class="row array-new-button-row">
+            <div class="col-sm-2 col-sm-offset-9">
+              <button type="button" class="btn btn-success" (click)="addContact(null, null);">New</button>
+            </div>
+          </div>
+        </mko-form-row>
 
       <mko-form-errors [control]="myForm"></mko-form-errors>
 

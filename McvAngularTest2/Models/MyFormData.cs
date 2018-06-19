@@ -19,5 +19,7 @@ namespace McvAngularTest2.Models
         public PersonNameVM extraPerson { get; set; }
 
         public string[] recipients { get; set; }
+
+        public PersonNameVM[] contacts {get; set;}
     }
 }

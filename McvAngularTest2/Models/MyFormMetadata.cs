@@ -103,6 +103,40 @@ namespace McvAngularTest2.Models
                 }
             });
 
+            /*
+             * An array of contacts
+             */
+
+            FormGroupMetadata contactMetadata = new FormGroupMetadata()
+            {
+                label = "Osoba kontaktowa",
+                isRequired = true
+            };
+
+            contactMetadata.controls.Add("firstName", new StringControlMetadata()
+            {
+                label = "Imię",
+                placeholder = "Imię",
+                isRequired = true,
+                maxLength = 20,
+                minLength = 2
+            });
+
+            contactMetadata.controls.Add("lastName", new StringControlMetadata()
+            {
+                label = "Nazwisko",
+                placeholder = "Nazwisko",
+                isRequired = true,
+                maxLength = 20,
+                minLength = 2
+            });
+
+            fd.controls.Add("contacts", new FormArrayMetadata()
+            {
+                label = "Kontakty",
+                help = "Wpisz tutaj kontakty, w każdej odrębnie jedną osobę. Musisz podać zarówno imię, jak i nazwisko.",
+                itemMetadata = contactMetadata
+            });
 
             return fd;
         }

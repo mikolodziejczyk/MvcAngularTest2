@@ -38,7 +38,7 @@ export class MyFormComponent implements OnInit {
       this.initialData = JSON.parse(dataElement.value);
     }
     else {
-      this.initialData = <MyFormData>JSON.parse('{"id":234,"locationId":1,"displayName":"Wpis próbny","unitPrice":321.12,"startYear":2001,"lastName":null,"notifyViaMail":true,"extraPerson":{"firstName":"John","lastName":"Doe"},"recipients":["tom","john","another"]}');
+      this.initialData = <MyFormData>JSON.parse('{"id":234,"locationId":1,"displayName":"Wpis próbny","unitPrice":321.12,"startYear":2001,"lastName":null,"notifyViaMail":true,"extraPerson":{"firstName":"John","lastName":"Doe"},"recipients":["tom@gmail.com","john@somewhere.com","harry@nowhere.com"],"contacts":[{"firstName":"Jan","lastName":"Kowalski"},{"firstName":"Tomasz","lastName":"Nowak"}]}');
     }
   }
 
@@ -66,6 +66,7 @@ export class MyFormComponent implements OnInit {
   notifyViaMail: FormControl;
   extraPerson: FormGroup;
   recipients: FormArray;
+  contacts: FormArray;
 
   formMetadata: FormMetadata;
   controlMetadata: ControlsMetadata;
@@ -85,7 +86,8 @@ export class MyFormComponent implements OnInit {
         firstName: (this.initialData.extraPerson.firstName || null),
         lastName: (this.initialData.extraPerson.lastName || null)
       }),
-      recipients: this.fb.array([])
+      recipients: this.fb.array([]),
+      contacts: this.fb.array([])
     });
 
 
@@ -95,10 +97,16 @@ export class MyFormComponent implements OnInit {
     this.notifyViaMail = <FormControl>this.myForm.controls["notifyViaMail"];
     this.extraPerson = <FormGroup>this.myForm.controls["extraPerson"];
     this.recipients = <FormArray>this.myForm.controls["recipients"];
+    this.contacts = <FormArray>this.myForm.controls["contacts"];
         
     for (let mail of this.initialData.recipients)
     {
       this.addRecipient(mail);
+    }
+
+    for (let contact of this.initialData.contacts)
+    {
+      this.addContact(contact.firstName, contact.lastName);
     }
   }
 
@@ -158,6 +166,19 @@ export class MyFormComponent implements OnInit {
   removeRecipient(i: number) {
     this.recipients.removeAt(i);
   }
+
+  addContact = (firstName: string, lastName: string) => {
+    let g = this.fb.group({
+      firstName: [firstName],
+      lastName: [lastName]
+    });
+    this.contacts.push(g);
+  }
+  
+  removeContact = (i: number) => {
+    this.contacts.removeAt(i);
+  }
+  
 }
 
 

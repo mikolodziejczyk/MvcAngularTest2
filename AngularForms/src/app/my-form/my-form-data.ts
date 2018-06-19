@@ -12,5 +12,6 @@ export interface MyFormData {
 
     extraPerson: PersonNameVM;
     recipients: string[];
+    contacts: PersonNameVM[];
 
 }

@@ -46,7 +46,13 @@ namespace McvAngularTest2.Controllers
                 startYear = 2001,
                 notifyViaMail = true,
                 extraPerson = new PersonNameVM() { firstName = "John", lastName = "Doe" },
-                recipients = new string[] { "tom@gmail.com", "john@somewhere.com", "harry@nowhere.com" }
+                recipients = new string[] { "tom@gmail.com", "john@somewhere.com", "harry@nowhere.com" },
+                contacts = new PersonNameVM[]
+                {
+                    new PersonNameVM() {firstName = "Jan", lastName = "Kowalski"},
+                    new PersonNameVM() {firstName = "Tomasz", lastName = "Nowak"},
+                }
+                
             };
 
             string initialData = JsonConvert.SerializeObject(data);
