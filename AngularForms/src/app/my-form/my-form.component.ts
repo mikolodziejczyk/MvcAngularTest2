@@ -155,6 +155,9 @@ export class MyFormComponent implements OnInit {
     this.recipients.push(c);
   }
 
+  removeRecipient(i: number) {
+    this.recipients.removeAt(i);
+  }
 }
 
 

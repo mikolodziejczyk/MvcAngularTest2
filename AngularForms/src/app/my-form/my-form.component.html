@@ -21,8 +21,8 @@
       <mko-editor-form-row [boundFormControl]="notifyViaMail" [metadata]="controlMetadata['notifyViaMail']">
       </mko-editor-form-row>
 
-      <mko-form-row [formGroup]='extraPerson' [control]="extraPerson"
-       [label]="controlMetadata['extraPerson']?.label" [help]="controlMetadata['extraPerson']?.help" [id]="extraPersonFirstName.id">
+      <mko-form-row [formGroup]='extraPerson' [control]="extraPerson" [label]="controlMetadata['extraPerson']?.label" [help]="controlMetadata['extraPerson']?.help"
+        [id]="extraPersonFirstName.id">
         <div class="row">
           <div class="col-sm-6">
             <mko-string-control #extraPersonFirstName [formControl]="extraPerson.controls['firstName']" [control]="extraPerson.controls['firstName']"
@@ -43,16 +43,27 @@
 
       </mko-form-row>
 
-      <mko-form-row  formArrayName="recipients" [control]="recipients"
-       [label]="controlMetadata['recipients']?.label" [help]="controlMetadata['recipients']?.help">
-        <div class="row" *ngFor="let recipient of this.recipients.controls; let i = index">
-          <div class="col-sm-6" >
-            <mko-string-control #recipientStringControl [formControl]="recipients.controls[i]" [control]="recipients.controls[i]"
-            [metadata]="controlMetadata['recipients'].itemMetadata">
-          </mko-string-control>
-          <mko-validation-errors [control]="recipients.controls[i]" [label]="controlMetadata['recipients'].itemMetadata.label" [id]="recipientStringControl.id"></mko-validation-errors>
+      <mko-form-row formArrayName="recipients" [control]="recipients" [label]="controlMetadata['recipients']?.label" [help]="controlMetadata['recipients']?.help">
+        <ng-container *ngFor="let recipient of this.recipients.controls; let i = index">
+          <div class="row array-entry-row">
+            <div class="col-sm-6">
+              <mko-string-control #recipientStringControl [formControl]="recipients.controls[i]" [control]="recipients.controls[i]" [metadata]="controlMetadata['recipients'].itemMetadata">
+              </mko-string-control>
+            </div>
+            <div class="col-sm-5 col-sm-offset-1">
+              <button type="button" class="btn btn-danger" (click)="removeRecipient(i)">Remove</button>
+            </div>
+            <div class="col-sm-12">
+              <mko-validation-errors [control]="recipients.controls[i]" [label]="controlMetadata['recipients'].itemMetadata.label" [id]="recipientStringControl.id"></mko-validation-errors>
+            </div>
+          </div>
+        </ng-container>
+        <div class="row array-new-button-row">
+          <div class="col-sm-2 col-sm-offset-7">
+            <button type="button" class="btn btn-success" (click)="addRecipient(null)">New</button>
           </div>
         </div>
+
       </mko-form-row>
 
       <mko-form-errors [control]="myForm"></mko-form-errors>
