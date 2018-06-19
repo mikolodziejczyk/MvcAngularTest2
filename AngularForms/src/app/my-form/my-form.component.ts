@@ -3,13 +3,14 @@ import { FormBuilder, FormControl, FormGroup, Validators, ValidationErrors, Form
 import { Subscription } from 'rxjs/Subscription';
 
 import { HttpClient } from '@angular/common/http';
-import { FormMetadata, ControlsMetadata } from '../formMetadata';
+import { FormMetadata, ControlsMetadata, FormArrayMetadata } from '../formMetadata';
 import { markFormGroupTouched } from '../formhelpers/formHelpers';
 import { FormSaveReply } from '../formSaveReply';
 import { errorsToErrorObject } from '../formhelpers/errorsToErrorObject';
 import { MyFormData } from './my-form-data';
 import { FormMetadataService } from '../form-metadata.service';
 import { MyFormSaveService } from './my-form-save.service';
+import { ArrayLengthValidators } from '../ArrayLengthValidators';
 
 
 
@@ -28,7 +29,7 @@ export class MyFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
 
   }
 
@@ -77,6 +78,9 @@ export class MyFormComponent implements OnInit {
   failureMessage: string;
 
   createForm() {
+    let recipientsMetadata : FormArrayMetadata = <FormArrayMetadata>this.controlMetadata["recipients"];
+    let contactsMetadata : FormArrayMetadata = <FormArrayMetadata>this.controlMetadata["contacts"];
+
     this.myForm = this.fb.group({
       unitPrice: (this.initialData.unitPrice || null),
       startYear: [(this.initialData.startYear || null)],
@@ -86,8 +90,10 @@ export class MyFormComponent implements OnInit {
         firstName: (this.initialData.extraPerson.firstName || null),
         lastName: (this.initialData.extraPerson.lastName || null)
       }),
-      recipients: this.fb.array([]),
-      contacts: this.fb.array([])
+      recipients: this.fb.array([],
+         Validators.compose([ArrayLengthValidators.minArrayLength(recipientsMetadata.minLength), ArrayLengthValidators.maxArrayLength(recipientsMetadata.maxLength)])),
+      contacts: this.fb.array([], 
+        Validators.compose([ArrayLengthValidators.minArrayLength(contactsMetadata.minLength), ArrayLengthValidators.maxArrayLength(contactsMetadata.maxLength)]))
     });
 
 
@@ -98,15 +104,13 @@ export class MyFormComponent implements OnInit {
     this.extraPerson = <FormGroup>this.myForm.controls["extraPerson"];
     this.recipients = <FormArray>this.myForm.controls["recipients"];
     this.contacts = <FormArray>this.myForm.controls["contacts"];
-        
-    for (let mail of this.initialData.recipients)
-    {
-      this.addRecipient(mail);
+
+    for (let mail of this.initialData.recipients) {
+      this.addRecipient(mail, true);
     }
 
-    for (let contact of this.initialData.contacts)
-    {
-      this.addContact(contact.firstName, contact.lastName);
+    for (let contact of this.initialData.contacts) {
+      this.addContact(contact.firstName, contact.lastName, true);
     }
   }
 
@@ -158,27 +162,31 @@ export class MyFormComponent implements OnInit {
     window.location.href = this.formMetadata.cancelUrl;
   }
 
-  addRecipient = (mail: string): void => {
+  addRecipient = (mail: string, isControlSetup?: boolean): void => {
     let c: FormControl = new FormControl(mail);
     this.recipients.push(c);
+    if (!isControlSetup) { this.recipients.markAsDirty(); this.recipients.markAsTouched(); }
   }
 
-  removeRecipient(i: number) {
+  removeRecipient(i: number, isControlSetup?: boolean) {
     this.recipients.removeAt(i);
+    this.recipients.markAsDirty(); this.recipients.markAsTouched();
   }
 
-  addContact = (firstName: string, lastName: string) => {
+  addContact = (firstName: string, lastName: string, isControlSetup?: boolean) => {
     let g = this.fb.group({
       firstName: [firstName],
       lastName: [lastName]
     });
     this.contacts.push(g);
+    if (!isControlSetup) { this.contacts.markAsDirty(); this.contacts.markAsTouched(); }
   }
-  
+
   removeContact = (i: number) => {
     this.contacts.removeAt(i);
+    this.contacts.markAsDirty(); this.contacts.markAsTouched();
   }
-  
+
 }
 
 

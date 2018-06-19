@@ -6,7 +6,8 @@ import { IntegerControlMetadata } from './integer-control/integerControlMetadata
 import { StringControlMetadata } from './string-component/stringControlMetadata';
 import { CheckboxControlMetadata } from './checkbox-control/checkboxControlMetadata';
 
-export type AnyControlMetadata = GeneralControlMetadata | TextInputControlBaseMetadata | DecimalControlMetadata | IntegerControlMetadata | StringControlMetadata | CheckboxControlMetadata;
+export type AnyControlMetadata = GeneralControlMetadata | TextInputControlBaseMetadata | DecimalControlMetadata | IntegerControlMetadata | 
+                                 StringControlMetadata | CheckboxControlMetadata | FormGroupMetadata | FormArrayMetadata;
 export type ControlsMetadata = { [name: string]: AnyControlMetadata }
 
 export interface FormMetadata {
@@ -16,3 +17,13 @@ export interface FormMetadata {
     cancelUrl?: string;
 }
 
+export interface FormGroupMetadata {
+    controls: ControlsMetadata;
+}
+
+
+export interface FormArrayMetadata {
+    minLength?: number;
+    maxLength?: number;
+    itemMetadata: AnyControlMetadata;
+}

@@ -100,7 +100,9 @@ namespace McvAngularTest2.Models
                     isRequired = true,
                     minLength = 2,
                     maxLength = 50
-                }
+                },
+                minLength = 3,
+                maxLength = 5
             });
 
             /*
@@ -135,7 +137,9 @@ namespace McvAngularTest2.Models
             {
                 label = "Kontakty",
                 help = "Wpisz tutaj kontakty, w każdej odrębnie jedną osobę. Musisz podać zarówno imię, jak i nazwisko.",
-                itemMetadata = contactMetadata
+                itemMetadata = contactMetadata,
+                minLength = 1,
+                maxLength = 4
             });
 
             return fd;

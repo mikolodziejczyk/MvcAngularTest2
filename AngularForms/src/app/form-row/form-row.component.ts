@@ -38,12 +38,14 @@ export class FormRowComponent implements OnInit, AfterViewInit {
     return this._label || (this.generalControl ? this.generalControl.label : null);
   }
 
-  @Input() set id(v: string) { this._id = v; };
+  @Input() set id(v: string) {
+    this._id = v;
+  };
   get id(): string {
     return this._id || (this.generalControl ? this.generalControl.id : null);
   }
 
-  @Input() set help(v: string) { 
+  @Input() set help(v: string) {
     this._help = v;
     this.updatePopoverIfNeeded();
   };
@@ -51,24 +53,24 @@ export class FormRowComponent implements OnInit, AfterViewInit {
     return this._help || (this.generalControl ? this.generalControl.help : null);
   }
 
-  @Input() set control(v: FormControl) { 
+  @Input() set control(v: FormControl) {
     this._control = v;
     this.updatePopoverIfNeeded();
-   };
+  };
   get control(): FormControl {
     return this._control || (this.generalControl ? this.generalControl.control : null);
   }
 
   _generalControl: GeneralControl;
 
-  @Input() set generalControl(v: GeneralControl) { 
+  @Input() set generalControl(v: GeneralControl) {
     this._generalControl = v;
     this.updatePopoverIfNeeded();
-   };
+  };
   get generalControl(): GeneralControl {
     return this._generalControl;
   }
-  
+
 
   private _isPopoverInitialized: boolean = false;
   private _currentPopoverHelp: string = null;
@@ -98,6 +100,6 @@ export class FormRowComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public labelClass : string = BootstrapHtmlHelpers.editLabelClass;
-  public valueClass : string = BootstrapHtmlHelpers.editValueClass;
+  public labelClass: string = BootstrapHtmlHelpers.editLabelClass;
+  public valueClass: string = BootstrapHtmlHelpers.editValueClass;
 }
