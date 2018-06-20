@@ -74,13 +74,13 @@ export class MyFormComponent implements OnInit {
   formMetadata: FormMetadata;
   controlMetadata: ControlsMetadata;
 
+  address: FormGroup;
+
   isSaving: boolean = false;
   isCancelling: boolean = false;
   isFailure: boolean = false;
   failureMessage: string;
-
-
-  @ViewChild(AddressComponent) addressComponent: AddressComponent;
+  
 
   
 
@@ -97,6 +97,7 @@ export class MyFormComponent implements OnInit {
         firstName: (this.initialData.extraPerson.firstName || null),
         lastName: (this.initialData.extraPerson.lastName || null)
       }),
+      address: this.fb.group({}),
       recipients: this.fb.array([],
          Validators.compose([ArrayLengthValidators.minArrayLength(recipientsMetadata.minLength), ArrayLengthValidators.maxArrayLength(recipientsMetadata.maxLength)])),
       contacts: this.fb.array([], 
@@ -111,6 +112,7 @@ export class MyFormComponent implements OnInit {
     this.extraPerson = <FormGroup>this.myForm.controls["extraPerson"];
     this.recipients = <FormArray>this.myForm.controls["recipients"];
     this.contacts = <FormArray>this.myForm.controls["contacts"];
+    this.address = <FormGroup>this.myForm.controls["address"];
 
     for (let mail of this.initialData.recipients) {
       this.addRecipient(mail, true);
@@ -119,13 +121,6 @@ export class MyFormComponent implements OnInit {
     for (let contact of this.initialData.contacts) {
       this.addContact(contact.firstName, contact.lastName, true);
     }
-
-    window.setTimeout(this.initalizeLateBound, 0);
-  }
-
-  initalizeLateBound = () => {
-    this.addressComponent.initialData = this.initialData.address;
-    this.myForm.addControl("address",this.addressComponent.control);
   }
 
 

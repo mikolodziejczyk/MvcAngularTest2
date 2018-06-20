@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { FormGroupMetadata } from '../formMetadata';
 import { AddressData } from './addressData';
 
@@ -10,19 +10,25 @@ import { AddressData } from './addressData';
 })
 export class AddressComponent implements OnInit {
 
-  constructor(private fb: FormBuilder) {
-    this.control = fb.group({
-      address1: "",
-      address2: "",
-      city: "",
-      zip: ""
-    });
+  constructor() {
   }
 
   ngOnInit() {
   }
 
-  control: FormGroup;
+  private _control: FormGroup;
+
+  public get control(): FormGroup {
+    return this._control;
+  }
+
+  @Input()
+  public set control(value: FormGroup) {
+    if (value && value != this._control) {
+      this._control = value;
+      this.createChildControls();
+    }
+  }
 
   private _initialData: AddressData;
 
@@ -32,14 +38,28 @@ export class AddressComponent implements OnInit {
 
   @Input()
   public set initialData(value: AddressData) {
-    this._initialData = value;
-
-    this.control.patchValue(value);
+    if (value && this._initialData != value) {
+      this._initialData = value;
+      this.setInitialData();
+    }
   }
-
-
 
   @Input() controlMetadata: FormGroupMetadata;
 
 
+
+  private createChildControls() {
+    this._control.addControl("address1", new FormControl(""));
+    this._control.addControl("address2", new FormControl(""));
+    this._control.addControl("city", new FormControl(""));
+    this._control.addControl("zip", new FormControl(""));
+    this.setInitialData();
+  }
+
+
+  private setInitialData() {
+    if (this._initialData && this._control) {
+      this.control.patchValue(this._initialData);
+    }
+  }
 }
