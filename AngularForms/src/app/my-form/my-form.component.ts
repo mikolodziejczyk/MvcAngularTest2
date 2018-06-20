@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild, OnInit } from '@angular/core';
+import { Component, OnDestroy, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ValidationErrors, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -11,6 +11,8 @@ import { MyFormData } from './my-form-data';
 import { FormMetadataService } from '../form-metadata.service';
 import { MyFormSaveService } from './my-form-save.service';
 import { ArrayLengthValidators } from '../ArrayLengthValidators';
+import { AddressComponent } from '../address/address.component';
+
 
 
 
@@ -68,7 +70,6 @@ export class MyFormComponent implements OnInit {
   extraPerson: FormGroup;
   recipients: FormArray;
   contacts: FormArray;
-  address: FormGroup;
 
   formMetadata: FormMetadata;
   controlMetadata: ControlsMetadata;
@@ -77,6 +78,11 @@ export class MyFormComponent implements OnInit {
   isCancelling: boolean = false;
   isFailure: boolean = false;
   failureMessage: string;
+
+
+  @ViewChild(AddressComponent) addressComponent: AddressComponent;
+
+  
 
   createForm() {
     let recipientsMetadata : FormArrayMetadata = <FormArrayMetadata>this.controlMetadata["recipients"];
@@ -90,12 +96,6 @@ export class MyFormComponent implements OnInit {
       extraPerson: this.fb.group({
         firstName: (this.initialData.extraPerson.firstName || null),
         lastName: (this.initialData.extraPerson.lastName || null)
-      }),
-      address: this.fb.group({
-        address1: (this.initialData.address.address1 || null),
-        address2: (this.initialData.address.address2 || null),
-        city: (this.initialData.address.city || null),
-        zip: (this.initialData.address.zip || null),
       }),
       recipients: this.fb.array([],
          Validators.compose([ArrayLengthValidators.minArrayLength(recipientsMetadata.minLength), ArrayLengthValidators.maxArrayLength(recipientsMetadata.maxLength)])),
@@ -111,7 +111,6 @@ export class MyFormComponent implements OnInit {
     this.extraPerson = <FormGroup>this.myForm.controls["extraPerson"];
     this.recipients = <FormArray>this.myForm.controls["recipients"];
     this.contacts = <FormArray>this.myForm.controls["contacts"];
-    this.address = <FormGroup>this.myForm.controls["address"];
 
     for (let mail of this.initialData.recipients) {
       this.addRecipient(mail, true);
@@ -120,6 +119,14 @@ export class MyFormComponent implements OnInit {
     for (let contact of this.initialData.contacts) {
       this.addContact(contact.firstName, contact.lastName, true);
     }
+
+    window.setTimeout(this.initalizeLateBound, 0);
+  }
+
+  initalizeLateBound = () => {
+    console.log(`************* The address component is ${this.addressComponent}.`);
+    this.addressComponent.initialData = this.initialData.address;
+    this.myForm.addControl("address",this.addressComponent.control);
   }
 
 

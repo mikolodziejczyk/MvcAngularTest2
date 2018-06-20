@@ -22,6 +22,6 @@ namespace McvAngularTest2.Models
 
         public PersonNameVM[] contacts {get; set;}
 
-        public Address address;
+        public Address address { get; set; }
     }
 }

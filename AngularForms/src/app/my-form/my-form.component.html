@@ -43,8 +43,8 @@
 
       </mko-form-row>
 
-      <mko-form-row [control]="address" [label]="controlMetadata['address']?.label" [help]="controlMetadata['address']?.help">
-        <app-address [control]="address" [controlMetadata]="controlMetadata['address']"></app-address>
+      <mko-form-row [control]="addresstv.control" [label]="controlMetadata['address']?.label" [help]="controlMetadata['address']?.help">
+        <app-address #addresstv [controlMetadata]="controlMetadata['address']"></app-address>
 
       </mko-form-row>
 
