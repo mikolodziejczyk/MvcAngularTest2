@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, ViewChild, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ValidationErrors, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -23,7 +23,7 @@ import { AddressComponent } from '../address/address.component';
 })
 export class MyFormComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private metadataService: FormMetadataService, private saveService: MyFormSaveService) {
+  constructor(private fb: FormBuilder, private metadataService: FormMetadataService, private saveService: MyFormSaveService, private changeDetector : ChangeDetectorRef) {
     this.getInitialData();
     this.isNew = !this.initialData.id;
     this.loadMetadata();
@@ -121,6 +121,8 @@ export class MyFormComponent implements OnInit {
     for (let contact of this.initialData.contacts) {
       this.addContact(contact.firstName, contact.lastName, true);
     }
+
+    this.changeDetector.detectChanges();
   }
 
 
