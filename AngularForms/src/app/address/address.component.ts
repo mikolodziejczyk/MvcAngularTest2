@@ -17,8 +17,6 @@ export class AddressComponent implements OnInit {
       city: "",
       zip: ""
     });
-
-    console.log("--------------------- AddressComponent is instantiated ---------------------");
   }
 
   ngOnInit() {

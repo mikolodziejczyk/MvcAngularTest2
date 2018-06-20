@@ -124,7 +124,6 @@ export class MyFormComponent implements OnInit {
   }
 
   initalizeLateBound = () => {
-    console.log(`************* The address component is ${this.addressComponent}.`);
     this.addressComponent.initialData = this.initialData.address;
     this.myForm.addControl("address",this.addressComponent.control);
   }
