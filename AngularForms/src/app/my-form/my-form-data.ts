@@ -1,4 +1,5 @@
 import { PersonNameVM } from "./PersonNameVM";
+import { AddressData } from "../address/addressData";
 
 export interface MyFormData {
     id: number | null; // null for add
@@ -13,5 +14,7 @@ export interface MyFormData {
     extraPerson: PersonNameVM;
     recipients: string[];
     contacts: PersonNameVM[];
+
+    address: AddressData
 
 }

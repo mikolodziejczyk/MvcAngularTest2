@@ -46,6 +46,13 @@ namespace McvAngularTest2.Controllers
                 startYear = 2001,
                 notifyViaMail = true,
                 extraPerson = new PersonNameVM() { firstName = "John", lastName = "Doe" },
+                address = new Address()
+                {
+                    address1 = "ul. Jakaś 12/34",
+                    address2 = "w podwórzu",
+                    city = "Siemianowice Śląskie",
+                    zip = "12-456"
+                },
                 recipients = new string[] { "tom@gmail.com", "john@somewhere.com", "harry@nowhere.com" },
                 contacts = new PersonNameVM[]
                 {

@@ -142,7 +142,56 @@ namespace McvAngularTest2.Models
                 maxLength = 4
             });
 
+            fd.controls.Add("address", AddressMetadata());
+
             return fd;
+        }
+
+        public static FormGroupMetadata AddressMetadata()
+        {
+            FormGroupMetadata addressMetadata = new FormGroupMetadata()
+            {
+                label = "Adres",
+                help = "Podaj tutaj adres kontaktowy.",
+                isRequired = true
+            };
+
+            addressMetadata.controls.Add("address1", new StringControlMetadata()
+            {
+                label = "Adres 1",
+                placeholder = "Adres 1",
+                isRequired = true,
+                maxLength = 50,
+                minLength = 2
+            });
+
+            addressMetadata.controls.Add("address2", new StringControlMetadata()
+            {
+                label = "Adres 2",
+                placeholder = "Adres 2",
+                isRequired = false,
+                maxLength = 50
+            });
+
+            addressMetadata.controls.Add("zip", new StringControlMetadata()
+            {
+                label = "Kod pocztowy",
+                placeholder = "Kod",
+                isRequired = false,
+                maxLength = 10,
+                minLength = 3
+            });
+
+            addressMetadata.controls.Add("city", new StringControlMetadata()
+            {
+                label = "Miasto",
+                placeholder = "Miasto",
+                isRequired = false,
+                maxLength = 30,
+                minLength = 2
+            });
+
+            return addressMetadata;
         }
     }
 }

@@ -39,7 +39,7 @@ export class MyFormComponent implements OnInit {
       this.initialData = JSON.parse(dataElement.value);
     }
     else {
-      this.initialData = <MyFormData>JSON.parse('{"id":234,"locationId":1,"displayName":"Wpis próbny","unitPrice":321.12,"startYear":2001,"lastName":null,"notifyViaMail":true,"extraPerson":{"firstName":"John","lastName":"Doe"},"recipients":["tom@gmail.com","john@somewhere.com","harry@nowhere.com"],"contacts":[{"firstName":"Jan","lastName":"Kowalski"},{"firstName":"Tomasz","lastName":"Nowak"}]}');
+      this.initialData = <MyFormData>JSON.parse('{"id":234,"locationId":1,"displayName":"Wpis próbny","unitPrice":321.12,"startYear":2001,"lastName":null,"notifyViaMail":true,"extraPerson":{"firstName":"John","lastName":"Doe"},"recipients":["tom@gmail.com","john@somewhere.com","harry@nowhere.com"],"contacts":[{"firstName":"Jan","lastName":"Kowalski"},{"firstName":"Tomasz","lastName":"Nowak"}], "address":{"address1":"ul. Jakaś 12/34","address2":"w podwórzu","zip":"12-456","city":"Siemianowice Śląskie"}}');
     }
   }
 
@@ -68,6 +68,7 @@ export class MyFormComponent implements OnInit {
   extraPerson: FormGroup;
   recipients: FormArray;
   contacts: FormArray;
+  address: FormGroup;
 
   formMetadata: FormMetadata;
   controlMetadata: ControlsMetadata;
@@ -90,6 +91,12 @@ export class MyFormComponent implements OnInit {
         firstName: (this.initialData.extraPerson.firstName || null),
         lastName: (this.initialData.extraPerson.lastName || null)
       }),
+      address: this.fb.group({
+        address1: (this.initialData.address.address1 || null),
+        address2: (this.initialData.address.address2 || null),
+        city: (this.initialData.address.city || null),
+        zip: (this.initialData.address.zip || null),
+      }),
       recipients: this.fb.array([],
          Validators.compose([ArrayLengthValidators.minArrayLength(recipientsMetadata.minLength), ArrayLengthValidators.maxArrayLength(recipientsMetadata.maxLength)])),
       contacts: this.fb.array([], 
@@ -104,6 +111,7 @@ export class MyFormComponent implements OnInit {
     this.extraPerson = <FormGroup>this.myForm.controls["extraPerson"];
     this.recipients = <FormArray>this.myForm.controls["recipients"];
     this.contacts = <FormArray>this.myForm.controls["contacts"];
+    this.address = <FormGroup>this.myForm.controls["address"];
 
     for (let mail of this.initialData.recipients) {
       this.addRecipient(mail, true);

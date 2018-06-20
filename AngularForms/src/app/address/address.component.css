@@ -1,0 +1,3 @@
+div.control-row + div.control-row {
+    margin-top: 6px;
+}

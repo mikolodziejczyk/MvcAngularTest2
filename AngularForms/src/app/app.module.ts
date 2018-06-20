@@ -26,6 +26,7 @@ import { OverlayComponent } from './overlay/overlay.component';
 import { OperationFailedComponent } from './operation-failed/operation-failed.component';
 import { FormMetadataService } from './form-metadata.service';
 import { MyFormSaveService } from './my-form/my-form-save.service';
+import { AddressComponent } from './address/address.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { MyFormSaveService } from './my-form/my-form-save.service';
     FormErrorsComponent,
     MyFormComponent,
     OverlayComponent,
-    OperationFailedComponent
+    OperationFailedComponent,
+    AddressComponent
   ],
   imports: [
     BrowserModule,
