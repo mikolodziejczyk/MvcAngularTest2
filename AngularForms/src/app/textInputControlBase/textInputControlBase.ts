@@ -371,7 +371,7 @@ export class TextInputControlBase implements OnDestroy, AfterViewInit, ControlVa
     @ContentChild(FormControlDirective) formControlDirective : FormControlDirective;
 
     ngAfterViewInit(): void {
-        if (this.formControlDirective.control) {
+        if (this.formControlDirective && this.formControlDirective.control) {
         this.control = this.formControlDirective.control;
         }
     }

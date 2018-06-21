@@ -68,7 +68,6 @@ export class AddressComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     let id = this.address1.id;
-    console.log(`AddressComponent id ${id}`);
   }
 
 }
