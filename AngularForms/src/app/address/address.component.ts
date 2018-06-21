@@ -1,20 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { FormGroupMetadata } from '../formMetadata';
 import { AddressData } from './addressData';
+import { StringControlComponent } from '../string-component/string-control.component';
 
 @Component({
   selector: 'app-address',
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.css']
 })
-export class AddressComponent implements OnInit {
-
+export class AddressComponent implements OnInit, AfterViewInit {
   constructor() {
   }
 
   ngOnInit() {
   }
+
+  @ViewChild("address1") address1: StringControlComponent;
+
 
   private _control: FormGroup;
 
@@ -62,4 +65,10 @@ export class AddressComponent implements OnInit {
       this.control.patchValue(this._initialData);
     }
   }
+
+  ngAfterViewInit(): void {
+    let id = this.address1.id;
+    console.log(`AddressComponent id ${id}`);
+  }
+
 }

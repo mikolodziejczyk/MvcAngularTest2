@@ -43,8 +43,8 @@
 
       </mko-form-row>
 
-      <mko-form-row [control]="address" [label]="controlMetadata['address']?.label" [help]="controlMetadata['address']?.help">
-        <app-address [control]="address" [initialData]="initialData?.address" [controlMetadata]="controlMetadata['address']"></app-address>
+      <mko-form-row [control]="address" [label]="controlMetadata['address']?.label" [help]="controlMetadata['address']?.help" [id]="addressTv.address1.id">
+        <app-address #addressTv [control]="address" [initialData]="initialData?.address" [controlMetadata]="controlMetadata['address']"></app-address>
       </mko-form-row>
 
       <mko-form-row formArrayName="recipients" [control]="recipients" [label]="controlMetadata['recipients']?.label" [help]="controlMetadata['recipients']?.help">
