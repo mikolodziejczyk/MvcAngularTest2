@@ -1,5 +1,5 @@
-import { Input, ElementRef, OnDestroy } from "@angular/core";
-import { FormControl, ControlValueAccessor } from "@angular/forms";
+import { Input, ElementRef, OnDestroy, AfterViewInit, ViewChild, ContentChild } from "@angular/core";
+import { FormControl, ControlValueAccessor, FormControlDirective } from "@angular/forms";
 import { setControlError, removeControlError } from "../validationErrorHelpers";
 import { GeneralControl } from "../generalControl/generalControl";
 import { GeneralControlMetadata } from "../generalControl/generalControlMetadata";
@@ -7,7 +7,8 @@ import { uniqueControlIdGenerator } from "../uniqueControlIdGenerator";
 import { TextInputControlBaseMetadata } from "./textInputControlBaseMetadata";
 import { InternalControlErrors } from "../internalControlErrors";
 
-export class TextInputControlBase implements OnDestroy, ControlValueAccessor, GeneralControl {
+export class TextInputControlBase implements OnDestroy, AfterViewInit, ControlValueAccessor, GeneralControl {
+
     constructor(protected host: ElementRef) { }
 
     static readonly controlSizeSmall = "-mko-control-size-small";
@@ -144,7 +145,7 @@ export class TextInputControlBase implements OnDestroy, ControlValueAccessor, Ge
     protected _control: FormControl;
 
     /**
-     * Reference to FormControl, needs to be injected into this control.
+     * Reference to FormControl, needs to be injected into this control or provided via the FormControl directive.
     */
     @Input() public set control(value: FormControl) {
         this._control = value;
@@ -364,4 +365,16 @@ export class TextInputControlBase implements OnDestroy, ControlValueAccessor, Ge
     protected valueToString(value: any): string {
         return value ? value.toString() : "";
     }
+
+    // #region retrieving bound FormControl from a directive
+
+    @ContentChild(FormControlDirective) formControlDirective : FormControlDirective;
+
+    ngAfterViewInit(): void {
+        if (this.formControlDirective.control) {
+        this.control = this.formControlDirective.control;
+        }
+    }
+
+    // #endregion 
 }

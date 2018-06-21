@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterContentInit, OnDestroy, ViewChild, ElementRef, Input, forwardRef } from '@angular/core';
-import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, OnInit, AfterContentInit, OnDestroy, ViewChild, ElementRef, Input, forwardRef, ContentChild } from '@angular/core';
+import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR, FormControlDirective } from '@angular/forms';
 import { CheckboxControlMetadata } from './checkboxControlMetadata';
 import { GeneralControlMetadata } from '../generalControl/generalControlMetadata';
 import { uniqueControlIdGenerator } from '../uniqueControlIdGenerator';
@@ -26,7 +26,7 @@ export class CheckboxControlComponent implements OnInit, AfterContentInit, OnDes
   @ViewChild("checkbox")
   private _inputWrapper: ElementRef;
 
-  private get input(): HTMLInputElement{
+  private get input(): HTMLInputElement {
     return this._inputWrapper.nativeElement;
   }
 
@@ -125,68 +125,80 @@ export class CheckboxControlComponent implements OnInit, AfterContentInit, OnDes
   // #endregion event handlers
 
 
-  
-    // #region GeneralControl interface
 
-    /**
-     * Reference to FormControl, needs to be injected into this control.
-     */
-    @Input() control: FormControl;
+  // #region GeneralControl interface
 
-
-    /**
-     * The label displayed for this control.
-     */
-    @Input() label: string;
-
-    /**
-     * The input.id in this control
-     */
-    @Input() id: string;
+  /**
+   * Reference to FormControl, needs to be injected into this control or provided via the FormControl directive
+   */
+  @Input() control: FormControl;
 
 
-    /**
-     * Ignored in this control.
-     */
-    @Input() isRequired: boolean = false;
+  /**
+   * The label displayed for this control.
+   */
+  @Input() label: string;
 
-    @Input() help: string;
+  /**
+   * The input.id in this control
+   */
+  @Input() id: string;
 
 
-    /**
-     * The input.name in this control
-     */
-    @Input() name: string;
+  /**
+   * Ignored in this control.
+   */
+  @Input() isRequired: boolean = false;
 
-    protected _metadata: CheckboxControlMetadata;
+  @Input() help: string;
 
-    @Input() set metadata(v: GeneralControlMetadata) {
-        if (!v) return;
-        this.setMetadata(v);
 
+  /**
+   * The input.name in this control
+   */
+  @Input() name: string;
+
+  protected _metadata: CheckboxControlMetadata;
+
+  @Input() set metadata(v: GeneralControlMetadata) {
+    if (!v) return;
+    this.setMetadata(v);
+
+  }
+  get metadata(): GeneralControlMetadata {
+    return this._metadata;
+  }
+
+  /**
+   * Internal metadata set method. Allows overriding in the derived classes.
+   */
+  protected setMetadata(v: GeneralControlMetadata): void {
+    let hasMetatadaChanged: boolean = this._metadata != v;
+    this._metadata = <CheckboxControlMetadata>v;
+
+    this.label = this._metadata.label;
+    this.id = this._metadata.id || uniqueControlIdGenerator.getId();
+    if (this._metadata.name !== undefined) this.name = this._metadata.name;
+    this.help = this._metadata.help || null;
+    this.additionalLabel = this._metadata.additionalLabel || null;
+
+
+  }
+
+  // #endregion GeneralControl interface
+
+  @Input() additionalLabel: string;
+
+
+  // #region retrieving bound FormControl from a directive
+
+  @ContentChild(FormControlDirective) formControlDirective: FormControlDirective;
+
+  ngAfterViewInit(): void {
+    if (this.formControlDirective.control) {
+      this.control = this.formControlDirective.control;
     }
-    get metadata(): GeneralControlMetadata {
-        return this._metadata;
-    }
+  }
 
-    /**
-     * Internal metadata set method. Allows overriding in the derived classes.
-     */
-    protected setMetadata(v: GeneralControlMetadata): void {
-        let hasMetatadaChanged: boolean = this._metadata != v;
-        this._metadata = <CheckboxControlMetadata>v;
-
-        this.label = this._metadata.label;
-        this.id = this._metadata.id || uniqueControlIdGenerator.getId();
-        if (this._metadata.name !== undefined) this.name = this._metadata.name;
-        this.help = this._metadata.help || null;
-        this.additionalLabel = this._metadata.additionalLabel || null;
-
-        
-    }
-
-    // #endregion GeneralControl interface
-
-    @Input() additionalLabel: string;
-
+  // #endregion 
 }

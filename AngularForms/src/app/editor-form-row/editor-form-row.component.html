@@ -1,19 +1,19 @@
 <mko-form-row #formRow>
 
   <ng-container *ngIf="isDecimal">
-    <mko-decimal-control [metadata]="metadata" #editor [formControl]="boundFormControl" [control]="boundFormControl">
+    <mko-decimal-control [metadata]="metadata" #editor [formControl]="boundFormControl">
     </mko-decimal-control>
   </ng-container>
   <ng-container *ngIf="isInteger">
-    <mko-integer-control [metadata]="metadata" #editor [formControl]="boundFormControl" [control]="boundFormControl">
+    <mko-integer-control [metadata]="metadata" #editor [formControl]="boundFormControl">
     </mko-integer-control>
   </ng-container>
   <ng-container *ngIf="isString">
-    <mko-string-control [metadata]="metadata" #editor [formControl]="boundFormControl" [control]="boundFormControl">
+    <mko-string-control [metadata]="metadata" #editor [formControl]="boundFormControl">
     </mko-string-control>
   </ng-container>
   <ng-container *ngIf="isCheckbox">
-    <mko-checkbox-control [metadata]="metadata" #editor [formControl]="boundFormControl" [control]="boundFormControl">
+    <mko-checkbox-control [metadata]="metadata" #editor [formControl]="boundFormControl">
     </mko-checkbox-control>
   </ng-container>
 

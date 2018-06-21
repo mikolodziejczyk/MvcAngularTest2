@@ -25,12 +25,12 @@
         [id]="extraPersonFirstName.id">
         <div class="row">
           <div class="col-sm-6">
-            <mko-string-control #extraPersonFirstName [formControl]="extraPerson.controls['firstName']" [control]="extraPerson.controls['firstName']"
+            <mko-string-control #extraPersonFirstName [formControl]="extraPerson.controls['firstName']" 
               [metadata]="controlMetadata['extraPerson'].controls['firstName']">
             </mko-string-control>
           </div>
           <div class="col-sm-6">
-            <mko-string-control #extraPersonLastName [formControl]="extraPerson.controls['lastName']" [control]="extraPerson.controls['lastName']"
+            <mko-string-control #extraPersonLastName [formControl]="extraPerson.controls['lastName']" 
               [metadata]="controlMetadata['extraPerson'].controls['lastName']">
             </mko-string-control>
           </div>
@@ -51,7 +51,7 @@
         <ng-container *ngFor="let recipient of this.recipients.controls; let i = index">
           <div class="row array-entry-row">
             <div class="col-sm-6">
-              <mko-string-control #recipientStringControl [formControl]="recipients.controls[i]" [control]="recipients.controls[i]" [metadata]="controlMetadata['recipients'].itemMetadata">
+              <mko-string-control #recipientStringControl [formControl]="recipients.controls[i]" [metadata]="controlMetadata['recipients'].itemMetadata">
               </mko-string-control>
             </div>
             <div class="col-sm-5 col-sm-offset-1">
@@ -75,12 +75,12 @@
         <ng-container *ngFor="let contact of this.contacts.controls; let i = index">
           <div class="row array-entry-row">
             <div class="col-sm-4">
-              <mko-string-control #firstNameStringControl [formControl]="contacts.controls[i].controls.firstName" [control]="contacts.controls[i].controls.firstName"
+              <mko-string-control #firstNameStringControl [formControl]="contacts.controls[i].controls.firstName"
                 [metadata]="controlMetadata['contacts'].itemMetadata.controls.firstName">
               </mko-string-control>
             </div>
             <div class="col-sm-4">
-              <mko-string-control #lastNameStringControl [formControl]="contacts.controls[i].controls.lastName" [control]="contacts.controls[i].controls.lastName"
+              <mko-string-control #lastNameStringControl [formControl]="contacts.controls[i].controls.lastName"
                 [metadata]="controlMetadata['contacts'].itemMetadata.controls.lastName">
               </mko-string-control>
             </div>
