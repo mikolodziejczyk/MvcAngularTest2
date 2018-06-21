@@ -10,9 +10,8 @@ import { errorsToErrorObject } from '../formhelpers/errorsToErrorObject';
 import { MyFormData } from './my-form-data';
 import { FormMetadataService } from '../form-metadata.service';
 import { MyFormSaveService } from './my-form-save.service';
-import { ArrayLengthValidators } from '../ArrayLengthValidators';
-import { AddressComponent } from '../address/address.component';
-
+import { minArrayLengthValidator } from '../array-length-validators/minArrayLengthValidator';
+import { maxArrayLengthValidator } from '../array-length-validators/maxArrayLengthValidator';
 
 
 
@@ -23,7 +22,7 @@ import { AddressComponent } from '../address/address.component';
 })
 export class MyFormComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private metadataService: FormMetadataService, private saveService: MyFormSaveService, private changeDetector : ChangeDetectorRef) {
+  constructor(private fb: FormBuilder, private metadataService: FormMetadataService, private saveService: MyFormSaveService, private changeDetector: ChangeDetectorRef) {
     this.getInitialData();
     this.isNew = !this.initialData.id;
     this.loadMetadata();
@@ -80,13 +79,13 @@ export class MyFormComponent implements OnInit {
   isCancelling: boolean = false;
   isFailure: boolean = false;
   failureMessage: string;
-  
 
-  
+
+
 
   createForm() {
-    let recipientsMetadata : FormArrayMetadata = <FormArrayMetadata>this.controlMetadata["recipients"];
-    let contactsMetadata : FormArrayMetadata = <FormArrayMetadata>this.controlMetadata["contacts"];
+    let recipientsMetadata: FormArrayMetadata = <FormArrayMetadata>this.controlMetadata["recipients"];
+    let contactsMetadata: FormArrayMetadata = <FormArrayMetadata>this.controlMetadata["contacts"];
 
     this.myForm = this.fb.group({
       unitPrice: (this.initialData.unitPrice || null),
@@ -99,9 +98,12 @@ export class MyFormComponent implements OnInit {
       }),
       address: this.fb.group({}),
       recipients: this.fb.array([],
-         Validators.compose([ArrayLengthValidators.minArrayLength(recipientsMetadata.minLength), ArrayLengthValidators.maxArrayLength(recipientsMetadata.maxLength)])),
-      contacts: this.fb.array([], 
-        Validators.compose([ArrayLengthValidators.minArrayLength(contactsMetadata.minLength), ArrayLengthValidators.maxArrayLength(contactsMetadata.maxLength)]))
+        Validators.compose([
+          minArrayLengthValidator(recipientsMetadata.minLength, (label: string, required: number, actual: number) => `Musisz wprowadzić co najmniej ${required} odbiorców`),
+          maxArrayLengthValidator(recipientsMetadata.maxLength, (label: string, required: number, actual: number) => `Możesz wprowadzić co najwyżej ${required} odbiorców`)])),
+      contacts: this.fb.array([],
+        Validators.compose([
+          minArrayLengthValidator(contactsMetadata.minLength), maxArrayLengthValidator(contactsMetadata.maxLength)]))
     });
 
 
