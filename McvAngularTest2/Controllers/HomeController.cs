@@ -59,9 +59,19 @@ namespace McvAngularTest2.Controllers
             return Content(rs, "application/json");
         }
 
-        public ActionResult Load(int id)
+        public ActionResult Load(int? id)
         {
-            MyFormData data = GetData(id);
+            MyFormData data;
+
+            if (id.HasValue)
+            {
+                data = GetData(id.Value);
+            }
+            else
+            {
+                data = new MyFormData();
+            }
+
             string initialData = JsonConvert.SerializeObject(data);
             return Content(initialData, "application/json");
         }
@@ -104,7 +114,7 @@ namespace McvAngularTest2.Controllers
         {
             return new MyFormData()
             {
-                id = 234,
+                id = id,
                 locationId = 1,
                 displayName = "Wpis próbny",
 

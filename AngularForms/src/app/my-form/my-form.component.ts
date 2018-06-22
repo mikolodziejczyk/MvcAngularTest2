@@ -1,8 +1,6 @@
 import { Component, OnDestroy, ViewChild, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ValidationErrors, FormArray } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
 
-import { HttpClient } from '@angular/common/http';
 import { FormMetadata, ControlsMetadata, FormArrayMetadata } from '../formMetadata';
 import { markFormGroupTouched } from '../formhelpers/formHelpers';
 import { FormSaveReply } from '../formSaveReply';
@@ -12,6 +10,7 @@ import { FormMetadataService } from '../form-metadata.service';
 import { MyFormSaveService } from './my-form-save.service';
 import { minArrayLengthValidator } from '../array-length-validators/minArrayLengthValidator';
 import { maxArrayLengthValidator } from '../array-length-validators/maxArrayLengthValidator';
+import { LoadDataService } from './load-data.service';
 
 
 
@@ -22,41 +21,46 @@ import { maxArrayLengthValidator } from '../array-length-validators/maxArrayLeng
 })
 export class MyFormComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private metadataService: FormMetadataService, private saveService: MyFormSaveService, private changeDetector: ChangeDetectorRef) {
-    this.getInitialData();
-    this.isNew = !this.initialData.id;
-    this.loadMetadata();
+  constructor(private fb: FormBuilder, 
+    private metadataService: FormMetadataService, 
+    private loadService: LoadDataService,
+    private saveService: MyFormSaveService, 
+    private changeDetector: ChangeDetectorRef) {
+
 
   }
 
   ngOnInit() {
-
+    this.loadForm();
 
   }
 
-  getInitialData(): void {
-    let dataElement = (<HTMLInputElement>document.getElementById("initialData"));
-    if (dataElement) {
-      this.initialData = JSON.parse(dataElement.value);
-    }
-    else {
-      this.initialData = <MyFormData>JSON.parse('{"id":234,"locationId":1,"displayName":"Wpis próbny","unitPrice":321.12,"startYear":2001,"lastName":null,"notifyViaMail":true,"extraPerson":{"firstName":"John","lastName":"Doe"},"recipients":["tom@gmail.com","john@somewhere.com","harry@nowhere.com"],"contacts":[{"firstName":"Jan","lastName":"Kowalski"},{"firstName":"Tomasz","lastName":"Nowak"}], "address":{"address1":"ul. Jakaś 12/34","address2":"w podwórzu","zip":"12-456","city":"Siemianowice Śląskie"}}');
-    }
-  }
-
-  async loadMetadata() {
+  async loadForm() {
+    let formInitialDataUrl = "/api/home/Load/123"; // fallback value
     let formMetadataUrl = "/api/home/FormMetadata"; // fallback value
-    let dataElement = (<HTMLInputElement>document.getElementById("formMetadataUrl"));
-    if (dataElement) {
-      formMetadataUrl = dataElement.value;
+
+    let initialDataPromise = this.loadService.loadData(formInitialDataUrl);
+    let formMetadataPromise = this.metadataService.getMetadata(formMetadataUrl);
+
+    try 
+    {
+      // wait for initial data
+      this.initialData = await initialDataPromise;
+      this.isNew = !this.initialData.id;
+
+      // wait for metadata
+      this.formMetadata = await formMetadataPromise;
+      this.controlMetadata = this.formMetadata.controls;
+
+      // eventually create the form
+      this.createForm();
     }
-
-    console.log(`Form metadata url: ${formMetadataUrl}`);
-    this.formMetadata = await this.metadataService.getMetadata(formMetadataUrl);
-    this.controlMetadata = this.formMetadata.controls;
-    this.createForm();
+    catch (e)
+    {
+      alert("Unable to load the form. Please contact the system administrator");
+      window.location.href = "";
+    }
   }
-
 
   initialData: MyFormData;
   isNew: boolean;

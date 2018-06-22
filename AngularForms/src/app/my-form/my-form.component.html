@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="page-header">
-    <h1>
+    <h1 *ngIf="formMetadata && initialData">
       <ng-container *ngIf="isNew">Dodawanie nowego elementu</ng-container>
       <ng-container *ngIf="!isNew">Edycja elementu
         <b>{{ initialData.displayName }}</b>
@@ -8,7 +8,7 @@
     </h1>
   </div>
 
-  <ng-container *ngIf="formMetadata && !isFailure">
+  <ng-container *ngIf="formMetadata && initialData && !isFailure">
 
     <form class="form-horizontal" [formGroup]="myForm" novalidate (ngSubmit)="onSubmit()">
 
@@ -110,7 +110,7 @@
 
   </ng-container>
 
-  <ng-container *ngIf="!formMetadata">
+  <ng-container *ngIf="!formMetadata || !initialData">
     <div>Loading...</div>
   </ng-container>
 

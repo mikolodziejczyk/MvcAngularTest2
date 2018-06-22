@@ -27,6 +27,7 @@ import { OperationFailedComponent } from './operation-failed/operation-failed.co
 import { FormMetadataService } from './form-metadata.service';
 import { MyFormSaveService } from './my-form/my-form-save.service';
 import { AddressComponent } from './address/address.component';
+import { LoadDataService } from './my-form/load-data.service';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,7 @@ import { AddressComponent } from './address/address.component';
     HttpClientModule,
   ],
   entryComponents: [AnotherComponentComponent],
-  providers: [ ErrorMessageFormatter, MyFormSaveService, FormMetadataService ],
+  providers: [ ErrorMessageFormatter, MyFormSaveService, FormMetadataService, LoadDataService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
