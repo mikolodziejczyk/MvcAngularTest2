@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy, ElementRef, forwardRef, Input } from '@angular/core';
-import { TextInputControlBase } from '../textInputControlBase/textInputControlBase';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { setControlError, removeControlError } from '../validationErrorHelpers';
-import { localeParseInt, localePaseFloat } from '../numberHelpers/localeNumberParse';
-import { formatNumberPlain, formatNumber } from '../numberHelpers/localeNumberFormat';
+import { localePaseFloat } from '../numberHelpers/localeNumberParse';
+import { formatNumberPlain } from '../numberHelpers/localeNumberFormat';
 import { roundAwayFromZero } from '../numberHelpers/numberHelpers';
 import { DecimalControlMetadata } from './decimalControlMetadata';
 import { sprintf } from  "sprintf-js"
+import { TextControlBaseComponent } from '../text-control-base/text-control-base.component';
 
 @Component({
   selector: 'mko-decimal-control',
@@ -20,14 +19,14 @@ import { sprintf } from  "sprintf-js"
     }
   ]
 })
-export class DecimalControlComponent extends TextInputControlBase implements OnInit, OnDestroy {
+export class DecimalControlComponent extends TextControlBaseComponent implements OnInit, OnDestroy {
   static error_NaN: string = "notANumber";
   static error_min: string = "min";
   static error_max: string = "max";
   static error_maxDecimalDigits: string = "maxDecimalDigits";
 
   constructor(host: ElementRef) {
-    super(host);
+    super();
   }
 
   ngOnInit() {

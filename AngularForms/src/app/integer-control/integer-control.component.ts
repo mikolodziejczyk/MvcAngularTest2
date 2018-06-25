@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, ElementRef, forwardRef, Input } from '@angular/core';
-import { TextInputControlBase } from '../textInputControlBase/textInputControlBase';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { setControlError, removeControlError } from '../validationErrorHelpers';
 import { localeParseInt } from '../numberHelpers/localeNumberParse';
 import { formatNumberPlain } from '../numberHelpers/localeNumberFormat';
 import { IntegerControlMetadata } from './integerControlMetadata';
+import { TextControlBaseComponent } from '../text-control-base/text-control-base.component';
 
 @Component({
   selector: 'mko-integer-control',
@@ -18,13 +18,13 @@ import { IntegerControlMetadata } from './integerControlMetadata';
     }
   ]
 })
-export class IntegerControlComponent extends TextInputControlBase implements OnInit, OnDestroy {
+export class IntegerControlComponent extends TextControlBaseComponent implements OnInit, OnDestroy {
   static error_NaN: string = "notANumber";
   static error_min: string = "min";
   static error_max: string = "max";
 
   constructor(host: ElementRef) {
-    super(host);
+    super();
   }
 
   ngOnInit() {

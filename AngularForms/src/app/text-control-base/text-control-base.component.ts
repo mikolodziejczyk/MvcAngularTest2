@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ContentChild, forwardRef } from '@angular/core';
+import { Component, OnInit, Input, ContentChild, forwardRef, OnDestroy } from '@angular/core';
 import { TextInputControlBaseMetadata } from '../textInputControlBase/textInputControlBaseMetadata';
 import { GeneralControlMetadata } from '../generalControl/generalControlMetadata';
 import { uniqueControlIdGenerator } from '../uniqueControlIdGenerator';
@@ -17,7 +17,7 @@ import { InternalControlErrors } from '../internalControlErrors';
     }
   ]
 })
-export class TextControlBaseComponent implements OnInit {
+export class TextControlBaseComponent implements OnInit, OnDestroy {
 
   static readonly controlSizeSmall = "-mko-control-size-small";
   static readonly controlSizeMedium = "-mko-control-size-medium";
@@ -33,9 +33,12 @@ export class TextControlBaseComponent implements OnInit {
 
   }
 
+  ngOnDestroy() {
+  }
+
   @Input() useDefaultTemplate: boolean = true;
 
-  value: any;
+  valueAsString: any;
   disabled: boolean;
 
   // #region ControlValueAccessor
@@ -46,10 +49,10 @@ export class TextControlBaseComponent implements OnInit {
    * @param obj - the new control value in any form supported by the control.
    */
   writeValue(obj: any): void {
-    this.value = this.valueToString(obj);
+    this.valueAsString = this.valueToString(obj);
 
     window.setTimeout(() => {
-      this.updateControl(this.value, false);
+      this.updateControl(this.valueAsString, false);
     }, 0);
 
   }

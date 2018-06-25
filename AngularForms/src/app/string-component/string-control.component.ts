@@ -1,8 +1,7 @@
 import { Component, OnInit, forwardRef, ElementRef, Input, OnDestroy } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { setControlError, removeControlError } from '../validationErrorHelpers';
-import { TextInputControlBase } from '../textInputControlBase/textInputControlBase';
 import { StringControlMetadata } from './stringControlMetadata';
+import { TextControlBaseComponent } from '../text-control-base/text-control-base.component';
 
 /*
 ** TODO
@@ -22,11 +21,11 @@ import { StringControlMetadata } from './stringControlMetadata';
     }
   ]
 })
-export class StringControlComponent extends TextInputControlBase implements OnInit, OnDestroy {
+export class StringControlComponent extends TextControlBaseComponent implements OnInit, OnDestroy {
   static error_min_length: string = "min_length";
 
   constructor(host: ElementRef) {
-    super(host);
+    super();
   }
 
   ngOnInit() {
