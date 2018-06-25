@@ -57,8 +57,9 @@ export class MyFormComponent implements OnInit {
     }
     catch (e)
     {
+      console.log(`Error loading: ${e}`);
       alert("Unable to load the form. Please contact the system administrator");
-      window.location.href = "";
+      // window.location.href = "";
     }
   }
 

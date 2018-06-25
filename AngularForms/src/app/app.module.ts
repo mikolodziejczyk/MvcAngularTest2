@@ -28,6 +28,7 @@ import { FormMetadataService } from './form-metadata.service';
 import { MyFormSaveService } from './my-form/my-form-save.service';
 import { AddressComponent } from './address/address.component';
 import { LoadDataService } from './my-form/load-data.service';
+import { TextControlBaseComponent } from './text-control-base/text-control-base.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { LoadDataService } from './my-form/load-data.service';
     MyFormComponent,
     OverlayComponent,
     OperationFailedComponent,
-    AddressComponent
+    AddressComponent,
+    TextControlBaseComponent
   ],
   imports: [
     BrowserModule,

@@ -14,8 +14,19 @@
 
       <mko-editor-form-row [boundFormControl]="unitPrice" [metadata]="controlMetadata['unitPrice']">
       </mko-editor-form-row>
-      <mko-editor-form-row [boundFormControl]="startYear" [metadata]="controlMetadata['startYear']">
-      </mko-editor-form-row>
+
+      <!-- <mko-editor-form-row [boundFormControl]="startYear" [metadata]="controlMetadata['startYear']">
+      </mko-editor-form-row> -->
+      <!-- temporary test -->
+      <mko-form-row [control]="startYear" [generalControl]="controlMetadata['startYear']"
+        [id]="startYearComponent.id">
+        <mko-text-control-base #startYearComponent [formControl]="startYear" [metadata]="controlMetadata['startYear']">
+           <!-- <input type="text" class="form-control" [value]="startYearComponent.value" [id]="startYearComponent.id" [disabled]="startYearComponent.disabled" [name]="startYearComponent.name" [placeholder]="startYearComponent.placeholder"
+            [maxLength]="startYearComponent.maxLength" (input)="startYearComponent.onInput($event);" (change)="startYearComponent.onInput($event);" (blur)="startYearComponent.onBlur();" />  -->
+        </mko-text-control-base>
+      </mko-form-row>
+
+
       <mko-editor-form-row [boundFormControl]="lastName" [metadata]="controlMetadata['lastName']">
       </mko-editor-form-row>
       <mko-editor-form-row [boundFormControl]="notifyViaMail" [metadata]="controlMetadata['notifyViaMail']">
@@ -25,13 +36,11 @@
         [id]="extraPersonFirstName.id">
         <div class="row">
           <div class="col-sm-6">
-            <mko-string-control #extraPersonFirstName [formControl]="extraPerson.controls['firstName']" 
-              [metadata]="controlMetadata['extraPerson'].controls['firstName']">
+            <mko-string-control #extraPersonFirstName [formControl]="extraPerson.controls['firstName']" [metadata]="controlMetadata['extraPerson'].controls['firstName']">
             </mko-string-control>
           </div>
           <div class="col-sm-6">
-            <mko-string-control #extraPersonLastName [formControl]="extraPerson.controls['lastName']" 
-              [metadata]="controlMetadata['extraPerson'].controls['lastName']">
+            <mko-string-control #extraPersonLastName [formControl]="extraPerson.controls['lastName']" [metadata]="controlMetadata['extraPerson'].controls['lastName']">
             </mko-string-control>
           </div>
         </div>
@@ -75,13 +84,11 @@
         <ng-container *ngFor="let contact of this.contacts.controls; let i = index">
           <div class="row array-entry-row">
             <div class="col-sm-4">
-              <mko-string-control #firstNameStringControl [formControl]="contacts.controls[i].controls.firstName"
-                [metadata]="controlMetadata['contacts'].itemMetadata.controls.firstName">
+              <mko-string-control #firstNameStringControl [formControl]="contacts.controls[i].controls.firstName" [metadata]="controlMetadata['contacts'].itemMetadata.controls.firstName">
               </mko-string-control>
             </div>
             <div class="col-sm-4">
-              <mko-string-control #lastNameStringControl [formControl]="contacts.controls[i].controls.lastName"
-                [metadata]="controlMetadata['contacts'].itemMetadata.controls.lastName">
+              <mko-string-control #lastNameStringControl [formControl]="contacts.controls[i].controls.lastName" [metadata]="controlMetadata['contacts'].itemMetadata.controls.lastName">
               </mko-string-control>
             </div>
 

@@ -1,0 +1,8 @@
+<ng-container *ngIf="!useDefaultTemplate">
+  <ng-content></ng-content>
+</ng-container>
+<ng-container *ngIf="useDefaultTemplate">
+  <input type="text" class="form-control" [value]="value" [id]="id" [disabled]="disabled" [name]="name" [placeholder]="placeholder"
+    [maxLength]="maxLength" (input)="onInput($event);" (change)="onInput($event);" (blur)="onBlur();" [class.-mko-control-size-small]="isControlSizeSmall"
+    [class.-mko-control-size-medium]="isControlSizeMedium" [class.-mko-control-size-large]="isControlSizeLarge" />
+</ng-container>
