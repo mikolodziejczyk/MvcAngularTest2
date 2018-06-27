@@ -7,6 +7,10 @@ namespace MkoForms
 {
     public class FormSaveReply
     {
+        public FormSaveReply()
+        {
+        }
+
         public bool? isSuccess;
         public bool? isError;
         public bool? isFailure;
@@ -15,6 +19,8 @@ namespace MkoForms
         public string failureMessage;
 
         public string redirectUrl;
+
+        public IDictionary<string, object> propertyErrors;
 
         public static FormSaveReply Success
         {

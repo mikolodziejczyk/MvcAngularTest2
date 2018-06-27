@@ -11,6 +11,7 @@ import { MyFormSaveService } from './my-form-save.service';
 import { minArrayLengthValidator } from '../array-length-validators/minArrayLengthValidator';
 import { maxArrayLengthValidator } from '../array-length-validators/maxArrayLengthValidator';
 import { LoadDataService } from './load-data.service';
+import { isArray } from 'util';
 
 
 
@@ -21,10 +22,10 @@ import { LoadDataService } from './load-data.service';
 })
 export class MyFormComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, 
-    private metadataService: FormMetadataService, 
+  constructor(private fb: FormBuilder,
+    private metadataService: FormMetadataService,
     private loadService: LoadDataService,
-    private saveService: MyFormSaveService, 
+    private saveService: MyFormSaveService,
     private changeDetector: ChangeDetectorRef) {
 
 
@@ -42,8 +43,7 @@ export class MyFormComponent implements OnInit {
     let initialDataPromise = this.loadService.loadData(formInitialDataUrl);
     let formMetadataPromise = this.metadataService.getMetadata(formMetadataUrl);
 
-    try 
-    {
+    try {
       // wait for initial data
       this.initialData = await initialDataPromise;
       this.isNew = !this.initialData.id;
@@ -55,8 +55,7 @@ export class MyFormComponent implements OnInit {
       // eventually create the form
       this.createForm();
     }
-    catch (e)
-    {
+    catch (e) {
       console.log(`Error loading: ${e}`);
       alert("Unable to load the form. Please contact the system administrator");
       // window.location.href = "";
@@ -162,11 +161,28 @@ export class MyFormComponent implements OnInit {
 
     if (r.isSuccess) {
       window.location.href = this.formMetadata.okUrl;
-    } else if (r.isError) {
+    }
+    else if (r.isError) {
 
+      // handle form-level server-side errors
+      
       let errors: ValidationErrors = errorsToErrorObject(r.errors);
       this.myForm.setErrors(errors);
-    } else if (r.isFailure) {
+
+      // handle property-level server-side errors
+
+      if (r.propertyErrors) {
+        for (let controlPath in r.propertyErrors) {
+          let error = r.propertyErrors[controlPath];
+          let control = this.myForm.get(controlPath);
+          if (control) {
+            let errors: ValidationErrors = errorsToErrorObject(error);
+            control.setErrors(errors);
+          }
+        }
+      }
+    }
+    else if (r.isFailure) {
       this.isFailure = true;
       this.failureMessage = r.failureMessage || "Nie udało sie zapisać zmian. Spróbuj ponownie.";
     }

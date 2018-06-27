@@ -95,6 +95,16 @@ namespace McvAngularTest2.Controllers
             {
                 r.isError = true;
                 r.errors = new string[] { "Wartość jest niewystarczająca.", "Podane wartości są bez sensu!" };
+
+                r.propertyErrors = new Dictionary<string, object>();
+                r.propertyErrors["notifyViaMail"] = "In %s you must allow notifying by mail";
+                r.propertyErrors["extraPerson.lastName"] = "In %s the name seems suspicious.";
+                r.propertyErrors["recipients.0"] = "W polu %s wartość jest brzydka.";
+                r.propertyErrors["contacts.0.firstName"] = new string[] { "W polu %s mamy pierwszy błąd.", "W polu %s mamy też błąd kolejny" };
+
+                int lastIndex = data.contacts.Length - 1;
+                string path = string.Format("contacts.{0}.lastName", lastIndex);
+                r.propertyErrors[path] = "In %s we have an error added dynamically";
             }
             else
             {

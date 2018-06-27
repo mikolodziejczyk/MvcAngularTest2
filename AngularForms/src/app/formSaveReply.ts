@@ -33,4 +33,11 @@ export interface FormSaveReply {
      * Optional reason for the failure if the result is an unrecoverable failure.
      */
     failureMessage?: string;
+
+    /**
+     * Server-side property-level errors. 
+     * The key is an string with the path to the control, e.g. "contacts.0.lastName". The value is a string or an array of strings.
+     * The errors message can contain the %s placeholder, which will be replaced by the control label when displaying the error.
+     */
+    propertyErrors?: { [key: string]: any };
 }
