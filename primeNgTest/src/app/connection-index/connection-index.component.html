@@ -27,7 +27,7 @@
     <tr>
       <td>{{connection.ppe}}</td>
       <td>{{connection.meterCode}}</td>
-      <td>{{connection.name}}</td>
+      <td [innerHTML]="connection.name"></td>
       <td>{{connection.tariff}}</td>
       <td>{{connection.company}}</td>
     </tr>

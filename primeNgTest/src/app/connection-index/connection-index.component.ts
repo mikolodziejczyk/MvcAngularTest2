@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConnectionListService } from '../connection-list.service';
 import { Connection } from '../connection';
 import { LazyLoadEvent } from 'primeng/api';
+import { ConnectionVM } from '../connectionVM';
 
 @Component({
   selector: 'app-connection-index',
@@ -18,7 +19,7 @@ export class ConnectionIndexComponent implements OnInit {
 
   // allData: Connection[];
   connectionCount: number;
-  connections: Connection[];
+  connections: ConnectionVM[];
   loading: boolean = false;
 
   async loadConnections() {
@@ -56,7 +57,7 @@ export class ConnectionIndexComponent implements OnInit {
     try {
       let dataPage = await this.connectionListService.getConnectionPage(event);
       console.log(`Successfully retrieved ${dataPage.count} connections.`);
-      this.connections = dataPage.rows;
+      this.connections = dataPage.rows.map(x=> new ConnectionVM(x));
       this.connectionCount = dataPage.count;
     }
     catch(e) {
