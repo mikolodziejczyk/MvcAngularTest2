@@ -1,35 +1,46 @@
 <h1>Connections</h1>
-<p-table #dt [value]="connections" [paginator]="true" pageLinks="10" [rows]="20" [resizableColumns]="true" [reorderableColumns]="true"
-  [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="connectionCount" [loading]="loading" sortMode="multiple">
+<p-table #dt [columns]="cols" [value]="connections" [paginator]="true" pageLinks="10" [rows]="20" [resizableColumns]="true"
+  [reorderableColumns]="true" [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="connectionCount" [loading]="loading"
+  sortMode="multiple">
   <ng-template pTemplate="caption">
     <div style="text-align: right">
       <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-      <input type="text" pInputText size="50" placeholder="szukaj" (input)="dt.filterGlobal($event.target.value, 'contains')"
-        style="width:auto">
+      <input type="text" pInputText size="50" placeholder="szukaj" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
     </div>
   </ng-template>
-  <ng-template pTemplate="header">
+  <ng-template pTemplate="header" let-columns>
     <tr>
-      <th pResizableColumn pReorderableColumn [pSortableColumn]="'ppe'">PPE
-        <p-sortIcon [field]="'ppe'"></p-sortIcon>
-      </th>
-      <th pResizableColumn pReorderableColumn  [pSortableColumn]="'meterCode'">Meter Code
-        <p-sortIcon [field]="'meterCode'"></p-sortIcon>
-      </th>
-      <th pResizableColumn pReorderableColumn [pSortableColumn]="'name'">Name
-        <p-sortIcon [field]="'name'"></p-sortIcon>
-      </th>
-      <th pResizableColumn pReorderableColumn>Tariff</th>
-      <th pResizableColumn pReorderableColumn>company</th>
+      <ng-container *ngFor="let col of columns">
+        <ng-container *ngIf="col.isSortable">
+          <th [pSortableColumn]="col.field" pReorderableColumn pResizableColumn>
+            {{col.header}}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
+        </ng-container>
+        <ng-container *ngIf="!col.isSortable">
+            <th pReorderableColumn pResizableColumn>
+              {{col.header}}
+            </th>
+          </ng-container>
+      </ng-container>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-connection>
+  <ng-template pTemplate="body" let-connection let-columns="columns">
     <tr>
-      <td>{{connection.ppe}}</td>
-      <td>{{connection.meterCode}}</td>
-      <td [innerHTML]="connection.name"></td>
-      <td>{{connection.tariff}}</td>
-      <td>{{connection.company}}</td>
+      <ng-container *ngFor="let col of columns">
+        <ng-container *ngIf="col.isHtml">
+          <td [innerHTML]="connection[col.field]">
+
+          </td>
+        </ng-container>
+        <ng-container *ngIf="!col.isHtml">
+          <td>
+            {{connection[col.field]}}
+          </td>
+        </ng-container>
+
+
+      </ng-container>
     </tr>
   </ng-template>
 </p-table>
