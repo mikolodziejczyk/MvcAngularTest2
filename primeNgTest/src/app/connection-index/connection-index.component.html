@@ -1,8 +1,12 @@
 <h1>Connections</h1>
-<p-table #dt [columns]="cols" [value]="connections" [paginator]="true" pageLinks="10" [rows]="20" [resizableColumns]="true"
+<p-table #dt [columns]="selectedColumns" [value]="connections" [paginator]="true" pageLinks="10" [rows]="20" [resizableColumns]="true"
   [reorderableColumns]="true" [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="connectionCount" [loading]="loading"
-  sortMode="multiple">
+  sortMode="multiple" (onColReorder)="onColReorder($event);">
   <ng-template pTemplate="caption">
+      <div style="text-align:left">
+          <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+                      selectedItemsLabel="Wybrano {0} kolumn" [style]="{minWidth: '200px'}" defaultLabel="Wybierz kolumny"></p-multiSelect>
+      </div>
     <div style="text-align: right">
       <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
       <input type="text" pInputText size="50" placeholder="szukaj" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
@@ -26,7 +30,7 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-connection let-columns="columns">
-    <tr>
+    <tr (dblclick)="rowClicked(connection);">
       <ng-container *ngFor="let col of columns">
         <ng-container *ngIf="col.isHtml">
           <td [innerHTML]="connection[col.field]">

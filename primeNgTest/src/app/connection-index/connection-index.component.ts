@@ -20,6 +20,8 @@ export class ConnectionIndexComponent implements OnInit {
       { field: 'tariff', header: 'Taryfa', isSortable: true },
       { field: 'company', header: 'Akronim', isSortable: false }
     ];
+
+    this.selectedColumns = this.cols;
   }
 
   ngOnInit() {
@@ -27,6 +29,7 @@ export class ConnectionIndexComponent implements OnInit {
   }
 
   cols: any[];
+  selectedColumns: any[];
   connectionCount: number;
   connections: ConnectionVM[];
   loading: boolean = false;
@@ -48,5 +51,15 @@ export class ConnectionIndexComponent implements OnInit {
     }
 
     this.loading = false;
+  }
+
+
+  rowClicked = (connection : Connection) => {
+    alert(connection.id);
+  }
+
+  onColReorder = (event: any )=> {
+    console.log(`${JSON.stringify(event.columns)}`);
+    console.log(`The current columns state: ${JSON.stringify(this.selectedColumns)}`);
   }
 }

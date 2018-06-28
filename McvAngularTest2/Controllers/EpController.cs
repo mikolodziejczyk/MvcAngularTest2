@@ -65,10 +65,8 @@ namespace McvAngularTest2.Controllers
                                 case "name": query = isAsc ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name); break;
                                 case "ppe": query = isAsc ? query.OrderBy(x => x.PPE) : query.OrderByDescending(x => x.PPE); break;
                                 case "meterCode": query = isAsc ? query = query.OrderBy(x => x.MeterCode) : query.OrderByDescending(x => x.MeterCode); break;
-                                    //case "meterCodeDESC": query = query.OrderByDescending(x => x.MeterCode); break;
-                                    //case "Company.AcronymASC": query = query.OrderBy(x => x.Company.Acronym); break;
-                                    //case "Company.AcronymDESC": query = query.OrderByDescending(x => x.Company.Acronym); break;
-                                    //case "Tariff.NameASC": query = query.OrderBy(x => x.Tariff.Name); break;
+                               case "company": query = isAsc ?  query.OrderBy(x => x.Company.Acronym) : query.OrderByDescending(x => x.Company.Acronym); break;
+                                case "tariff": query = isAsc ? query.OrderBy(x => x.Tariff.Name) : query.OrderByDescending(x => x.Tariff.Name); break;
                                     //case "Tariff.NameDESC": query = query.OrderByDescending(x => x.Tariff.Name); break;
                                     //case "StartDateASC": query = query.OrderBy(x => x.StartDate); break;
                                     //case "StartDateDESC": query = query.OrderByDescending(x => x.StartDate); break;
@@ -85,6 +83,8 @@ namespace McvAngularTest2.Controllers
                                 case "name": query = isAsc ? oq.ThenBy(x => x.Name) : oq.ThenByDescending(x => x.Name); break;
                                 case "ppe": query = isAsc ? oq.ThenBy(x => x.PPE) : oq.ThenByDescending(x => x.PPE); break;
                                 case "meterCode": query = isAsc ? oq.ThenBy(x => x.MeterCode) : oq.ThenByDescending(x => x.MeterCode); break;
+                                case "company": query = isAsc ? oq.ThenBy(x => x.Company.Acronym) : oq.ThenByDescending(x => x.Company.Acronym); break;
+                                case "tariff": query = isAsc ? oq.ThenBy(x => x.Tariff.Name) : oq.ThenByDescending(x => x.Tariff.Name); break;
                                     //case "meterCodeDESC": query = query.OrderByDescending(x => x.MeterCode); break;
                                     //case "Company.AcronymASC": query = query.OrderBy(x => x.Company.Acronym); break;
                                     //case "Company.AcronymDESC": query = query.OrderByDescending(x => x.Company.Acronym); break;
@@ -99,7 +99,9 @@ namespace McvAngularTest2.Controllers
                     }
                 }
 
-                var r = query.Skip(first).Take(rows).Select(x => new { ppe = x.PPE, meterCode = x.MeterCode, name = x.Name, tariff = x.Tariff.Name, company = x.Company.Acronym });
+                var r = query.Skip(first).Take(rows).Select(x => 
+                    new { id = x.Id, ppe = x.PPE, meterCode = x.MeterCode, name = x.Name, tariff = x.Tariff.Name, company = x.Company.Acronym,
+                    startDate = x.StartDate, endDate = x.EndDate});
 
                 var response = new { rows = r, count = count };
 

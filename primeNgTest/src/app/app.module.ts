@@ -11,6 +11,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ConnectionIndexComponent } from './connection-index/connection-index.component';
 import { TableModule } from 'primeng/table';
 import { ConnectionListService } from './connection-list.service';
+import {MultiSelectModule} from 'primeng/multiselect';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ConnectionListService } from './connection-list.service';
     FormsModule,
     InputSwitchModule,
     CalendarModule,
-    TableModule
+    TableModule,
+    MultiSelectModule
 
   ],
   providers: [ConnectionListService],
