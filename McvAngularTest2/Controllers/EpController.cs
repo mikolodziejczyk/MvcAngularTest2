@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -48,7 +49,7 @@ namespace McvAngularTest2.Controllers
 
                 int count = query.Count();
 
-                foreach(var kvp in filters)
+                foreach (var kvp in filters)
                 {
                     if (kvp.Key == "ppe")
                     {
@@ -76,6 +77,7 @@ namespace McvAngularTest2.Controllers
                     }
                 }
 
+
                 if (multiSortMeta != null)
                 {
                     for (int i = 0; i < multiSortMeta.Length; i++)
@@ -83,55 +85,89 @@ namespace McvAngularTest2.Controllers
 
                         string field = multiSortMeta[i].field;
                         bool isAsc = multiSortMeta[i].order == 1;
+                        Expression<Func<Connection, object>> orderExpression;
+
+                        switch (field)
+                        {
+                            case "name": orderExpression = x => x.Name; break;
+                            case "ppe": orderExpression = x => x.PPE; break;
+                            case "meterCode": orderExpression = x => x.MeterCode; break;
+                            case "company": orderExpression = x => x.Company.Acronym; break;
+                            case "tariff": orderExpression = x => x.Tariff.Name; break;
+                            default: throw new InvalidOperationException("The column is not enabled for sorting.");
+                        }
 
                         if (i == 0)
                         {
-                            switch (field)
-                            {
-                                case "name": query = isAsc ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name); break;
-                                case "ppe": query = isAsc ? query.OrderBy(x => x.PPE) : query.OrderByDescending(x => x.PPE); break;
-                                case "meterCode": query = isAsc ? query = query.OrderBy(x => x.MeterCode) : query.OrderByDescending(x => x.MeterCode); break;
-                               case "company": query = isAsc ?  query.OrderBy(x => x.Company.Acronym) : query.OrderByDescending(x => x.Company.Acronym); break;
-                                case "tariff": query = isAsc ? query.OrderBy(x => x.Tariff.Name) : query.OrderByDescending(x => x.Tariff.Name); break;
-                                    //case "Tariff.NameDESC": query = query.OrderByDescending(x => x.Tariff.Name); break;
-                                    //case "StartDateASC": query = query.OrderBy(x => x.StartDate); break;
-                                    //case "StartDateDESC": query = query.OrderByDescending(x => x.StartDate); break;
-                                    //case "EndDateASC": query = query.OrderBy(x => x.EndDate); break;
-                                    //case "EndDateDESC": query = query.OrderByDescending(x => x.EndDate); break;
-                            }
+                            query = isAsc ? query.OrderBy(orderExpression) : query.OrderByDescending(orderExpression);
                         }
                         else
                         {
                             IOrderedQueryable<Connection> oq = (IOrderedQueryable<Connection>)query;
+                            query = isAsc ? oq.ThenBy(orderExpression) : oq.ThenByDescending(orderExpression);
 
-                            switch (field)
-                            {
-                                case "name": query = isAsc ? oq.ThenBy(x => x.Name) : oq.ThenByDescending(x => x.Name); break;
-                                case "ppe": query = isAsc ? oq.ThenBy(x => x.PPE) : oq.ThenByDescending(x => x.PPE); break;
-                                case "meterCode": query = isAsc ? oq.ThenBy(x => x.MeterCode) : oq.ThenByDescending(x => x.MeterCode); break;
-                                case "company": query = isAsc ? oq.ThenBy(x => x.Company.Acronym) : oq.ThenByDescending(x => x.Company.Acronym); break;
-                                case "tariff": query = isAsc ? oq.ThenBy(x => x.Tariff.Name) : oq.ThenByDescending(x => x.Tariff.Name); break;
-                                    //case "meterCodeDESC": query = query.OrderByDescending(x => x.MeterCode); break;
-                                    //case "Company.AcronymASC": query = query.OrderBy(x => x.Company.Acronym); break;
-                                    //case "Company.AcronymDESC": query = query.OrderByDescending(x => x.Company.Acronym); break;
-                                    //case "Tariff.NameASC": query = query.OrderBy(x => x.Tariff.Name); break;
-                                    //case "Tariff.NameDESC": query = query.OrderByDescending(x => x.Tariff.Name); break;
-                                    //case "StartDateASC": query = query.OrderBy(x => x.StartDate); break;
-                                    //case "StartDateDESC": query = query.OrderByDescending(x => x.StartDate); break;
-                                    //case "EndDateASC": query = query.OrderBy(x => x.EndDate); break;
-                                    //case "EndDateDESC": query = query.OrderByDescending(x => x.EndDate); break;
-                            }
                         }
+
+
+                        //if (i == 0)
+                        //{
+                        //    switch (field)
+                        //    {
+                        //        case "name": query = isAsc ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name); break;
+                        //        case "ppe": query = isAsc ? query.OrderBy(x => x.PPE) : query.OrderByDescending(x => x.PPE); break;
+                        //        case "meterCode": query = isAsc ? query = query.OrderBy(x => x.MeterCode) : query.OrderByDescending(x => x.MeterCode); break;
+                        //        case "company": query = isAsc ? query.OrderBy(x => x.Company.Acronym) : query.OrderByDescending(x => x.Company.Acronym); break;
+                        //        case "tariff": query = isAsc ? query.OrderBy(x => x.Tariff.Name) : query.OrderByDescending(x => x.Tariff.Name); break;
+                        //            //case "Tariff.NameDESC": query = query.OrderByDescending(x => x.Tariff.Name); break;
+                        //            //case "StartDateASC": query = query.OrderBy(x => x.StartDate); break;
+                        //            //case "StartDateDESC": query = query.OrderByDescending(x => x.StartDate); break;
+                        //            //case "EndDateASC": query = query.OrderBy(x => x.EndDate); break;
+                        //            //case "EndDateDESC": query = query.OrderByDescending(x => x.EndDate); break;
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    IOrderedQueryable<Connection> oq = (IOrderedQueryable<Connection>)query;
+
+                        //    switch (field)
+                        //    {
+                        //        case "name": query = isAsc ? oq.ThenBy(x => x.Name) : oq.ThenByDescending(x => x.Name); break;
+                        //        case "ppe": query = isAsc ? oq.ThenBy(x => x.PPE) : oq.ThenByDescending(x => x.PPE); break;
+                        //        case "meterCode": query = isAsc ? oq.ThenBy(x => x.MeterCode) : oq.ThenByDescending(x => x.MeterCode); break;
+                        //        case "company": query = isAsc ? oq.ThenBy(x => x.Company.Acronym) : oq.ThenByDescending(x => x.Company.Acronym); break;
+                        //        case "tariff": query = isAsc ? oq.ThenBy(x => x.Tariff.Name) : oq.ThenByDescending(x => x.Tariff.Name); break;
+                        //            //case "meterCodeDESC": query = query.OrderByDescending(x => x.MeterCode); break;
+                        //            //case "Company.AcronymASC": query = query.OrderBy(x => x.Company.Acronym); break;
+                        //            //case "Company.AcronymDESC": query = query.OrderByDescending(x => x.Company.Acronym); break;
+                        //            //case "Tariff.NameASC": query = query.OrderBy(x => x.Tariff.Name); break;
+                        //            //case "Tariff.NameDESC": query = query.OrderByDescending(x => x.Tariff.Name); break;
+                        //            //case "StartDateASC": query = query.OrderBy(x => x.StartDate); break;
+                        //            //case "StartDateDESC": query = query.OrderByDescending(x => x.StartDate); break;
+                        //            //case "EndDateASC": query = query.OrderBy(x => x.EndDate); break;
+                        //            //case "EndDateDESC": query = query.OrderByDescending(x => x.EndDate); break;
+                        //    }
+                        //}
                     }
                 }
                 else
                 {
-                    query = query.OrderBy(x => x.PPE);
+                    Expression<Func<Connection, object>> orderExpression = x => x.PPE;
+                    query = query.OrderBy(orderExpression);
+                    // query = query.OrderBy(x => x.PPE);
                 }
 
-                var r = query.Skip(first).Take(rows).Select(x => 
-                    new { id = x.Id, ppe = x.PPE, meterCode = x.MeterCode, name = x.Name, tariff = x.Tariff.Name, company = x.Company.Acronym,
-                    startDate = x.StartDate, endDate = x.EndDate});
+                var r = query.Skip(first).Take(rows).Select(x =>
+                    new
+                    {
+                        id = x.Id,
+                        ppe = x.PPE,
+                        meterCode = x.MeterCode,
+                        name = x.Name,
+                        tariff = x.Tariff.Name,
+                        company = x.Company.Acronym,
+                        startDate = x.StartDate,
+                        endDate = x.EndDate
+                    });
 
                 var response = new { rows = r, count = count };
 
