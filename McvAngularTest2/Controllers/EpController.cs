@@ -49,32 +49,66 @@ namespace McvAngularTest2.Controllers
 
                 int count = query.Count();
 
-                foreach (var kvp in filters)
+                // if filters aren't posted, in filters we get values from MVC; with "action", "controller" as keys; they must be excluded, currently by their null value criterion
+                foreach (var kvp in filters.Where(x=>x.Value != null))
                 {
-                    if (kvp.Key == "ppe")
+                    string field = kvp.Key;
+                    string value = kvp.Value.value;
+
+                    Expression<Func<Connection, bool>> filterExpression;
+
+                    switch (field)
                     {
-                        query = query.Where(x => x.PPE.Contains(kvp.Value.value));
+                        case "name": filterExpression = x => x.Name.Contains(value); break;
+                        case "ppe": filterExpression = x => x.PPE.Contains(value); break;
+                        case "meterCode": filterExpression = x => x.MeterCode.Contains(value); break;
+                        case "company": filterExpression = x => x.Company.Acronym.Contains(value); break;
+                        case "tariff": filterExpression = x => x.Tariff.Name.Contains(value); break;
+                        default: throw new InvalidOperationException("The column is not enabled for filtering.");
                     }
 
-                    if (kvp.Key == "meterCode")
-                    {
-                        query = query.Where(x => x.MeterCode.Contains(kvp.Value.value));
-                    }
+                    query = query.Where(filterExpression);
 
-                    if (kvp.Key == "company")
-                    {
-                        query = query.Where(x => x.Company.Acronym.Contains(kvp.Value.value));
-                    }
+                    //Expression<Func<Connection, string>> stringPropertyExpression;
 
-                    if (kvp.Key == "tariff")
-                    {
-                        query = query.Where(x => x.Tariff.Name.Contains(kvp.Value.value));
-                    }
+                    //switch (field)
+                    //{
+                    //    case "name": stringPropertyExpression = x => x.Name; break;
+                    //    case "ppe": stringPropertyExpression = x => x.PPE; break;
+                    //    case "meterCode": stringPropertyExpression = x => x.MeterCode; break;
+                    //    case "company": stringPropertyExpression = x => x.Company.Acronym; break;
+                    //    case "tariff": stringPropertyExpression = x => x.Tariff.Name; break;
+                    //    default: throw new InvalidOperationException("The column is not enabled for sorting.");
+                    //}
 
-                    if (kvp.Key == "name")
-                    {
-                        query = query.Where(x => x.Name.Contains(kvp.Value.value));
-                    }
+                    //filterExpression = Expression.Call(stringPropertyExpression, "Contains", new Type[] { typeof(string) }, new Expression[] { Expression.Constant(value) });
+
+                    //if (kvp.Key == "ppe")
+                    //{
+                    //    query = query.Where(x => x.PPE.Contains(kvp.Value.value));
+                    //}
+
+                    //if (kvp.Key == "meterCode")
+                    //{
+                    //    query = query.Where(x => x.MeterCode.Contains(kvp.Value.value));
+                    //}
+
+                    //if (kvp.Key == "company")
+                    //{
+                    //    query = query.Where(x => x.Company.Acronym.Contains(kvp.Value.value));
+                    //}
+
+                    //if (kvp.Key == "tariff")
+                    //{
+                    //    query = query.Where(x => x.Tariff.Name.Contains(kvp.Value.value));
+                    //}
+
+                    //if (kvp.Key == "name")
+                    //{
+                    //    query = query.Where(x => x.Name.Contains(kvp.Value.value));
+                    //}
+
+
                 }
 
 
