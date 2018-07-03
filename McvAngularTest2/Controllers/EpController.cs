@@ -28,7 +28,7 @@ namespace McvAngularTest2.Controllers
             return Content(data, "application/json");
         }
 
-        public ActionResult Page(int first, int rows, string globalFilter, MultiSort[] multiSortMeta)
+        public ActionResult Page(int first, int rows, string globalFilter, MultiSort[] multiSortMeta, IDictionary<string, FilterEntry> filters)
         {
 
             string data;
@@ -48,7 +48,33 @@ namespace McvAngularTest2.Controllers
 
                 int count = query.Count();
 
-                query = query.OrderBy(x => x.PPE);
+                foreach(var kvp in filters)
+                {
+                    if (kvp.Key == "ppe")
+                    {
+                        query = query.Where(x => x.PPE.Contains(kvp.Value.value));
+                    }
+
+                    if (kvp.Key == "meterCode")
+                    {
+                        query = query.Where(x => x.MeterCode.Contains(kvp.Value.value));
+                    }
+
+                    if (kvp.Key == "company")
+                    {
+                        query = query.Where(x => x.Company.Acronym.Contains(kvp.Value.value));
+                    }
+
+                    if (kvp.Key == "tariff")
+                    {
+                        query = query.Where(x => x.Tariff.Name.Contains(kvp.Value.value));
+                    }
+
+                    if (kvp.Key == "name")
+                    {
+                        query = query.Where(x => x.Name.Contains(kvp.Value.value));
+                    }
+                }
 
                 if (multiSortMeta != null)
                 {
@@ -98,6 +124,10 @@ namespace McvAngularTest2.Controllers
                         }
                     }
                 }
+                else
+                {
+                    query = query.OrderBy(x => x.PPE);
+                }
 
                 var r = query.Skip(first).Take(rows).Select(x => 
                     new { id = x.Id, ppe = x.PPE, meterCode = x.MeterCode, name = x.Name, tariff = x.Tariff.Name, company = x.Company.Acronym,
@@ -118,5 +148,11 @@ namespace McvAngularTest2.Controllers
     {
         public string field { get; set; }
         public int order { get; set; }
+    }
+
+    public class FilterEntry
+    {
+        public string value { get; set; }
+        public string matchMode { get; set; }
     }
 }
