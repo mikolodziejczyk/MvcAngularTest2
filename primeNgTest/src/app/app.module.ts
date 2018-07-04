@@ -12,6 +12,7 @@ import { ConnectionIndexComponent } from './connection-index/connection-index.co
 import { TableModule } from 'primeng/table';
 import { ConnectionListService } from './connection-list.service';
 import {MultiSelectModule} from 'primeng/multiselect';
+import {CheckboxModule} from 'primeng/checkbox';
 
 @NgModule({
   declarations: [
@@ -27,8 +28,8 @@ import {MultiSelectModule} from 'primeng/multiselect';
     InputSwitchModule,
     CalendarModule,
     TableModule,
-    MultiSelectModule
-
+    MultiSelectModule,
+    CheckboxModule
   ],
   providers: [ConnectionListService],
   bootstrap: [AppComponent]

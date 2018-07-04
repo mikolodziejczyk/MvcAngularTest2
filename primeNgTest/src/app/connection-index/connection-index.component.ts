@@ -84,17 +84,13 @@ export class ConnectionIndexComponent implements OnInit {
     this.savedState.sort = this.dataTable.multiSortMeta;
     this.savedState.filters = this.dataTable.filters;
 
+
+
     console.log(JSON.stringify(this.savedState));
 
-    // console.log(`---- Setting the sort and filter state`);
-    // this.dataTable.multiSortMeta = [{"field":"tariff","order":1},{"field":"name","order":-1}];
+    // we must clone the whole object as sort and filters are currently references and can change
+    this.savedState = JSON.parse(JSON.stringify(this.savedState));
 
-    // this.visible = false;
-
-    // window.setTimeout( () => {
-    //   this.visible = true;
-    //   this.dataTable.filters = {"ppe":{"value":"480","matchMode":"contains"},"tariff":{"value":"c21","matchMode":"contains"}};
-    // }, 0);
 
 
     // let filters = {"ppe":{"value":"480","matchMode":"contains"},"tariff":{"value":"c21","matchMode":"contains"}};
@@ -109,7 +105,9 @@ export class ConnectionIndexComponent implements OnInit {
   }
 
   loadState = (): void => {
-    let view = this.savedState;
+    let view = JSON.parse(JSON.stringify(this.savedState));
+
+    console.log(`Restoring state to: ${JSON.stringify(view)}`);
 
     // restore visible columns and their order
     this.selectedColumns = [];
@@ -117,7 +115,24 @@ export class ConnectionIndexComponent implements OnInit {
     savedCols.map(x => this.cols.find(y => y.field === x)).forEach(x => this.selectedColumns.push(x));
 
     this.dataTable.filters = view.filters;
-    this.dataTable.multiSortMeta = view.sort;
+
+    this.filterControls = {};
+
+    for (let col in view.filters) {
+      this.filterControls[col] = view.filters[col].value;
+    }
+
+
+    // we apply filters manually if they aren't applied by sort
+    if (!this.dataTable.multiSortMeta) {
+      for (let key in view.filters) {
+        let value = view.filters[key];
+        this.dataTable.filter(value.value, key, value.matchMode);
+      }
+    }
+
+    // (suspended) we apply default sort if none is specified
+    this.dataTable.multiSortMeta = view.sort; // || [{ "field": "name", "order": 1 }];
 
     let columns: HTMLElement[] = <HTMLElement[]>Array.from(document.querySelectorAll("#dataTable table thead tr:first-child th"));
     let relativeWidths: number[] = this.savedState.relativeWidths;
@@ -126,7 +141,7 @@ export class ConnectionIndexComponent implements OnInit {
     // once bindings are updated, restore column widths
     window.setTimeout(() => {
       for (let i = 0; i < columns.length; i++) {
-        
+
         let absoluteWidth = relativeWidths[i] * arrayWidth / 100;
         let widthString = `${absoluteWidth}px`;
         columns[i].style.width = widthString;
@@ -134,4 +149,9 @@ export class ConnectionIndexComponent implements OnInit {
     }, 0);
 
   }
+
+  isAutoLayout: boolean = false;
+
+  filterControls: any = {};
+
 }

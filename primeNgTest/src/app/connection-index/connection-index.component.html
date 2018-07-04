@@ -1,5 +1,5 @@
 <h1>Connections</h1>
-<p-table #dt id="dataTable" [columns]="selectedColumns" [value]="connections" [paginator]="true" pageLinks="10" [rows]="20" [resizableColumns]="true"
+<p-table #dt id="dataTable" [columns]="selectedColumns" [value]="connections" [paginator]="true" pageLinks="10" [rows]="20" [resizableColumns]="!isAutoLayout" [autoLayout]="isAutoLayout"
   [reorderableColumns]="true" [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="connectionCount" [loading]="loading"
   sortMode="multiple" (onColReorder)="onColReorder($event);" *ngIf="visible" >
   <ng-template pTemplate="caption">
@@ -9,7 +9,7 @@
       </div>
     <div style="text-align: right">
       <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-      <input type="text" pInputText size="50" placeholder="szukaj" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+      <input type="text" pInputText size="50" placeholder="szukaj" (input)="dt.filterGlobal($event.target.value, 'contains')"  style="width:auto" />
     </div>
   </ng-template>
   <ng-template pTemplate="header" let-columns>
@@ -30,7 +30,7 @@
     </tr>
     <tr>
       <th *ngFor="let col of columns" [ngSwitch]="col.field">
-          <input *ngSwitchDefault pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+          <input *ngSwitchDefault pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')" [(ngModel)]="filterControls[col.field]" />
 
       </th>
       
@@ -57,3 +57,4 @@
 </p-table>
 <br/>
 <p><button (click)="saveState();">Save state</button> <button (click)="loadState();">Load state</button> </p>
+<p><p-checkbox [(ngModel)]="isAutoLayout" label="use auto layout" binary="true"></p-checkbox></p>

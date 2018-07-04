@@ -50,7 +50,7 @@ namespace McvAngularTest2.Controllers
                 int count = query.Count();
 
                 // if filters aren't posted, in filters we get values from MVC; with "action", "controller" as keys; they must be excluded, currently by their null value criterion
-                foreach (var kvp in filters.Where(x=>x.Value != null))
+                foreach (var kvp in filters.Where(x=>x.Value != null).Where(x=>x.Key != "global"))
                 {
                     string field = kvp.Key;
                     string value = kvp.Value.value;
@@ -68,6 +68,17 @@ namespace McvAngularTest2.Controllers
                     }
 
                     query = query.Where(filterExpression);
+
+                    // test
+
+                    //Expression<Func<Connection, string>> filterBase;
+                    //filterBase = x => x.PPE;
+
+                    //Expression<Func<string, bool>> filterMethod = x => x.Contains(value);
+
+
+
+
 
                     //Expression<Func<Connection, string>> stringPropertyExpression;
 
