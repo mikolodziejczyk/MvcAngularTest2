@@ -1,5 +1,5 @@
 <h1>Connections</h1>
-<p-table #dt [columns]="selectedColumns" [value]="connections" [paginator]="true" pageLinks="10" [rows]="20" [resizableColumns]="true"
+<p-table #dt id="dataTable" [columns]="selectedColumns" [value]="connections" [paginator]="true" pageLinks="10" [rows]="20" [resizableColumns]="true"
   [reorderableColumns]="true" [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="connectionCount" [loading]="loading"
   sortMode="multiple" (onColReorder)="onColReorder($event);" *ngIf="visible" >
   <ng-template pTemplate="caption">
@@ -56,4 +56,4 @@
   </ng-template>
 </p-table>
 <br/>
-<p><button (click)="saveState();">Save state</button> </p>
+<p><button (click)="saveState();">Save state</button> <button (click)="loadState();">Load state</button> </p>

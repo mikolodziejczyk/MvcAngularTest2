@@ -57,30 +57,45 @@ export class ConnectionIndexComponent implements OnInit {
   }
 
 
-  rowClicked = (connection : Connection) => {
+  rowClicked = (connection: Connection) => {
     alert(connection.id);
   }
 
-  onColReorder = (event: any )=> {
+  onColReorder = (event: any) => {
     console.log(`${JSON.stringify(event.columns)}`);
     console.log(`The current columns state: ${JSON.stringify(this.selectedColumns)}`);
   }
 
+  savedState: any;
+
   saveState = () => {
-    console.log(`---- Simulating saving state`);
-    console.log(`The current columns state:\r\n ${JSON.stringify(this.selectedColumns)}`);
-    console.log(`The current sort state:\r\n ${JSON.stringify(this.dataTable.multiSortMeta)}`);
-    console.log(`The current filter state:\r\n ${JSON.stringify(this.dataTable.filters)}`);
-    console.log(`---- Setting the sort and filter state`);
+    console.log(`---- Saving saving state`);
+    // saving selected columns and their order
+    let currentCols = this.selectedColumns.map(x => x.field);
+
+    // saving column widths
+    let absoluteWidths: number[] = Array.from(document.querySelectorAll("#dataTable table thead tr:first-child th")).map(x => (<HTMLElement>x).offsetWidth);
+    let arrayWidth: number = (<HTMLElement>document.querySelector("#dataTable table")).offsetWidth;
+    let relativeWidths: number[] = absoluteWidths.map(x => (x * 100 / arrayWidth).toFixed(3)).map(x => Number(x));
+
+    this.savedState = {};
+    this.savedState.cols = currentCols;
+    this.savedState.relativeWidths = relativeWidths;
+    this.savedState.sort = this.dataTable.multiSortMeta;
+    this.savedState.filters = this.dataTable.filters;
+
+    console.log(JSON.stringify(this.savedState));
+
+    // console.log(`---- Setting the sort and filter state`);
     // this.dataTable.multiSortMeta = [{"field":"tariff","order":1},{"field":"name","order":-1}];
 
     // this.visible = false;
-    
+
     // window.setTimeout( () => {
     //   this.visible = true;
     //   this.dataTable.filters = {"ppe":{"value":"480","matchMode":"contains"},"tariff":{"value":"c21","matchMode":"contains"}};
     // }, 0);
-    
+
 
     // let filters = {"ppe":{"value":"480","matchMode":"contains"},"tariff":{"value":"c21","matchMode":"contains"}};
     // for (let key in filters) {
@@ -88,8 +103,35 @@ export class ConnectionIndexComponent implements OnInit {
     //   this.dataTable.filter(value.value, key, value.matchMode);
     // }
 
-    this.dataTable.filters = {"ppe":{"value":"480","matchMode":"contains"},"tariff":{"value":"c21","matchMode":"contains"}};
-    this.dataTable.multiSortMeta = [{"field":"tariff","order":1},{"field":"name","order":-1}];
+    // this.dataTable.filters = {"ppe":{"value":"480","matchMode":"contains"},"tariff":{"value":"c21","matchMode":"contains"}};
+    // this.dataTable.multiSortMeta = [{"field":"tariff","order":1},{"field":"name","order":-1}];
+
+  }
+
+  loadState = (): void => {
+    let view = this.savedState;
+
+    // restore visible columns and their order
+    this.selectedColumns = [];
+    let savedCols: string[] = view.cols;
+    savedCols.map(x => this.cols.find(y => y.field === x)).forEach(x => this.selectedColumns.push(x));
+
+    this.dataTable.filters = view.filters;
+    this.dataTable.multiSortMeta = view.sort;
+
+    let columns: HTMLElement[] = <HTMLElement[]>Array.from(document.querySelectorAll("#dataTable table thead tr:first-child th"));
+    let relativeWidths: number[] = this.savedState.relativeWidths;
+    let arrayWidth: number = (<HTMLElement>document.querySelector("#dataTable table")).offsetWidth;
+
+    // once bindings are updated, restore column widths
+    window.setTimeout(() => {
+      for (let i = 0; i < columns.length; i++) {
+        
+        let absoluteWidth = relativeWidths[i] * arrayWidth / 100;
+        let widthString = `${absoluteWidth}px`;
+        columns[i].style.width = widthString;
+      }
+    }, 0);
 
   }
 }
