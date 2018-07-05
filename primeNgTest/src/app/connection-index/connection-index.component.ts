@@ -23,6 +23,7 @@ export class ConnectionIndexComponent implements OnInit {
     ];
 
     this.selectedColumns = this.cols;
+    this.resetFilterControls();
   }
 
   ngOnInit() {
@@ -118,6 +119,7 @@ export class ConnectionIndexComponent implements OnInit {
 
     this.filterControls = {};
 
+    this.resetFilterControls();
     for (let col in view.filters) {
       this.filterControls[col] = view.filters[col].value;
     }
@@ -154,4 +156,13 @@ export class ConnectionIndexComponent implements OnInit {
 
   filterControls: any = {};
 
+  resetFilterControls() {
+    this.filterControls = {};
+
+    for (let col of this.cols) {
+      this.filterControls[col.field] = null;
+    }
+
+    this.filterControls['global'] = null;
+  }
 }
