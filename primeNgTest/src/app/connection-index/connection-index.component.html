@@ -10,29 +10,40 @@
   </ng-container>
 </p-overlayPanel>
 
-<div>
-  <button type="text" pButton icon="fa fa-columns" (click)="op.show($event)" class="ui-button-info" title="Wybierz kolumny"></button>
-  <p-toggleButton onIcon="fa fa-filter" onLabel="" offLabel="" offIcon="fa fa-filter" [(ngModel)]="filtersVisible"></p-toggleButton>
-  <p-slideMenu #savedViewsMenu [model]="savedViews"  [popup]="true"></p-slideMenu>
+<div style="margin-bottom: 16px">
+  <p-tieredMenu #savedViewsMenu [model]="savedViews" [popup]="true"></p-tieredMenu>
   <button #savedViewsButton type="button" pButton icon="fa fa-list-ul" (click)="savedViewsMenu.toggle($event)"></button>
-  <button #settingsButton type="button" pButton icon="fa fa-cog"></button>
+  <p-toggleButton onIcon="fa fa-filter" onLabel="" offLabel="" offIcon="fa fa-filter" [(ngModel)]="filtersVisible"></p-toggleButton>
+  <button type="text" pButton icon="fa fa-columns" (click)="op.show($event)" class="ui-button-info" title="Wybierz kolumny"></button>
+  <p-tieredMenu #manageViewsMenu [model]="manageViews" [popup]="true"></p-tieredMenu>
+  <button #settingsButton type="button" pButton icon="fa fa-cog" (click)="manageViewsMenu.toggle($event)"></button>
+  <div style="float: right;">
+    <div class="ui-inputgroup">
+      <input type="text" pInputText placeholder="Znajdź" (input)="dt.filterGlobal($event.target.value, 'contains')" [(ngModel)]="filterControls['global']"
+      />
+      <span class="ui-inputgroup-addon">
+        <i class="fa fa-search"></i>
+      </span>
+
+    </div>
+  </div>
 </div>
 
 
 <p-table #dt id="dataTable" [columns]="selectedColumns" [value]="connections" [paginator]="true" pageLinks="10" [rows]="20"
   [resizableColumns]="!isAutoLayout" [autoLayout]="isAutoLayout" [reorderableColumns]="true" [lazy]="true" (onLazyLoad)="loadData($event)"
   [totalRecords]="connectionCount" [loading]="loading" sortMode="multiple" (onColReorder)="onColReorder($event);" *ngIf="visible">
-  <ng-template pTemplate="caption">
-    <!-- <div style="text-align:left">
+  <!-- <ng-template pTemplate="caption">
+    <div style="text-align:left">
       <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header" selectedItemsLabel="Wybrano {0} kolumn"
         [style]="{minWidth: '200px'}" defaultLabel="Wybierz kolumny"></p-multiSelect>
-    </div> -->
+    </div> 
     <div style="text-align: right">
       <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
       <input type="text" pInputText size="50" placeholder="szukaj" (input)="dt.filterGlobal($event.target.value, 'contains')" [(ngModel)]="filterControls['global']"
         style="width:auto" />
     </div>
-  </ng-template>
+  </ng-template> -->
   <ng-template pTemplate="header" let-columns>
     <tr>
       <ng-container *ngFor="let col of columns">

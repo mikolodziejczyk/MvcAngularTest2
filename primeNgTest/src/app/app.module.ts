@@ -15,8 +15,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ToggleButtonModule } from 'primeng/togglebutton';
-import { SlideMenuModule } from 'primeng/slidemenu';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { TieredMenuModule } from 'primeng/tieredmenu';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [
@@ -36,8 +37,9 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     CheckboxModule,
     OverlayPanelModule,
     ToggleButtonModule,
-    SlideMenuModule,
-    SplitButtonModule
+    TieredMenuModule,
+    SplitButtonModule,
+    InputTextModule
   ],
   providers: [ConnectionListService],
   bootstrap: [AppComponent]

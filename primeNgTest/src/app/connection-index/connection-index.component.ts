@@ -39,9 +39,19 @@ export class ConnectionIndexComponent implements OnInit {
 
   filtersVisible: boolean = false;
   savedViews: MenuItem[] = [
-    {label: 'PLENED-y', id: '1'},
-    {label: 'Wg PPE', id: '2'},
-    {label: 'Tylko licznik', id: '3'},
+    { label: 'PLENED-y', id: '1', icon: 'fa fa-users', title : "(widok wspólny)" },
+    { label: 'Wg PPE', id: '2', icon: 'fa fa-users', title : "(widok wspólny)"  },
+    { label: 'Tylko licznik', id: '3', icon: 'fa fa-user', title : "(widok prywatny)"  },
+    { label: 'Ostatni rok', id: '3', icon: 'fa fa-user', title : "(widok prywatny)"  },
+  ];
+
+  manageViews: MenuItem[] = [
+    { label: 'Zapisz jako nowy', icon: 'fa fa-plus-circle' },
+    { separator: true },
+    { label: 'Aktualizuj bieżący', icon: 'fa fa-save' },
+    { label: 'Właściwości', icon: 'fa fa-edit' },
+    { separator: true },
+    { label: 'Usuń ten widok', icon: 'fa fa-minus-circle' }
   ];
 
   @ViewChild("dt") dataTable: Table;
