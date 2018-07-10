@@ -11,8 +11,12 @@ import { CalendarModule } from 'primeng/calendar';
 import { ConnectionIndexComponent } from './connection-index/connection-index.component';
 import { TableModule } from 'primeng/table';
 import { ConnectionListService } from './connection-list.service';
-import {MultiSelectModule} from 'primeng/multiselect';
-import {CheckboxModule} from 'primeng/checkbox';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { CheckboxModule } from 'primeng/checkbox';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { SlideMenuModule } from 'primeng/slidemenu';
+import { SplitButtonModule } from 'primeng/splitbutton';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,11 @@ import {CheckboxModule} from 'primeng/checkbox';
     CalendarModule,
     TableModule,
     MultiSelectModule,
-    CheckboxModule
+    CheckboxModule,
+    OverlayPanelModule,
+    ToggleButtonModule,
+    SlideMenuModule,
+    SplitButtonModule
   ],
   providers: [ConnectionListService],
   bootstrap: [AppComponent]

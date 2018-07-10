@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConnectionListService } from '../connection-list.service';
 import { Connection } from '../connection';
-import { LazyLoadEvent } from 'primeng/api';
+import { LazyLoadEvent, MenuItem } from 'primeng/api';
 import { ConnectionVM } from '../connectionVM';
 import { Table } from 'primeng/table';
 
@@ -36,6 +36,13 @@ export class ConnectionIndexComponent implements OnInit {
   connections: ConnectionVM[];
   loading: boolean = true;
   visible: boolean = true;
+
+  filtersVisible: boolean = false;
+  savedViews: MenuItem[] = [
+    {label: 'PLENED-y', id: '1'},
+    {label: 'Wg PPE', id: '2'},
+    {label: 'Tylko licznik', id: '3'},
+  ];
 
   @ViewChild("dt") dataTable: Table;
 
@@ -106,6 +113,7 @@ export class ConnectionIndexComponent implements OnInit {
   }
 
   loadState = (): void => {
+    // we must create a clone of the saved object, otherwise the current changes will be reflected in it (the table component doesn't recreate the filters and multiSortMeta but rather alters them)
     let view = JSON.parse(JSON.stringify(this.savedState));
 
     console.log(`Restoring state to: ${JSON.stringify(view)}`);
@@ -117,8 +125,7 @@ export class ConnectionIndexComponent implements OnInit {
 
     this.dataTable.filters = view.filters;
 
-    this.filterControls = {};
-
+    // reapply filter controls values (note: this doesn't apply filters but only shows the current filtering expressions)
     this.resetFilterControls();
     for (let col in view.filters) {
       this.filterControls[col] = view.filters[col].value;
