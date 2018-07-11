@@ -29,7 +29,7 @@ namespace McvAngularTest2.Controllers
             return Content(data, "application/json");
         }
 
-        public ActionResult Page(int first, int rows, string globalFilter, MultiSort[] multiSortMeta, IDictionary<string, FilterEntry> filters)
+        public ActionResult Page(int first, int rows, string globalFilter, SortMeta[] multiSortMeta, IDictionary<string, FilterEntry> filters)
         {
 
             string data;
@@ -225,7 +225,7 @@ namespace McvAngularTest2.Controllers
         }
     }
 
-    public class MultiSort
+    public class SortMeta
     {
         public string field { get; set; }
         public int order { get; set; }
@@ -235,5 +235,22 @@ namespace McvAngularTest2.Controllers
     {
         public string value { get; set; }
         public string matchMode { get; set; }
+    }
+
+    public class ViewSettings
+    {
+        public int id { get; set; }
+
+        public string name { get; set; }
+        public bool isPublic { get; set; }
+
+        public string[] columns { get; set; }
+
+
+        public int[] columnRelativeWidths { get; set; }
+
+        public SortMeta[] sort { get; set; }
+
+        public IDictionary<string, FilterEntry> filters { get; set; }
     }
 }

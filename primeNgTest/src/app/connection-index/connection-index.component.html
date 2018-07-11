@@ -1,4 +1,6 @@
-<h1>Connections</h1>
+<h1>Connections
+  <span *ngIf="namedView"> - {{namedView.name}}</span>
+</h1>
 
 <!-- the overlay panel for the column selection -->
 <p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true">

@@ -4,6 +4,7 @@ import { Connection } from '../connection';
 import { LazyLoadEvent, MenuItem } from 'primeng/api';
 import { ConnectionVM } from '../connectionVM';
 import { Table } from 'primeng/table';
+import { ViewSettings } from '../viewSettings';
 
 @Component({
   selector: 'app-connection-index',
@@ -84,7 +85,8 @@ export class ConnectionIndexComponent implements OnInit {
     console.log(`The current columns state: ${JSON.stringify(this.selectedColumns)}`);
   }
 
-  savedState: any;
+  namedView: ViewSettings;
+
 
   saveState = () => {
     console.log(`---- Saving saving state`);
@@ -96,18 +98,21 @@ export class ConnectionIndexComponent implements OnInit {
     let arrayWidth: number = (<HTMLElement>document.querySelector("#dataTable table")).offsetWidth;
     let relativeWidths: number[] = absoluteWidths.map(x => (x * 100 / arrayWidth).toFixed(3)).map(x => Number(x));
 
-    this.savedState = {};
-    this.savedState.cols = currentCols;
-    this.savedState.relativeWidths = relativeWidths;
-    this.savedState.sort = this.dataTable.multiSortMeta;
-    this.savedState.filters = this.dataTable.filters;
+    let viewSettings = <ViewSettings>{};
+    viewSettings.name = `Widok próbny ${(Math.random()*1000).toFixed(0)}`;
+    viewSettings.isPublic = false;
+
+    viewSettings.columns = currentCols;
+    viewSettings.columnRelativeWidths = relativeWidths;
+    viewSettings.sort = this.dataTable.multiSortMeta;
+    viewSettings.filters = this.dataTable.filters;
 
 
 
-    console.log(JSON.stringify(this.savedState));
+    console.log(JSON.stringify(viewSettings));
 
     // we must clone the whole object as sort and filters are currently references and can change
-    this.savedState = JSON.parse(JSON.stringify(this.savedState));
+    this.namedView = JSON.parse(JSON.stringify(viewSettings));
 
 
 
@@ -124,13 +129,13 @@ export class ConnectionIndexComponent implements OnInit {
 
   loadState = (): void => {
     // we must create a clone of the saved object, otherwise the current changes will be reflected in it (the table component doesn't recreate the filters and multiSortMeta but rather alters them)
-    let view = JSON.parse(JSON.stringify(this.savedState));
+    let view = <ViewSettings>JSON.parse(JSON.stringify(this.namedView));
 
     console.log(`Restoring state to: ${JSON.stringify(view)}`);
 
     // restore visible columns and their order
     this.selectedColumns = [];
-    let savedCols: string[] = view.cols;
+    let savedCols: string[] = view.columns;
     savedCols.map(x => this.cols.find(y => y.field === x)).forEach(x => this.selectedColumns.push(x));
 
     this.dataTable.filters = view.filters;
@@ -154,7 +159,7 @@ export class ConnectionIndexComponent implements OnInit {
     this.dataTable.multiSortMeta = view.sort; // || [{ "field": "name", "order": 1 }];
 
     let columns: HTMLElement[] = <HTMLElement[]>Array.from(document.querySelectorAll("#dataTable table thead tr:first-child th"));
-    let relativeWidths: number[] = this.savedState.relativeWidths;
+    let relativeWidths: number[] = view.columnRelativeWidths;
     let arrayWidth: number = (<HTMLElement>document.querySelector("#dataTable table")).offsetWidth;
 
     // once bindings are updated, restore column widths
