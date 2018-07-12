@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AngularPatternsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ListViewSettings">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="ListId" Type="int" Nullable="false" />
+          <Property Name="IsTemporary" Type="bit" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ViewData" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserActiveView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="ListId" Type="int" Nullable="false" />
+          <Property Name="ViewId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_UserActiveView_ListViewSettings">
+          <End Role="ListViewSettings" Type="Self.ListViewSettings" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UserActiveView" Type="Self.UserActiveView" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ListViewSettings">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserActiveView">
+              <PropertyRef Name="ViewId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AngularPatternsModelStoreContainer">
+          <EntitySet Name="ListViewSettings" EntityType="Self.ListViewSettings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserActiveView" EntityType="Self.UserActiveView" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_UserActiveView_ListViewSettings" Association="Self.FK_UserActiveView_ListViewSettings">
+            <End Role="ListViewSettings" EntitySet="ListViewSettings" />
+            <End Role="UserActiveView" EntitySet="UserActiveView" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AngularPatternsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ListViewSettings">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="ListId" Type="Int32" Nullable="false" />
+          <Property Name="IsTemporary" Type="Boolean" Nullable="false" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ViewData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="UserActiveView" Relationship="Self.FK_UserActiveView_ListViewSettings" FromRole="ListViewSettings" ToRole="UserActiveView" />
+        </EntityType>
+        <EntityType Name="UserActiveView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="ListId" Type="Int32" Nullable="false" />
+          <Property Name="ViewId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ListViewSettings" Relationship="Self.FK_UserActiveView_ListViewSettings" FromRole="UserActiveView" ToRole="ListViewSettings" />
+        </EntityType>
+        <Association Name="FK_UserActiveView_ListViewSettings">
+          <End Role="ListViewSettings" Type="Self.ListViewSettings" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UserActiveView" Type="Self.UserActiveView" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ListViewSettings">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserActiveView">
+              <PropertyRef Name="ViewId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AngularPatternsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ListViewSettings" EntityType="Self.ListViewSettings" />
+          <EntitySet Name="UserActiveView" EntityType="Self.UserActiveView" />
+          <AssociationSet Name="FK_UserActiveView_ListViewSettings" Association="Self.FK_UserActiveView_ListViewSettings">
+            <End Role="ListViewSettings" EntitySet="ListViewSettings" />
+            <End Role="UserActiveView" EntitySet="UserActiveView" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AngularPatternsModelStoreContainer" CdmEntityContainer="AngularPatternsEntities">
+          <EntitySetMapping Name="ListViewSettings">
+            <EntityTypeMapping TypeName="AngularPatternsModel.ListViewSettings">
+              <MappingFragment StoreEntitySet="ListViewSettings">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ListId" ColumnName="ListId" />
+                <ScalarProperty Name="IsTemporary" ColumnName="IsTemporary" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ViewData" ColumnName="ViewData" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserActiveView">
+            <EntityTypeMapping TypeName="AngularPatternsModel.UserActiveView">
+              <MappingFragment StoreEntitySet="UserActiveView">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ListId" ColumnName="ListId" />
+                <ScalarProperty Name="ViewId" ColumnName="ViewId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

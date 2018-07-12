@@ -240,9 +240,12 @@ namespace McvAngularTest2.Controllers
     public class ViewSettings
     {
         public int id { get; set; }
+        public int listId { get; set; }
 
         public string name { get; set; }
         public bool isPublic { get; set; }
+        public bool isTemporary { get; set; }
+        public bool isDefault { get; set; }
 
         public string[] columns { get; set; }
 

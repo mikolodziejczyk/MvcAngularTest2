@@ -31,6 +31,7 @@ export class ConnectionIndexComponent implements OnInit {
 
   }
 
+  listId = 234;
   cols: any[];
   selectedColumns: any[];
   connectionCount: number;
@@ -100,7 +101,10 @@ export class ConnectionIndexComponent implements OnInit {
 
     let viewSettings = <ViewSettings>{};
     viewSettings.name = `Widok próbny ${(Math.random()*1000).toFixed(0)}`;
+    viewSettings.listId=  this.listId;
     viewSettings.isPublic = false;
+    viewSettings.isTemporary = true;
+    viewSettings.isDefault = false;
 
     viewSettings.columns = currentCols;
     viewSettings.columnRelativeWidths = relativeWidths;

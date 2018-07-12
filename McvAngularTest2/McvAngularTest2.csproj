@@ -68,6 +68,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -163,22 +165,54 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AngularPatternsModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AngularPatternsModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AngularPatternsModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AngularPatternsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AngularPatternsModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AngularPatternsModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\EpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ViewManagerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="JsonNetValueProvider.cs" />
+    <Compile Include="ListViewSettings.cs">
+      <DependentUpon>AngularPatternsModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\MyFormData.cs" />
     <Compile Include="Models\MyFormMetadata.cs" />
     <Compile Include="Models\PersonNameVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserActiveView.cs">
+      <DependentUpon>AngularPatternsModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AngularPatternsModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AngularPatternsModel.edmx</DependentUpon>
+      <LastGenOutput>AngularPatternsModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="AngularPatternsModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AngularPatternsModel.edmx</DependentUpon>
+      <LastGenOutput>AngularPatternsModel.cs</LastGenOutput>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -193,6 +227,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="assets\my-form-metadata.json" />
+    <EntityDeploy Include="AngularPatternsModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AngularPatternsModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="AngularPatternsModel.edmx.diagram">
+      <DependentUpon>AngularPatternsModel.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -223,6 +264,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Ep\" />
+    <Folder Include="Views\ViewManager\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -242,6 +284,9 @@
       <Project>{e5608693-a8ce-4f7a-9da4-a5cae3c0892f}</Project>
       <Name>MkoForms</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
