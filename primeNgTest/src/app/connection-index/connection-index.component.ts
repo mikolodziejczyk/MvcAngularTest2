@@ -17,6 +17,8 @@ export class ConnectionIndexComponent implements OnInit {
   constructor(private connectionListService: ConnectionListService,
     private viewService: ViewService) {
 
+    this.suspendLoadingData = true;
+
     this.cols = [
       { field: 'ppe', header: 'PPE', isSortable: true },
       { field: 'meterCode', header: 'Kod licznika', isSortable: true },
@@ -31,6 +33,7 @@ export class ConnectionIndexComponent implements OnInit {
 
   ngOnInit() {
 
+    window.setTimeout(() => this.loadState(), 0);
   }
 
   listId = 234;
@@ -40,6 +43,7 @@ export class ConnectionIndexComponent implements OnInit {
   connections: ConnectionVM[];
   loading: boolean = true;
   visible: boolean = true;
+  suspendLoadingData: boolean = true;
 
   filtersVisible: boolean = false;
   savedViews: MenuItem[] = [
@@ -62,6 +66,7 @@ export class ConnectionIndexComponent implements OnInit {
 
   async loadData(event: LazyLoadEvent) {
     console.log(`Update: ${JSON.stringify(event)}`);
+    if (this.suspendLoadingData) console.log(`Update cancelled as requested with suspendLoadingData`);
 
     this.loading = true;
 
@@ -134,14 +139,20 @@ export class ConnectionIndexComponent implements OnInit {
   }
 
   loadState = async () => {
+    console.log(`Loading state...`);
+
     // we must create a clone of the saved object, otherwise the current changes will be reflected in it (the table component doesn't recreate the filters and multiSortMeta but rather alters them)
     // let view = <ViewSettings>JSON.parse(JSON.stringify(this.namedView));
     let view = await this.viewService.getCurrent(this.listId);
+
+    if (!view) {
+      this.suspendLoadingData = false;
+      this.dataTable.reset();
+    }
+
     this.namedView = JSON.parse(JSON.stringify(view));
 
     console.log(`Restoring state to: ${JSON.stringify(view)}`);
-
-    // this.dataTable.reset();
 
     // restore visible columns and their order
     this.selectedColumns = [];
@@ -156,12 +167,13 @@ export class ConnectionIndexComponent implements OnInit {
       this.filtersVisible = false;
     }
 
+
+
     // reapply filter controls values (note: this doesn't apply filters but only shows the current filtering expressions)
     this.resetFilterControls();
     for (let col in view.filters) {
       this.filterControls[col] = view.filters[col].value;
     }
-
 
     // we apply filters manually if they aren't applied by sort
     if (!this.dataTable.multiSortMeta) {
@@ -171,12 +183,19 @@ export class ConnectionIndexComponent implements OnInit {
       }
     }
 
+
+
     // (suspended) we apply default sort if none is specified
     this.dataTable.multiSortMeta = view.sort; // || [{ "field": "name", "order": 1 }];
+
+    // at this point we can resume loading data
+    this.suspendLoadingData = false;
 
     let columns: HTMLElement[] = <HTMLElement[]>Array.from(document.querySelectorAll("#dataTable table thead tr:first-child th"));
     let relativeWidths: number[] = view.columnRelativeWidths;
     let arrayWidth: number = (<HTMLElement>document.querySelector("#dataTable table")).offsetWidth;
+
+
 
     // once bindings are updated, restore column widths
     window.setTimeout(() => {
