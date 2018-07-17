@@ -73,7 +73,7 @@ namespace McvAngularTest2.Controllers
                 }
             }
 
-            return Content(JsonConvert.SerializeObject(lvs), "application/json");
+            return Content(lvs.ViewData, "application/json");
         }
     }
 }

@@ -18,6 +18,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { InputTextModule } from 'primeng/inputtext';
+import { ViewService } from './view.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { InputTextModule } from 'primeng/inputtext';
     SplitButtonModule,
     InputTextModule
   ],
-  providers: [ConnectionListService],
+  providers: [ConnectionListService, ViewService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -5,6 +5,7 @@ import { LazyLoadEvent, MenuItem } from 'primeng/api';
 import { ConnectionVM } from '../connectionVM';
 import { Table } from 'primeng/table';
 import { ViewSettings } from '../viewSettings';
+import { ViewService } from '../view.service';
 
 @Component({
   selector: 'app-connection-index',
@@ -13,7 +14,8 @@ import { ViewSettings } from '../viewSettings';
 })
 export class ConnectionIndexComponent implements OnInit {
 
-  constructor(private connectionListService: ConnectionListService) {
+  constructor(private connectionListService: ConnectionListService,
+    private viewService: ViewService) {
 
     this.cols = [
       { field: 'ppe', header: 'PPE', isSortable: true },
@@ -41,10 +43,10 @@ export class ConnectionIndexComponent implements OnInit {
 
   filtersVisible: boolean = false;
   savedViews: MenuItem[] = [
-    { label: 'PLENED-y', id: '1', icon: 'fa fa-users', title : "(widok wspólny)" },
-    { label: 'Wg PPE', id: '2', icon: 'fa fa-users', title : "(widok wspólny)"  },
-    { label: 'Tylko licznik', id: '3', icon: 'fa fa-user', title : "(widok prywatny)"  },
-    { label: 'Ostatni rok', id: '3', icon: 'fa fa-user', title : "(widok prywatny)"  },
+    { label: 'PLENED-y', id: '1', icon: 'fa fa-users', title: "(widok wspólny)" },
+    { label: 'Wg PPE', id: '2', icon: 'fa fa-users', title: "(widok wspólny)" },
+    { label: 'Tylko licznik', id: '3', icon: 'fa fa-user', title: "(widok prywatny)" },
+    { label: 'Ostatni rok', id: '3', icon: 'fa fa-user', title: "(widok prywatny)" },
   ];
 
   manageViews: MenuItem[] = [
@@ -100,8 +102,8 @@ export class ConnectionIndexComponent implements OnInit {
     let relativeWidths: number[] = absoluteWidths.map(x => (x * 100 / arrayWidth).toFixed(3)).map(x => Number(x));
 
     let viewSettings = <ViewSettings>{};
-    viewSettings.name = `Widok próbny ${(Math.random()*1000).toFixed(0)}`;
-    viewSettings.listId=  this.listId;
+    viewSettings.name = `Widok próbny ${(Math.random() * 1000).toFixed(0)}`;
+    viewSettings.listId = this.listId;
     viewSettings.isPublic = false;
     viewSettings.isTemporary = true;
     viewSettings.isDefault = false;
@@ -118,7 +120,7 @@ export class ConnectionIndexComponent implements OnInit {
     // we must clone the whole object as sort and filters are currently references and can change
     this.namedView = JSON.parse(JSON.stringify(viewSettings));
 
-
+    this.viewService.setTemporaryView(this.namedView);
 
     // let filters = {"ppe":{"value":"480","matchMode":"contains"},"tariff":{"value":"c21","matchMode":"contains"}};
     // for (let key in filters) {
@@ -131,18 +133,28 @@ export class ConnectionIndexComponent implements OnInit {
 
   }
 
-  loadState = (): void => {
+  loadState = async () => {
     // we must create a clone of the saved object, otherwise the current changes will be reflected in it (the table component doesn't recreate the filters and multiSortMeta but rather alters them)
-    let view = <ViewSettings>JSON.parse(JSON.stringify(this.namedView));
+    // let view = <ViewSettings>JSON.parse(JSON.stringify(this.namedView));
+    let view = await this.viewService.getCurrent(this.listId);
+    this.namedView = JSON.parse(JSON.stringify(view));
 
     console.log(`Restoring state to: ${JSON.stringify(view)}`);
+
+    // this.dataTable.reset();
 
     // restore visible columns and their order
     this.selectedColumns = [];
     let savedCols: string[] = view.columns;
     savedCols.map(x => this.cols.find(y => y.field === x)).forEach(x => this.selectedColumns.push(x));
 
-    this.dataTable.filters = view.filters;
+    if (view.filters) {
+      this.dataTable.filters = view.filters;
+      this.filtersVisible = true;
+    } else {
+      this.dataTable.filters = {};
+      this.filtersVisible = false;
+    }
 
     // reapply filter controls values (note: this doesn't apply filters but only shows the current filtering expressions)
     this.resetFilterControls();
