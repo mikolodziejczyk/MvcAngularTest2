@@ -20,6 +20,8 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
 import { InputTextModule } from 'primeng/inputtext';
 import { ViewService } from './view.service';
 import { ToolbarModule } from 'primeng/toolbar';
+import { GrowlModule } from 'primeng/growl';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @NgModule({
   declarations: [
@@ -42,9 +44,10 @@ import { ToolbarModule } from 'primeng/toolbar';
     TieredMenuModule,
     SplitButtonModule,
     InputTextModule,
-    ToolbarModule
+    ToolbarModule,
+    GrowlModule
   ],
-  providers: [ConnectionListService, ViewService],
+  providers: [ConnectionListService, ViewService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

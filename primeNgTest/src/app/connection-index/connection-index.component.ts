@@ -6,6 +6,8 @@ import { ConnectionVM } from '../connectionVM';
 import { Table } from 'primeng/table';
 import { ViewSettings } from '../viewSettings';
 import { ViewService } from '../view.service';
+import { Message } from 'primeng/components/common/api';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'app-connection-index',
@@ -15,7 +17,8 @@ import { ViewService } from '../view.service';
 export class ConnectionIndexComponent implements OnInit {
 
   constructor(private connectionListService: ConnectionListService,
-    private viewService: ViewService) {
+    private viewService: ViewService,
+    private messageService: MessageService) {
 
     this.suspendLoadingData = true;
 
@@ -35,6 +38,8 @@ export class ConnectionIndexComponent implements OnInit {
 
     window.setTimeout(() => this.loadState(), 0);
   }
+
+  msgs: Message[] = [];
 
   listId = 234;
   cols: any[];
@@ -96,7 +101,7 @@ export class ConnectionIndexComponent implements OnInit {
   namedView: ViewSettings;
 
 
-  saveState = () => {
+  saveState = async () => {
     console.log(`---- Saving saving state`);
     // saving selected columns and their order
     let currentCols = this.selectedColumns.map(x => x.field);
@@ -125,7 +130,9 @@ export class ConnectionIndexComponent implements OnInit {
     // we must clone the whole object as sort and filters are currently references and can change
     this.namedView = JSON.parse(JSON.stringify(viewSettings));
 
-    this.viewService.setTemporaryView(this.namedView);
+    await this.viewService.setTemporaryView(this.namedView);
+
+    this.messageService.add({ severity: 'info', summary: 'Widok zapisany', detail: "Bieżące ustawienia widoku zostały zapamiętane." });
 
     // let filters = {"ppe":{"value":"480","matchMode":"contains"},"tariff":{"value":"c21","matchMode":"contains"}};
     // for (let key in filters) {
@@ -206,6 +213,14 @@ export class ConnectionIndexComponent implements OnInit {
         columns[i].style.width = widthString;
       }
     }, 0);
+
+    let message = "";
+
+    if (view.isTemporary) {
+      message = "Ostatnio zapisany tymczasowy widok został przywrócony";
+    }
+
+    this.messageService.add({ severity: 'info', summary: 'Widok wczytany', detail: message });
 
   }
 
