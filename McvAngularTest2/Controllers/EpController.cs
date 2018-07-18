@@ -47,7 +47,6 @@ namespace McvAngularTest2.Controllers
                                              );
                 }
 
-                int count = query.Count();
 
                 // if filters aren't posted, in filters we get values from MVC; with "action", "controller" as keys; they must be excluded, currently by their null value criterion
                 foreach (var kvp in filters.Where(x=>x.Value != null).Where(x=>x.Key != "global"))
@@ -121,6 +120,8 @@ namespace McvAngularTest2.Controllers
 
 
                 }
+
+                int count = query.Count();
 
 
                 if (multiSortMeta != null)

@@ -22,6 +22,7 @@ import { ViewService } from './view.service';
 import { ToolbarModule } from 'primeng/toolbar';
 import { GrowlModule } from 'primeng/growl';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { MessageService } from 'primeng/components/common/messageservice';
     SplitButtonModule,
     InputTextModule,
     ToolbarModule,
-    GrowlModule
+    GrowlModule,
+    DialogModule
   ],
   providers: [ConnectionListService, ViewService, MessageService],
   bootstrap: [AppComponent]

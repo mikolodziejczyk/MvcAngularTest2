@@ -50,6 +50,13 @@ export class ConnectionIndexComponent implements OnInit {
   visible: boolean = true;
   suspendLoadingData: boolean = true;
 
+  // move these settings to sub-class
+  saveDialogVisible: boolean = false;
+  viewName: string = "Nowy widok";
+  isViewPublic: boolean = false;
+  isViewDefault: boolean = false;
+  saveColumnWidths: boolean = false;
+
   filtersVisible: boolean = false;
   savedViews: MenuItem[] = [
     { label: 'PLENED-y', id: '1', icon: 'fa fa-users', title: "(widok wspólny)" },
@@ -58,14 +65,7 @@ export class ConnectionIndexComponent implements OnInit {
     { label: 'Ostatni rok', id: '3', icon: 'fa fa-user', title: "(widok prywatny)" },
   ];
 
-  manageViews: MenuItem[] = [
-    { label: 'Zapisz jako nowy', icon: 'fa fa-plus-circle' },
-    { separator: true },
-    { label: 'Aktualizuj bieżący', icon: 'fa fa-save' },
-    { label: 'Właściwości', icon: 'fa fa-edit' },
-    { separator: true },
-    { label: 'Usuń ten widok', icon: 'fa fa-minus-circle' }
-  ];
+
 
   @ViewChild("dt") dataTable: Table;
 
@@ -237,4 +237,18 @@ export class ConnectionIndexComponent implements OnInit {
 
     this.filterControls['global'] = null;
   }
+
+  saveNewNamedView = () => {
+    this.saveDialogVisible = true;
+
+  }
+
+  manageViews: MenuItem[] = [
+    { label: 'Zapisz jako nowy', icon: 'fa fa-plus-circle', command: this.saveNewNamedView },
+    { separator: true },
+    { label: 'Aktualizuj bieżący', icon: 'fa fa-save' },
+    { label: 'Właściwości', icon: 'fa fa-edit' },
+    { separator: true },
+    { label: 'Usuń ten widok', icon: 'fa fa-minus-circle' }
+  ];
 }
