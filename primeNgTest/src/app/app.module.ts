@@ -19,6 +19,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { InputTextModule } from 'primeng/inputtext';
 import { ViewService } from './view.service';
+import { ToolbarModule } from 'primeng/toolbar';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ViewService } from './view.service';
     ToggleButtonModule,
     TieredMenuModule,
     SplitButtonModule,
-    InputTextModule
+    InputTextModule,
+    ToolbarModule
   ],
   providers: [ConnectionListService, ViewService],
   bootstrap: [AppComponent]

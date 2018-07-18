@@ -12,25 +12,40 @@
   </ng-container>
 </p-overlayPanel>
 
-<div style="margin-bottom: 16px">
-  <p-tieredMenu #savedViewsMenu [model]="savedViews" [popup]="true"></p-tieredMenu>
-  <button #savedViewsButton type="button" pButton icon="fa fa-list-ul" (click)="savedViewsMenu.toggle($event)"></button>
-  <p-toggleButton onIcon="fa fa-filter" onLabel="" offLabel="" offIcon="fa fa-filter" [(ngModel)]="filtersVisible"></p-toggleButton>
-  <button type="text" pButton icon="fa fa-columns" (click)="op.show($event)" class="ui-button-info" title="Wybierz kolumny"></button>
-  <p-tieredMenu #manageViewsMenu [model]="manageViews" [popup]="true"></p-tieredMenu>
-  <button #settingsButton type="button" pButton icon="fa fa-cog" (click)="manageViewsMenu.toggle($event)"></button>
-  <div style="float: right;">
-    <div class="ui-inputgroup">
-      <input type="text" pInputText placeholder="Znajdź" (input)="dt.filterGlobal($event.target.value, 'contains')" [(ngModel)]="filterControls['global']"
-      />
-      <span class="ui-inputgroup-addon">
-        <i class="fa fa-search"></i>
-      </span>
 
+<div style="margin-bottom: 32px;">
+  <p-toolbar>
+
+    <div class="ui-toolbar-group-left">
+      <p-toggleButton onIcon="fa fa-filter" onLabel="" offLabel="" offIcon="fa fa-filter" [(ngModel)]="filtersVisible"></p-toggleButton>
+      <button type="text" pButton icon="fa fa-columns" (click)="op.show($event)" class="ui-button-info" title="Wybierz kolumny"></button>
+
+      <i class="fa fa-ellipsis-v" style="margin-left: 0.5em; margin-right: 0.5em;"></i>
+
+      <button pButton type="button" label="Zachowaj" (click)="saveState();"></button>
+      <button pButton type="button" label="Przywróć" (click)="loadState();"></button>
+
+      <i class="fa fa-ellipsis-v" style="margin-left: 0.5em; margin-right: 0.5em;"></i>
+
+      <p-tieredMenu #savedViewsMenu [model]="savedViews" [popup]="true"></p-tieredMenu>
+      <button #savedViewsButton type="button" pButton icon="fa fa-list-ul" (click)="savedViewsMenu.toggle($event)"></button>
+
+      <p-tieredMenu #manageViewsMenu [model]="manageViews" [popup]="true"></p-tieredMenu>
+      <button #settingsButton type="button" pButton icon="fa fa-cog" (click)="manageViewsMenu.toggle($event)"></button>
     </div>
-  </div>
-</div>
 
+    <div class="ui-toolbar-group-right">
+      <div class="ui-inputgroup">
+        <input type="text" pInputText placeholder="Znajdź" (input)="dt.filterGlobal($event.target.value, 'contains')" [(ngModel)]="filterControls['global']"
+        />
+        <span class="ui-inputgroup-addon">
+          <i class="fa fa-search"></i>
+        </span>
+
+      </div>
+    </div>
+  </p-toolbar>
+</div>
 
 <p-table #dt id="dataTable" [columns]="selectedColumns" [value]="connections" [paginator]="true" pageLinks="10" [rows]="20"
   [resizableColumns]="!isAutoLayout" [autoLayout]="isAutoLayout" [reorderableColumns]="true" [lazy]="true" (onLazyLoad)="loadData($event)"
@@ -91,10 +106,6 @@
   </ng-template>
 </p-table>
 <br/>
-<p>
-  <button (click)="saveState();">Save state</button>
-  <button (click)="loadState();">Load state</button>
-</p>
 <p>
   <p-checkbox [(ngModel)]="isAutoLayout" label="use auto layout" binary="true"></p-checkbox>
 </p>
