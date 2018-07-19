@@ -109,7 +109,7 @@
 </p-table>
 <br/>
 
-<p-dialog header="Zapisywanie" [(visible)]="saveDialogVisible">
+<!-- <p-dialog header="Zapisywanie" [(visible)]="saveDialogVisible">
   <div>
     Bieżący widok zostanie zapisany jako nowy widok nazwany.
   </div>
@@ -133,7 +133,10 @@
     <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Zapisz"></button>
     <button type="button" pButton icon="pi pi-close" (click)="display=false" label="Anuluj" class="ui-button-secondary"></button>
   </p-footer>
-</p-dialog>
+</p-dialog> -->
+
+
+<app-save-view-dialog #saveViewDialog></app-save-view-dialog>
 
 <p>
   <p-checkbox [(ngModel)]="isAutoLayout" label="use auto layout" binary="true"></p-checkbox>

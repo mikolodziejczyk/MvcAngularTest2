@@ -8,6 +8,8 @@ import { ViewSettings } from '../viewSettings';
 import { ViewService } from '../view.service';
 import { Message } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { SaveViewDialogComponent } from '../save-view-dialog/save-view-dialog.component';
+import { ViewListEntry } from '../viewListEntry';
 
 @Component({
   selector: 'app-connection-index',
@@ -37,6 +39,7 @@ export class ConnectionIndexComponent implements OnInit {
   ngOnInit() {
 
     window.setTimeout(() => this.loadState(), 0);
+    this.refreshNamedViewList();
   }
 
   msgs: Message[] = [];
@@ -50,24 +53,22 @@ export class ConnectionIndexComponent implements OnInit {
   visible: boolean = true;
   suspendLoadingData: boolean = true;
 
-  // move these settings to sub-class
-  saveDialogVisible: boolean = false;
-  viewName: string = "Nowy widok";
-  isViewPublic: boolean = false;
-  isViewDefault: boolean = false;
-  saveColumnWidths: boolean = false;
 
   filtersVisible: boolean = false;
+
+  savedPublicViews: MenuItem[] = [];
+  savedPrivateViews: MenuItem[] = [];
+
   savedViews: MenuItem[] = [
-    { label: 'PLENED-y', id: '1', icon: 'fa fa-users', title: "(widok wspólny)" },
-    { label: 'Wg PPE', id: '2', icon: 'fa fa-users', title: "(widok wspólny)" },
-    { label: 'Tylko licznik', id: '3', icon: 'fa fa-user', title: "(widok prywatny)" },
-    { label: 'Ostatni rok', id: '3', icon: 'fa fa-user', title: "(widok prywatny)" },
+    { label: 'Wspólne (publiczne)', icon: 'fa fa-users', items: this.savedPublicViews },
+    { label: 'Moje (prywatne)', icon: 'fa fa-user', items: this.savedPrivateViews },
   ];
 
+  
 
 
   @ViewChild("dt") dataTable: Table;
+  @ViewChild("saveViewDialog") saveViewDialog: SaveViewDialogComponent;
 
   async loadData(event: LazyLoadEvent) {
     console.log(`Update: ${JSON.stringify(event)}`);
@@ -221,7 +222,6 @@ export class ConnectionIndexComponent implements OnInit {
     }
 
     this.messageService.add({ severity: 'info', summary: 'Widok wczytany', detail: message });
-
   }
 
   isAutoLayout: boolean = false;
@@ -238,17 +238,121 @@ export class ConnectionIndexComponent implements OnInit {
     this.filterControls['global'] = null;
   }
 
-  saveNewNamedView = () => {
-    this.saveDialogVisible = true;
 
+   saveNewNamedViewOk = async () => {
+    // apply to the current view
+    this.namedView.name = this.saveViewDialog.viewName;
+    this.namedView.isPublic = this.saveViewDialog.isViewPublic;
+    this.namedView.isDefault =  this.saveViewDialog.isViewDefault;
+
+    let viewSettings = this.createViewSettings(this.saveViewDialog.viewName, 
+      this.saveViewDialog.isViewPublic, this.saveViewDialog.isViewDefault, false, this.saveViewDialog.saveColumnWidths);
+
+      try {
+      let returnedView = await this.viewService.saveNewNamedView(viewSettings);
+      this.namedView = returnedView;
+      this.messageService.add({ severity: 'info', summary: 'Widok zapisany', detail: `Bieżące ustawienia widoku zostały zapamiętane jako widok ${this.namedView.name}.` });
+      }
+      catch (e) {
+        this.messageService.add({ severity: 'error', summary: 'Nieudane', detail: `Nie udało się zapisać bieżącego widoku.` });
+      }
+
+      this.refreshNamedViewList();
+
+  }
+
+  saveNewNamedView = () => {
+    if (this.namedView) {
+      this.saveViewDialog.isNew = true;
+      this.saveViewDialog.viewName = this.namedView.name;
+      this.saveViewDialog.isViewPublic = this.namedView.isPublic;
+      this.saveViewDialog.isViewDefault = this.namedView.isDefault;
+      this.saveViewDialog.saveColumnWidths = !!this.namedView.columnRelativeWidths;
+      this.saveViewDialog.ok = this.saveNewNamedViewOk;
+    }
+
+    this.saveViewDialog.show();
+  }
+
+  updateNamedViewOk = () => {
+    alert("Update named view here!");
+  }
+
+  updateNamedView = () => {
+    if (this.namedView) {
+      this.saveViewDialog.isNew = false;
+      this.saveViewDialog.viewName = this.namedView.name;
+      this.saveViewDialog.isViewPublic = this.namedView.isPublic;
+      this.saveViewDialog.isViewDefault = this.namedView.isDefault;
+      this.saveViewDialog.saveColumnWidths = !!this.namedView.columnRelativeWidths;
+      this.saveViewDialog.ok = this.updateNamedViewOk;
+    }
+
+    this.saveViewDialog.show();
   }
 
   manageViews: MenuItem[] = [
     { label: 'Zapisz jako nowy', icon: 'fa fa-plus-circle', command: this.saveNewNamedView },
     { separator: true },
-    { label: 'Aktualizuj bieżący', icon: 'fa fa-save' },
-    { label: 'Właściwości', icon: 'fa fa-edit' },
+    { label: 'Aktualizuj bieżący', icon: 'fa fa-save', command: this.updateNamedView },
     { separator: true },
     { label: 'Usuń ten widok', icon: 'fa fa-minus-circle' }
   ];
+
+  /**
+   * Creates a ViewSettings instance based on the current view and the specified additional parameters.
+   * @param name 
+   * @param isPublic 
+   * @param isDefault 
+   * @param isTemporary 
+   * @param saveColumnWidths 
+   */
+  createViewSettings(name: string, isPublic: boolean, isDefault: boolean, isTemporary: boolean, saveColumnWidths: boolean): ViewSettings {
+    // saving selected columns and their order
+    let currentCols = this.selectedColumns.map(x => x.field);
+
+    // saving column widths
+    let absoluteWidths: number[] = Array.from(document.querySelectorAll("#dataTable table thead tr:first-child th")).map(x => (<HTMLElement>x).offsetWidth);
+    let arrayWidth: number = (<HTMLElement>document.querySelector("#dataTable table")).offsetWidth;
+    let relativeWidths: number[] = absoluteWidths.map(x => (x * 100 / arrayWidth).toFixed(3)).map(x => Number(x));
+
+    let viewSettings = <ViewSettings>{};
+    viewSettings.name = name;
+    viewSettings.listId = this.listId;
+    viewSettings.isPublic = isPublic;
+    viewSettings.isTemporary = isTemporary;
+    viewSettings.isDefault = isDefault;
+
+    viewSettings.columns = currentCols;
+    viewSettings.columnRelativeWidths = saveColumnWidths ? relativeWidths : null;
+    viewSettings.sort = this.dataTable.multiSortMeta;
+    viewSettings.filters = this.dataTable.filters;
+
+
+    // we must clone the whole object as sort and filters are currently references and can change
+
+    viewSettings = JSON.parse(JSON.stringify(viewSettings));
+
+    return viewSettings;
+  }
+
+  async refreshNamedViewList() {
+    let vle : ViewListEntry[] = await this.viewService.getViewList(this.listId);
+
+    vle.sort( (a, b) => a.name.toLocaleUpperCase().localeCompare(b.name.toLocaleUpperCase()));
+
+    while (this.savedPrivateViews.pop());
+    while (this.savedPublicViews.pop());
+
+    vle.filter(x=>!x.isPublic).forEach(x => {
+      let mi : MenuItem = { label : x.name, id : x.id.toString()};
+      this.savedPrivateViews.push(mi);
+    });
+
+    vle.filter(x=>x.isPublic).forEach(x => {
+      let mi : MenuItem = { label : x.name, id : x.id.toString()};
+      this.savedPublicViews.push(mi);
+    });
+
+  }
 }

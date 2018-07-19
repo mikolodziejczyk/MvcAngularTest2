@@ -27,6 +27,7 @@ namespace McvAngularTest2
         public bool IsDefault { get; set; }
         public string Name { get; set; }
         public string ViewData { get; set; }
+        public bool IsPublic { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserActiveView> UserActiveView { get; set; }

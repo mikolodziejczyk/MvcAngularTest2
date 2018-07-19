@@ -1,4 +1,5 @@
 ﻿using EnergyPoint.Repository;
+using McvAngularTest2.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -226,35 +227,9 @@ namespace McvAngularTest2.Controllers
         }
     }
 
-    public class SortMeta
-    {
-        public string field { get; set; }
-        public int order { get; set; }
-    }
-
-    public class FilterEntry
-    {
-        public string value { get; set; }
-        public string matchMode { get; set; }
-    }
-
-    public class ViewSettings
-    {
-        public int id { get; set; }
-        public int listId { get; set; }
-
-        public string name { get; set; }
-        public bool isPublic { get; set; }
-        public bool isTemporary { get; set; }
-        public bool isDefault { get; set; }
-
-        public string[] columns { get; set; }
 
 
-        public int[] columnRelativeWidths { get; set; }
 
-        public SortMeta[] sort { get; set; }
 
-        public IDictionary<string, FilterEntry> filters { get; set; }
-    }
+
 }

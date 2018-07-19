@@ -23,12 +23,14 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { GrowlModule } from 'primeng/growl';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { DialogModule } from 'primeng/dialog';
+import { SaveViewDialogComponent } from './save-view-dialog/save-view-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MyFormComponent,
-    ConnectionIndexComponent
+    ConnectionIndexComponent,
+    SaveViewDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -186,6 +186,7 @@
     <Compile Include="Controllers\EpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ViewManagerController.cs" />
+    <Compile Include="DerivedTypeFilterContractResolver.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -194,9 +195,14 @@
       <DependentUpon>AngularPatternsModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\FilterEntry.cs" />
     <Compile Include="Models\MyFormData.cs" />
     <Compile Include="Models\MyFormMetadata.cs" />
     <Compile Include="Models\PersonNameVM.cs" />
+    <Compile Include="Models\SortMeta.cs" />
+    <Compile Include="Models\StoreableViewSettings.cs" />
+    <Compile Include="Models\ViewListEntry.cs" />
+    <Compile Include="Models\ViewSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserActiveView.cs">
       <DependentUpon>AngularPatternsModel.tt</DependentUpon>
