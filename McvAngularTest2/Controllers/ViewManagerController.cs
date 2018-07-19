@@ -178,7 +178,43 @@ namespace McvAngularTest2.Controllers
             }
         }
 
-            ViewSettings CreateFromListViewSetting(ListViewSettings lvs)
+        /// <summary>
+        /// Gets the view settings with the specified id.
+        /// </summary>
+        /// <param name="listId"></param>
+        /// <returns></returns>
+        public ActionResult GetViewById(int id)
+        {
+            using (AngularPatternsEntities context = new AngularPatternsEntities())
+            {
+                ListViewSettings lvs = context.ListViewSettings.FirstOrDefault(x => x.Id == id);
+
+                if (lvs == null) throw new Exception("The view doesn't exist");
+
+                UserActiveView userActiveView = context.UserActiveView.FirstOrDefault(x => x.UserId == userId && x.ListId == lvs.ListId);
+
+                if (userActiveView != null) context.UserActiveView.Remove(userActiveView);
+
+                // set this view as an active one
+
+                userActiveView = new UserActiveView();
+                userActiveView.ListId = lvs.ListId;
+                userActiveView.UserId = userId;
+                userActiveView.ListViewSettings = lvs;
+
+                context.UserActiveView.Add(userActiveView);
+
+                context.SaveChanges();
+
+                ViewSettings viewSettings = CreateFromListViewSetting(lvs);
+
+                return Content(JsonConvert.SerializeObject(viewSettings), "application/json");
+            }
+
+
+        }
+
+        ViewSettings CreateFromListViewSetting(ListViewSettings lvs)
             {
                 ViewSettings vs = JsonConvert.DeserializeObject<ViewSettings>(lvs.ViewData);
                 vs.name = lvs.Name;

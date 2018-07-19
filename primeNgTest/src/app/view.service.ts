@@ -26,4 +26,9 @@ export class ViewService {
     let url = `/api/ViewManager/GetViewList?listId=${listId}`;
     return this.http.get<ViewListEntry[]>(url).toPromise();
   }
+
+  GetViewById(id : number) : Promise<ViewSettings> {
+    let url = `/api/ViewManager/GetViewById/${id}`;
+    return this.http.get<ViewSettings>(url).toPromise();
+  }
 }

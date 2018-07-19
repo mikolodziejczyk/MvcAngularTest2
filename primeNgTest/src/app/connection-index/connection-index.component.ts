@@ -336,7 +336,23 @@ export class ConnectionIndexComponent implements OnInit {
     return viewSettings;
   }
 
+  async loadNamedView(id: number) {
+    try {
+      let viewSettings = await this.viewService.GetViewById(id);
+      alert(`Not implemented but the view is retrieved: ${JSON.stringify(viewSettings)}`);
+      // TODO: create a loadView() method that applies the specied viewSettings
+    }
+    catch(e) {
+      alert("Not implemented but failed");
+      // TODO: Replace this with a message
+    }
+  }
+
   async refreshNamedViewList() {
+    let menuCallback = (event) => {
+      this.loadNamedView(+event.item.id)
+    };
+
     let vle : ViewListEntry[] = await this.viewService.getViewList(this.listId);
 
     vle.sort( (a, b) => a.name.toLocaleUpperCase().localeCompare(b.name.toLocaleUpperCase()));
@@ -345,12 +361,12 @@ export class ConnectionIndexComponent implements OnInit {
     while (this.savedPublicViews.pop());
 
     vle.filter(x=>!x.isPublic).forEach(x => {
-      let mi : MenuItem = { label : x.name, id : x.id.toString()};
+      let mi : MenuItem = { label : x.name, id : x.id.toString(), command: menuCallback};
       this.savedPrivateViews.push(mi);
     });
 
     vle.filter(x=>x.isPublic).forEach(x => {
-      let mi : MenuItem = { label : x.name, id : x.id.toString()};
+      let mi : MenuItem = { label : x.name, id : x.id.toString(), command: menuCallback};
       this.savedPublicViews.push(mi);
     });
 
