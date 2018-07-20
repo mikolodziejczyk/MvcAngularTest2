@@ -465,5 +465,12 @@ export class ConnectionIndexComponent implements OnInit {
     this.removeViewMenuItem.disabled = !isNamed;
   }
 
-
+  viewNameClick = () => {
+    if (this.isCurrentViewNamedView) {
+      this.updateNamedView();
+    }
+    else {
+      this.saveNewNamedView();
+    }
+  }
 }
