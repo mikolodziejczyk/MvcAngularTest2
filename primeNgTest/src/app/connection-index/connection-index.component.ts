@@ -101,30 +101,7 @@ export class ConnectionIndexComponent implements OnInit {
 
 
   saveState = async () => {
-    console.log(`---- Saving saving state`);
-    // saving selected columns and their order
-    let currentCols = this.selectedColumns.map(x => x.field);
-
-    // saving column widths
-    let absoluteWidths: number[] = Array.from(document.querySelectorAll("#dataTable table thead tr:first-child th")).map(x => (<HTMLElement>x).offsetWidth);
-    let arrayWidth: number = (<HTMLElement>document.querySelector("#dataTable table")).offsetWidth;
-    let relativeWidths: number[] = absoluteWidths.map(x => (x * 100 / arrayWidth).toFixed(3)).map(x => Number(x));
-
-    let viewSettings = <ViewSettings>{};
-    viewSettings.name = `Widok próbny ${(Math.random() * 1000).toFixed(0)}`;
-    viewSettings.listId = this.listId;
-    viewSettings.isPublic = false;
-    viewSettings.isTemporary = true;
-    viewSettings.isDefault = false;
-
-    viewSettings.columns = currentCols;
-    viewSettings.columnRelativeWidths = relativeWidths;
-    viewSettings.sort = this.dataTable.multiSortMeta;
-    viewSettings.filters = this.dataTable.filters;
-
-
-
-    console.log(JSON.stringify(viewSettings));
+    let viewSettings : ViewSettings = this.createViewSettings("Widok tymczasowy", false, false, true, true);
 
     // we must clone the whole object as sort and filters are currently references and can change
     this.namedView = JSON.parse(JSON.stringify(viewSettings));
@@ -132,16 +109,6 @@ export class ConnectionIndexComponent implements OnInit {
     await this.viewService.setTemporaryView(this.namedView);
 
     this.messageService.add({ severity: 'info', summary: 'Widok zapisany', detail: "Bieżące ustawienia widoku zostały zapamiętane." });
-
-    // let filters = {"ppe":{"value":"480","matchMode":"contains"},"tariff":{"value":"c21","matchMode":"contains"}};
-    // for (let key in filters) {
-    //   let value = filters[key];
-    //   this.dataTable.filter(value.value, key, value.matchMode);
-    // }
-
-    // this.dataTable.filters = {"ppe":{"value":"480","matchMode":"contains"},"tariff":{"value":"c21","matchMode":"contains"}};
-    // this.dataTable.multiSortMeta = [{"field":"tariff","order":1},{"field":"name","order":-1}];
-
   }
 
   loadState = async () => {
@@ -375,6 +342,8 @@ export class ConnectionIndexComponent implements OnInit {
           }
         }
       }
+
+      this.isAutoLayout = !relativeWidths;
     }, 0);
 
   }

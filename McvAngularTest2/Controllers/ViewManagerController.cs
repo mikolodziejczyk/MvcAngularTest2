@@ -73,6 +73,18 @@ namespace McvAngularTest2.Controllers
                 {
                     lvs = context.ListViewSettings.First(x => x.Id == userActiveView.ViewId);
                 }
+                else
+                {
+                    // if there's no last view stored, try to load the default view for this user
+                    lvs = context.ListViewSettings.FirstOrDefault(x => x.ListId == listId && x.UserId == userId && x.IsDefault);
+
+                    if (lvs == null)
+                    {
+                        // if there's no default view for this user, try to load the default view for this user
+                        lvs = context.ListViewSettings.FirstOrDefault(x => x.ListId == listId && x.IsDefault && x.IsPublic);
+                    }
+
+                }
             }
 
             ViewSettings viewSettings = null;

@@ -50,19 +50,9 @@
 </div>
 
 <p-table #dt id="dataTable" [columns]="selectedColumns" [value]="connections" [paginator]="true" pageLinks="10" [rows]="20"
-  [resizableColumns]="!isAutoLayout" [autoLayout]="isAutoLayout" [reorderableColumns]="true" [lazy]="true" (onLazyLoad)="loadData($event)"
+  [resizableColumns]="true" [autoLayout]="isAutoLayout" [reorderableColumns]="true" [lazy]="true" (onLazyLoad)="loadData($event)"
   [totalRecords]="connectionCount" [loading]="loading" sortMode="multiple" (onColReorder)="onColReorder($event);" *ngIf="visible">
-  <!-- <ng-template pTemplate="caption">
-    <div style="text-align:left">
-      <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header" selectedItemsLabel="Wybrano {0} kolumn"
-        [style]="{minWidth: '200px'}" defaultLabel="Wybierz kolumny"></p-multiSelect>
-    </div> 
-    <div style="text-align: right">
-      <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-      <input type="text" pInputText size="50" placeholder="szukaj" (input)="dt.filterGlobal($event.target.value, 'contains')" [(ngModel)]="filterControls['global']"
-        style="width:auto" />
-    </div>
-  </ng-template> -->
+
   <ng-template pTemplate="header" let-columns>
     <tr>
       <ng-container *ngFor="let col of columns">
@@ -109,35 +99,5 @@
 </p-table>
 <br/>
 
-<!-- <p-dialog header="Zapisywanie" [(visible)]="saveDialogVisible">
-  <div>
-    Bieżący widok zostanie zapisany jako nowy widok nazwany.
-  </div>
-  <div>
-    <div>
-      <label for="dialogViewName">Nazwa widoku: </label>
-      <input id="dialogViewName" type="text" pInputText [(ngModel)]="viewName" placeholder="Nazwa widoku" required />
-    </div>
-
-    <div>
-      <p-checkbox [(ngModel)]="isViewPublic" binary="true" label="Dostępny dla wszystkich użytkowników" title="Jeśli nie zaznaczysz, widok będzie dostępny tylko dla ciebie, jeśli zaznaczysz - będzie to widok publiczny, dla wszystkich użytkowników."></p-checkbox>
-    </div>
-    <div>
-      <p-checkbox [(ngModel)]="isViewDefault" binary="true" label="Zapisz jako widok domyślny" title="Jeśli zaznaczysz, widok będzie widokiem domyślnym (dla ciebie lub wszystkich użytkowników)."></p-checkbox>
-    </div>
-    <div>
-      <p-checkbox [(ngModel)]="saveColumnWidths" binary="true" label="Zapisz szerokości kolumn" title="Jeśli zaznaczysz, bieżące szerokości kolumn zostaną zapisane i po wczytaniu widoku zostaną przywrócone. Niezalecane dla widoków publicznych."></p-checkbox>
-    </div>
-  </div>
-  <p-footer>
-    <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Zapisz"></button>
-    <button type="button" pButton icon="pi pi-close" (click)="display=false" label="Anuluj" class="ui-button-secondary"></button>
-  </p-footer>
-</p-dialog> -->
-
 
 <app-save-view-dialog #saveViewDialog></app-save-view-dialog>
-
-<p>
-  <p-checkbox [(ngModel)]="isAutoLayout" label="use auto layout" binary="true"></p-checkbox>
-</p>
