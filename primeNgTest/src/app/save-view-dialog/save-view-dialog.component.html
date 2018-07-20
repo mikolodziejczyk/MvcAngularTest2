@@ -1,29 +1,39 @@
 <p-dialog header="Zapisywanie widoku" [(visible)]="visible" modal=true closeable=false>
-  <div *ngIf="isNew">
+  <div *ngIf="isNew" class="info-section">
     Bieżący widok zostanie zapisany jako nowy widok nazwany.
   </div>
   <div *ngIf="!isNew">
-      Widok nazwany {{ originalViewName }} zostanie zapisany z nowymi ustawieniami.
-    </div>
-  
-  <div>
-    <div>
-      <label for="dialogViewName">Nazwa widoku: </label>
-      <input id="dialogViewName" type="text" pInputText [(ngModel)]="viewName" placeholder="Nazwa widoku" required />
-    </div>
-
-    <div>
-      <p-checkbox [(ngModel)]="isViewPublic" binary="true" label="Dostępny dla wszystkich użytkowników" title="Jeśli nie zaznaczysz, widok będzie dostępny tylko dla ciebie, jeśli zaznaczysz - będzie to widok publiczny, dla wszystkich użytkowników."></p-checkbox>
-    </div>
-    <div>
-      <p-checkbox [(ngModel)]="isViewDefault" binary="true" label="Zapisz jako widok domyślny" title="Jeśli zaznaczysz, widok będzie widokiem domyślnym (dla ciebie lub wszystkich użytkowników)."></p-checkbox>
-    </div>
-    <div>
-      <p-checkbox [(ngModel)]="saveColumnWidths" binary="true" label="Zapisz szerokości kolumn" title="Jeśli zaznaczysz, bieżące szerokości kolumn zostaną zapisane i po wczytaniu widoku zostaną przywrócone. Niezalecane dla widoków publicznych."></p-checkbox>
-    </div>
+    Widok nazwany {{ originalViewName }} zostanie zapisany z nowymi ustawieniami.
   </div>
+
+  <div>
+    <form novalidate #form="ngForm">
+      <div class="name-section">
+        <!-- <label for="dialogViewName">Nazwa widoku: </label> -->
+        <input class="full-width"  #viewNameControl="ngModel" name="dialogViewName" id="dialogViewName" type="text" pInputText [(ngModel)]="viewName" placeholder="Nazwa widoku"
+          required maxlength="40"/>
+      </div>
+      <div *ngIf="viewNameControl.invalid && (viewNameControl.dirty || viewNameControl.touched)">
+        <div *ngIf="viewNameControl.errors['required']" class="error-message">
+          Musisz podać nazwę widoku.
+        </div>
+
+      </div>
+
+      <div>
+        <p-checkbox name="isPublic" [(ngModel)]="isViewPublic" binary="true" label="Dostępny dla wszystkich użytkowników" title="Jeśli nie zaznaczysz, widok będzie dostępny tylko dla ciebie, jeśli zaznaczysz - będzie to widok publiczny, dla wszystkich użytkowników."></p-checkbox>
+      </div>
+      <div>
+        <p-checkbox name="isDefault" [(ngModel)]="isViewDefault" binary="true" label="Zapisz jako widok domyślny" title="Jeśli zaznaczysz, widok będzie widokiem domyślnym (dla ciebie lub wszystkich użytkowników)."></p-checkbox>
+      </div>
+      <div>
+        <p-checkbox name="saveColumnWidths" [(ngModel)]="saveColumnWidths" binary="true" label="Zapisz szerokości kolumn" title="Jeśli zaznaczysz, bieżące szerokości kolumn zostaną zapisane i po wczytaniu widoku zostaną przywrócone. Niezalecane dla widoków publicznych."></p-checkbox>
+      </div>
+    </form>
+  </div>
+
   <p-footer>
-    <button type="button" pButton icon="pi pi-check" (click)="onOk();" label="Zapisz"></button>
+    <button type="button" pButton icon="pi pi-check" (click)="onOk();" label="Zapisz" [disabled]="!form.valid"></button>
     <button type="button" pButton icon="pi pi-times" (click)="onCancel()" label="Anuluj" class="ui-button-secondary"></button>
   </p-footer>
 </p-dialog>

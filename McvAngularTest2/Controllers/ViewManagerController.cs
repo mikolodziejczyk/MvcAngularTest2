@@ -11,6 +11,7 @@ namespace McvAngularTest2.Controllers
     public class ViewManagerController : Controller
     {
         int userId = 123; // simulates the current user id
+        bool isUserViewAdministrator = true; // the user has right to alter public views
 
         /// <summary>
         /// Sets the specified view data as the current view for the specified user.
@@ -145,7 +146,7 @@ namespace McvAngularTest2.Controllers
                 lvs.IsDefault = viewSettings.isDefault;
                 lvs.IsPublic = viewSettings.isPublic;
                 lvs.IsTemporary = false;
-                lvs.UserId = viewSettings.isPublic ? null: (int?)userId;
+                lvs.UserId = viewSettings.isPublic ? null : (int?)userId;
                 lvs.ListId = viewSettings.listId;
                 lvs.Name = viewSettings.name;
                 lvs.ViewData = JsonConvert.SerializeObject(viewSettings, new JsonSerializerSettings() { ContractResolver = new IgnoreThisTypePropertyFilterContractResolver<ViewSettings>() });
@@ -222,21 +223,46 @@ namespace McvAngularTest2.Controllers
 
                 return Content(JsonConvert.SerializeObject(viewSettings), "application/json");
             }
-
-
         }
+
+        public ActionResult RemoveViewById(int id)
+        {
+            using (AngularPatternsEntities context = new AngularPatternsEntities())
+            {
+                ListViewSettings lvs = context.ListViewSettings.FirstOrDefault(x => x.Id == id);
+                if (lvs == null) throw new Exception("The view doesn't exist");
+
+                if (lvs.IsPublic && !isUserViewAdministrator)
+                {
+                    throw new Exception("The user doesn't have right to delete a public view");
+                }
+
+                if (lvs.UserId.HasValue && lvs.UserId != userId)
+                {
+                    throw new Exception("Only the administrator can remove other users' views.");
+                }
+
+                context.ListViewSettings.Remove(lvs);
+                // correlated entries from UserActiveView get removed automatically
+
+                context.SaveChanges();
+            }
+
+            return Json(true);
+        }
+
 
         ViewSettings CreateFromListViewSetting(ListViewSettings lvs)
-            {
-                ViewSettings vs = JsonConvert.DeserializeObject<ViewSettings>(lvs.ViewData);
-                vs.name = lvs.Name;
-                vs.id = lvs.Id;
-                vs.isDefault = lvs.IsDefault;
-                vs.isPublic = lvs.IsPublic;
-                vs.isTemporary = lvs.IsTemporary;
-                vs.listId = lvs.ListId;
+        {
+            ViewSettings vs = JsonConvert.DeserializeObject<ViewSettings>(lvs.ViewData);
+            vs.name = lvs.Name;
+            vs.id = lvs.Id;
+            vs.isDefault = lvs.IsDefault;
+            vs.isPublic = lvs.IsPublic;
+            vs.isTemporary = lvs.IsTemporary;
+            vs.listId = lvs.ListId;
 
-                return vs;
-            }
+            return vs;
         }
     }
+}

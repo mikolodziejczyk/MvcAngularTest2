@@ -24,6 +24,8 @@ import { GrowlModule } from 'primeng/growl';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { DialogModule } from 'primeng/dialog';
 import { SaveViewDialogComponent } from './save-view-dialog/save-view-dialog.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -49,9 +51,10 @@ import { SaveViewDialogComponent } from './save-view-dialog/save-view-dialog.com
     InputTextModule,
     ToolbarModule,
     GrowlModule,
-    DialogModule
+    DialogModule,
+    ConfirmDialogModule
   ],
-  providers: [ConnectionListService, ViewService, MessageService],
+  providers: [ConnectionListService, ViewService, MessageService, ConfirmationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

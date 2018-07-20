@@ -19,7 +19,7 @@
   <p-toolbar>
 
     <div class="ui-toolbar-group-left">
-      <p-toggleButton onIcon="fa fa-filter" onLabel="" offLabel="" offIcon="fa fa-filter" [(ngModel)]="filtersVisible"></p-toggleButton>
+      <p-toggleButton [onIcon]="'fa fa-filter'" onLabel="" offLabel="" offIcon="fa fa-filter" [(ngModel)]="filtersVisible"></p-toggleButton>
       <button type="text" pButton icon="fa fa-columns" (click)="op.show($event)" class="ui-button-info" title="Wybierz kolumny"></button>
 
       <i class="fa fa-ellipsis-v" style="margin-left: 0.5em; margin-right: 0.5em;"></i>
@@ -101,3 +101,4 @@
 
 
 <app-save-view-dialog #saveViewDialog></app-save-view-dialog>
+<p-confirmDialog header="Potwierdzenie" icon="pi pi-exclamation-triangle" width="425"></p-confirmDialog>

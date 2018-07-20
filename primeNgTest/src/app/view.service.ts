@@ -27,8 +27,13 @@ export class ViewService {
     return this.http.get<ViewListEntry[]>(url).toPromise();
   }
 
-  GetViewById(id : number) : Promise<ViewSettings> {
+  getViewById(id : number) : Promise<ViewSettings> {
     let url = `/api/ViewManager/GetViewById/${id}`;
     return this.http.get<ViewSettings>(url).toPromise();
+  }
+
+  removeViewId(id : number) : Promise<boolean> {
+    let url = `/api/ViewManager/RemoveViewById/${id}`;
+    return this.http.post<boolean>(url, null).toPromise();
   }
 }

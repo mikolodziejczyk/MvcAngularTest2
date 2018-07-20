@@ -6,7 +6,7 @@ import { ConnectionVM } from '../connectionVM';
 import { Table } from 'primeng/table';
 import { ViewSettings } from '../viewSettings';
 import { ViewService } from '../view.service';
-import { Message } from 'primeng/components/common/api';
+import { Message, ConfirmationService } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { SaveViewDialogComponent } from '../save-view-dialog/save-view-dialog.component';
 import { ViewListEntry } from '../viewListEntry';
@@ -20,7 +20,8 @@ export class ConnectionIndexComponent implements OnInit {
 
   constructor(private connectionListService: ConnectionListService,
     private viewService: ViewService,
-    private messageService: MessageService) {
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService) {
 
     this.suspendLoadingData = true;
 
@@ -101,7 +102,7 @@ export class ConnectionIndexComponent implements OnInit {
 
 
   saveState = async () => {
-    let viewSettings : ViewSettings = this.createViewSettings("Widok tymczasowy", false, false, true, true);
+    let viewSettings: ViewSettings = this.createViewSettings("Widok tymczasowy", false, false, true, true);
 
     // we must clone the whole object as sort and filters are currently references and can change
     this.namedView = JSON.parse(JSON.stringify(viewSettings));
@@ -199,9 +200,9 @@ export class ConnectionIndexComponent implements OnInit {
     { separator: true },
     { label: 'Aktualizuj bieżący', icon: 'fa fa-save', command: this.updateNamedView },
     { separator: true },
-    { label: 'Usuń ten widok', icon: 'fa fa-minus-circle', command: () => { alert("Not implemented yet."); } },
+    { label: 'Usuń ten widok', icon: 'fa fa-minus-circle', command: () => { this.removeCurrentView(); } },
     { separator: true },
-    { label: 'Przywróć widok fabryczny', /*, icon: 'fa fa-minus-circle',*/ command: this.restoreBuildInView  }
+    { label: 'Przywróć widok fabryczny', /*, icon: 'fa fa-minus-circle',*/ command: this.restoreBuildInView }
   ];
 
   /**
@@ -243,7 +244,7 @@ export class ConnectionIndexComponent implements OnInit {
 
   async loadNamedView(id: number) {
     try {
-      let viewSettings = await this.viewService.GetViewById(id);
+      let viewSettings = await this.viewService.getViewById(id);
       this.applyViewSettings(viewSettings);
     }
     catch (e) {
@@ -323,12 +324,15 @@ export class ConnectionIndexComponent implements OnInit {
     this.dataTable.multiSortMeta = viewSettings.sort; // || [{ "field": "name", "order": 1 }];
 
 
-    let columns: HTMLElement[] = <HTMLElement[]>Array.from(document.querySelectorAll("#dataTable table thead tr:first-child th"));
-    let relativeWidths: number[] = viewSettings.columnRelativeWidths;
-    let arrayWidth: number = (<HTMLElement>document.querySelector("#dataTable table")).offsetWidth;
-
     // once bindings are updated, restore column widths
     window.setTimeout(() => {
+
+      this.isAutoLayout = !viewSettings.columnRelativeWidths;
+
+      let columns: HTMLElement[] = <HTMLElement[]>Array.from(document.querySelectorAll("#dataTable table thead tr:first-child th"));
+      let relativeWidths: number[] = viewSettings.columnRelativeWidths;
+      let arrayWidth: number = (<HTMLElement>document.querySelector("#dataTable table")).offsetWidth;
+
       for (let i = 0; i < columns.length; i++) {
 
         if (relativeWidths) {
@@ -343,7 +347,7 @@ export class ConnectionIndexComponent implements OnInit {
         }
       }
 
-      this.isAutoLayout = !relativeWidths;
+
     }, 0);
 
   }
@@ -354,6 +358,7 @@ export class ConnectionIndexComponent implements OnInit {
   getBuildInView(): ViewSettings {
 
     let viewSettings = <ViewSettings>{};
+    viewSettings.id = -1;
     viewSettings.name = `Widok standardowy`;
     viewSettings.listId = this.listId;
     viewSettings.isPublic = false;
@@ -369,5 +374,51 @@ export class ConnectionIndexComponent implements OnInit {
 
     return viewSettings;
   }
+
+
+  async removeCurrentView() {
+
+    let name = this.namedView.name;
+
+    if (this.namedView.isTemporary || this.namedView.id === -1) {
+      alert("Nie można usunąć tego widoku");
+      return;
+    }
+
+    let confirm = await this.confirmRemoveView();
+
+    if (!confirm) {
+      return;
+    }
+
+    try {
+      await this.viewService.removeViewId(this.namedView.id);
+      this.messageService.add({ severity: 'info', summary: 'Widok usunięty', detail: `Widok ${name} został usunięty.` });
+      this.refreshNamedViewList();
+      this.loadState();
+    }
+    catch (e) {
+      this.messageService.add({ severity: 'error', summary: 'Nieudane', detail: "Nie udało się usunąć tego widoku." });
+    }
+  }
+
+  confirmRemoveView(): Promise<boolean> {
+    let r = new Promise<boolean>((resolve, reject) => {
+      this.confirmationService.confirm({
+        message: `Czy na pewno chcesz usunąć widok ${this.namedView.name}?`,
+        header: "Usuwanie widoku",
+        acceptLabel: "Tak",
+        rejectLabel: "Nie",
+        accept: () => {
+          resolve(true);
+        },
+        reject: () => {
+          resolve(false);
+        }
+      });
+    });
+    return r;
+  }
+
 
 }
