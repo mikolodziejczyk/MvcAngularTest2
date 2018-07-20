@@ -51,7 +51,7 @@ export class ConnectionIndexComponent implements OnInit {
   connections: ConnectionVM[];
   loading: boolean = true;
   visible: boolean = true;
-  suspendLoadingData: boolean = true;
+  suspendLoadingData: boolean = false;
 
 
   filtersVisible: boolean = false;
@@ -63,8 +63,6 @@ export class ConnectionIndexComponent implements OnInit {
     { label: 'Wspólne (publiczne)', icon: 'fa fa-users', items: this.savedPublicViews },
     { label: 'Moje (prywatne)', icon: 'fa fa-user', items: this.savedPrivateViews },
   ];
-
-  
 
 
   @ViewChild("dt") dataTable: Table;
@@ -147,81 +145,19 @@ export class ConnectionIndexComponent implements OnInit {
   }
 
   loadState = async () => {
-    console.log(`Loading state...`);
-
-    // we must create a clone of the saved object, otherwise the current changes will be reflected in it (the table component doesn't recreate the filters and multiSortMeta but rather alters them)
-    // let view = <ViewSettings>JSON.parse(JSON.stringify(this.namedView));
     let view = await this.viewService.getCurrent(this.listId);
 
-    if (!view) {
-      this.suspendLoadingData = false;
-      this.dataTable.reset();
+    this.applyViewSettings(view);
+
+    if (this.namedView.isTemporary) {
+      this.messageService.add({ severity: 'info', summary: 'Widok wczytany', detail: "Ostatnio zapisany tymczasowy widok został przywrócony" });
     }
 
-    this.namedView = JSON.parse(JSON.stringify(view));
+  }
 
-    console.log(`Restoring state to: ${JSON.stringify(view)}`);
-
-    // restore visible columns and their order
-    this.selectedColumns = [];
-    let savedCols: string[] = view.columns;
-    savedCols.map(x => this.cols.find(y => y.field === x)).forEach(x => this.selectedColumns.push(x));
-
-    if (view.filters) {
-      this.dataTable.filters = view.filters;
-      this.filtersVisible = true;
-    } else {
-      this.dataTable.filters = {};
-      this.filtersVisible = false;
-    }
-
-
-
-    // reapply filter controls values (note: this doesn't apply filters but only shows the current filtering expressions)
-    this.resetFilterControls();
-    for (let col in view.filters) {
-      this.filterControls[col] = view.filters[col].value;
-    }
-
-    // we apply filters manually if they aren't applied by sort
-    if (!this.dataTable.multiSortMeta) {
-      for (let key in view.filters) {
-        let value = view.filters[key];
-        this.dataTable.filter(value.value, key, value.matchMode);
-      }
-    }
-
-
-
-    // (suspended) we apply default sort if none is specified
-    this.dataTable.multiSortMeta = view.sort; // || [{ "field": "name", "order": 1 }];
-
-    // at this point we can resume loading data
-    this.suspendLoadingData = false;
-
-    let columns: HTMLElement[] = <HTMLElement[]>Array.from(document.querySelectorAll("#dataTable table thead tr:first-child th"));
-    let relativeWidths: number[] = view.columnRelativeWidths;
-    let arrayWidth: number = (<HTMLElement>document.querySelector("#dataTable table")).offsetWidth;
-
-
-
-    // once bindings are updated, restore column widths
-    window.setTimeout(() => {
-      for (let i = 0; i < columns.length; i++) {
-
-        let absoluteWidth = relativeWidths[i] * arrayWidth / 100;
-        let widthString = `${absoluteWidth}px`;
-        columns[i].style.width = widthString;
-      }
-    }, 0);
-
-    let message = "";
-
-    if (view.isTemporary) {
-      message = "Ostatnio zapisany tymczasowy widok został przywrócony";
-    }
-
-    this.messageService.add({ severity: 'info', summary: 'Widok wczytany', detail: message });
+  restoreBuildInView = () => {
+    this.applyViewSettings(null);
+    this.messageService.add({ severity: 'info', summary: 'Widok wczytany', detail: "Przywrócono fabryczne ustawienia widoku." });
   }
 
   isAutoLayout: boolean = false;
@@ -239,25 +175,25 @@ export class ConnectionIndexComponent implements OnInit {
   }
 
 
-   saveNewNamedViewOk = async () => {
+  saveNewNamedViewOk = async () => {
     // apply to the current view
     this.namedView.name = this.saveViewDialog.viewName;
     this.namedView.isPublic = this.saveViewDialog.isViewPublic;
-    this.namedView.isDefault =  this.saveViewDialog.isViewDefault;
+    this.namedView.isDefault = this.saveViewDialog.isViewDefault;
 
-    let viewSettings = this.createViewSettings(this.saveViewDialog.viewName, 
+    let viewSettings = this.createViewSettings(this.saveViewDialog.viewName,
       this.saveViewDialog.isViewPublic, this.saveViewDialog.isViewDefault, false, this.saveViewDialog.saveColumnWidths);
 
-      try {
+    try {
       let returnedView = await this.viewService.saveNewNamedView(viewSettings);
       this.namedView = returnedView;
       this.messageService.add({ severity: 'info', summary: 'Widok zapisany', detail: `Bieżące ustawienia widoku zostały zapamiętane jako widok ${this.namedView.name}.` });
-      }
-      catch (e) {
-        this.messageService.add({ severity: 'error', summary: 'Nieudane', detail: `Nie udało się zapisać bieżącego widoku.` });
-      }
+    }
+    catch (e) {
+      this.messageService.add({ severity: 'error', summary: 'Nieudane', detail: `Nie udało się zapisać bieżącego widoku.` });
+    }
 
-      this.refreshNamedViewList();
+    this.refreshNamedViewList();
 
   }
 
@@ -296,7 +232,9 @@ export class ConnectionIndexComponent implements OnInit {
     { separator: true },
     { label: 'Aktualizuj bieżący', icon: 'fa fa-save', command: this.updateNamedView },
     { separator: true },
-    { label: 'Usuń ten widok', icon: 'fa fa-minus-circle' }
+    { label: 'Usuń ten widok', icon: 'fa fa-minus-circle', command: () => { alert("Not implemented yet."); } },
+    { separator: true },
+    { label: 'Przywróć widok fabryczny', /*, icon: 'fa fa-minus-circle',*/ command: this.restoreBuildInView  }
   ];
 
   /**
@@ -339,12 +277,11 @@ export class ConnectionIndexComponent implements OnInit {
   async loadNamedView(id: number) {
     try {
       let viewSettings = await this.viewService.GetViewById(id);
-      alert(`Not implemented but the view is retrieved: ${JSON.stringify(viewSettings)}`);
-      // TODO: create a loadView() method that applies the specied viewSettings
+      this.applyViewSettings(viewSettings);
     }
-    catch(e) {
-      alert("Not implemented but failed");
-      // TODO: Replace this with a message
+    catch (e) {
+      this.messageService.add({ severity: 'error', summary: 'Nieudane', detail: `Nie udało się wczytać wybranego widoku.` });
+      this.refreshNamedViewList();
     }
   }
 
@@ -353,22 +290,115 @@ export class ConnectionIndexComponent implements OnInit {
       this.loadNamedView(+event.item.id)
     };
 
-    let vle : ViewListEntry[] = await this.viewService.getViewList(this.listId);
+    let vle: ViewListEntry[] = await this.viewService.getViewList(this.listId);
 
-    vle.sort( (a, b) => a.name.toLocaleUpperCase().localeCompare(b.name.toLocaleUpperCase()));
+    vle.sort((a, b) => a.name.toLocaleUpperCase().localeCompare(b.name.toLocaleUpperCase()));
 
     while (this.savedPrivateViews.pop());
     while (this.savedPublicViews.pop());
 
-    vle.filter(x=>!x.isPublic).forEach(x => {
-      let mi : MenuItem = { label : x.name, id : x.id.toString(), command: menuCallback};
+    vle.filter(x => !x.isPublic).forEach(x => {
+      let mi: MenuItem = { label: x.name, id: x.id.toString(), command: menuCallback };
       this.savedPrivateViews.push(mi);
     });
 
-    vle.filter(x=>x.isPublic).forEach(x => {
-      let mi : MenuItem = { label : x.name, id : x.id.toString(), command: menuCallback};
+    vle.filter(x => x.isPublic).forEach(x => {
+      let mi: MenuItem = { label: x.name, id: x.id.toString(), command: menuCallback };
       this.savedPublicViews.push(mi);
     });
 
   }
+
+  /**
+   * Applies the specified view settings
+   * @param viewSettings
+   */
+  applyViewSettings(viewSettings: ViewSettings) {
+
+    if (!viewSettings) {
+      viewSettings = this.getBuildInView();
+      this.dataTable.reset();
+    }
+
+    this.namedView = viewSettings;
+
+
+    // restore visible columns and their order
+    this.selectedColumns = [];
+    let savedCols: string[] = viewSettings.columns;
+    savedCols.map(x => this.cols.find(y => y.field === x)).forEach(x => this.selectedColumns.push(x));
+
+    if (viewSettings.filters) {
+      this.dataTable.filters = viewSettings.filters;
+      this.filtersVisible = true;
+    } else {
+      this.dataTable.filters = {};
+      this.filtersVisible = false;
+    }
+
+    // reapply filter controls values (note: this doesn't apply filters but only shows the current filtering expressions)
+    this.resetFilterControls();
+    for (let col in viewSettings.filters) {
+      this.filterControls[col] = viewSettings.filters[col].value;
+    }
+
+    // we apply filters manually if they aren't applied by sort
+    if (!this.dataTable.multiSortMeta) {
+      for (let key in viewSettings.filters) {
+        let value = viewSettings.filters[key];
+        this.dataTable.filter(value.value, key, value.matchMode);
+      }
+    }
+
+
+
+    // (suspended) we apply default sort if none is specified
+    this.dataTable.multiSortMeta = viewSettings.sort; // || [{ "field": "name", "order": 1 }];
+
+
+    let columns: HTMLElement[] = <HTMLElement[]>Array.from(document.querySelectorAll("#dataTable table thead tr:first-child th"));
+    let relativeWidths: number[] = viewSettings.columnRelativeWidths;
+    let arrayWidth: number = (<HTMLElement>document.querySelector("#dataTable table")).offsetWidth;
+
+    // once bindings are updated, restore column widths
+    window.setTimeout(() => {
+      for (let i = 0; i < columns.length; i++) {
+
+        if (relativeWidths) {
+          let absoluteWidth = relativeWidths[i] * arrayWidth / 100;
+          let widthString = `${absoluteWidth}px`;
+          columns[i].style.width = widthString;
+        }
+        else {
+          if (columns[i].style.width) {
+            columns[i].style.removeProperty("width");
+          }
+        }
+      }
+    }, 0);
+
+  }
+
+  /**
+   * Returns a build-in default view, used when there's no server-side stored view
+   */
+  getBuildInView(): ViewSettings {
+
+    let viewSettings = <ViewSettings>{};
+    viewSettings.name = `Widok standardowy`;
+    viewSettings.listId = this.listId;
+    viewSettings.isPublic = false;
+    viewSettings.isTemporary = false;
+    viewSettings.isDefault = false;
+
+    // we use all columns here, can be narrowed
+    viewSettings.columns = this.cols.map(x => x.field);
+
+    viewSettings.columnRelativeWidths = null;
+    viewSettings.sort = [];
+    viewSettings.filters = null;
+
+    return viewSettings;
+  }
+
 }
