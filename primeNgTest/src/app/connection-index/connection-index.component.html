@@ -24,8 +24,8 @@
 
       <i class="fa fa-ellipsis-v" style="margin-left: 0.5em; margin-right: 0.5em;"></i>
 
-      <button pButton type="button" label="Zachowaj" (click)="saveState();"></button>
-      <button pButton type="button" label="Przywróć" (click)="loadState();"></button>
+      <button pButton type="button" label="Zachowaj" (click)="saveCurrentAsTemporaryView();"></button>
+      <button pButton type="button" label="Przywróć" (click)="restoreRecentView(true);"></button>
 
       <i class="fa fa-ellipsis-v" style="margin-left: 0.5em; margin-right: 0.5em;"></i>
 

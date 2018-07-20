@@ -39,7 +39,7 @@ export class ConnectionIndexComponent implements OnInit {
 
   ngOnInit() {
 
-    window.setTimeout(() => this.loadState(), 0);
+    window.setTimeout(() => this.restoreRecentView(), 0);
     this.refreshNamedViewList();
   }
 
@@ -101,7 +101,7 @@ export class ConnectionIndexComponent implements OnInit {
   namedView: ViewSettings;
 
 
-  saveState = async () => {
+  saveCurrentAsTemporaryView = async () => {
     let viewSettings: ViewSettings = this.createViewSettings("Widok tymczasowy", false, false, true, true);
 
     // we must clone the whole object as sort and filters are currently references and can change
@@ -112,13 +112,18 @@ export class ConnectionIndexComponent implements OnInit {
     this.messageService.add({ severity: 'info', summary: 'Widok zapisany', detail: "Bieżące ustawienia widoku zostały zapamiętane." });
   }
 
-  loadState = async () => {
+  restoreRecentView = async (notifyAlsoForNamed: boolean = false) => {
     let view = await this.viewService.getCurrent(this.listId);
 
     this.applyViewSettings(view);
 
     if (this.namedView.isTemporary) {
-      this.messageService.add({ severity: 'info', summary: 'Widok wczytany', detail: "Ostatnio zapisany tymczasowy widok został przywrócony" });
+      this.messageService.add({ severity: 'info', summary: 'Widok wczytany', detail: "Ostatnio zapisany tymczasowy widok został przywrócony." });
+    }
+    else {
+      if (notifyAlsoForNamed) {
+        this.messageService.add({ severity: 'info', summary: 'Widok wczytany', detail: `Widok ${view.name} został przywrócony.` });
+      }
     }
 
   }
@@ -395,7 +400,7 @@ export class ConnectionIndexComponent implements OnInit {
       await this.viewService.removeViewId(this.namedView.id);
       this.messageService.add({ severity: 'info', summary: 'Widok usunięty', detail: `Widok ${name} został usunięty.` });
       this.refreshNamedViewList();
-      this.loadState();
+      this.restoreRecentView();
     }
     catch (e) {
       this.messageService.add({ severity: 'error', summary: 'Nieudane', detail: "Nie udało się usunąć tego widoku." });
