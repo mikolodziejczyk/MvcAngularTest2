@@ -36,4 +36,9 @@ export class ViewService {
     let url = `/api/ViewManager/RemoveViewById/${id}`;
     return this.http.post<boolean>(url, null).toPromise();
   }
+
+  updateNamedView(req : ViewSettings) : Promise<ViewSettings> {
+    return this.http.post<ViewSettings>("/api/ViewManager/UpdateNamedView", req).toPromise();
+  }
+  
 }

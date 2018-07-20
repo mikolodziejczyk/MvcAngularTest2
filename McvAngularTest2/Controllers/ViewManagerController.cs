@@ -116,7 +116,7 @@ namespace McvAngularTest2.Controllers
                         existingDefault = context.ListViewSettings.FirstOrDefault(x => x.IsDefault && x.ListId == viewSettings.listId && x.IsPublic);
                     }
 
-                    existingDefault.IsDefault = false;
+                    if (existingDefault!=null) existingDefault.IsDefault = false;
                 }
 
                 // remove any temporary view for this user
@@ -249,6 +249,82 @@ namespace McvAngularTest2.Controllers
             }
 
             return Json(true);
+        }
+
+
+        public ActionResult UpdateNamedView(ViewSettings viewSettings)
+        {
+            if (viewSettings.isTemporary) throw new InvalidOperationException("A view cannot be temporary for this method.");
+
+            using (AngularPatternsEntities context = new AngularPatternsEntities())
+            {
+                ListViewSettings lvs = context.ListViewSettings.FirstOrDefault(x => x.Id == viewSettings.id);
+
+                // ensure that the current user can alter this view
+
+                if (lvs.IsPublic && !isUserViewAdministrator)
+                {
+                    throw new Exception("The user doesn't have right to delete a public view");
+                }
+
+                if (lvs.UserId.HasValue && lvs.UserId != userId)
+                {
+                    throw new Exception("Only the administrator can remove other users' views.");
+                }
+
+                if (lvs.IsPublic != viewSettings.isPublic)
+                {
+                    throw new Exception("You cannot change isPublic property.");
+                }
+
+                // if the view is to become default, remove the default flag from an existing view that isn't this view
+                if (viewSettings.isDefault)
+                {
+                    ListViewSettings existingDefault = null;
+
+                    if (viewSettings.isPublic)
+                    {
+                        existingDefault = context.ListViewSettings.FirstOrDefault(x => x.UserId == userId && x.ListId == viewSettings.listId && x.IsDefault && !x.IsPublic && x.Id != viewSettings.id);
+                    }
+                    else
+                    {
+                        existingDefault = context.ListViewSettings.FirstOrDefault(x => x.IsDefault && x.ListId == viewSettings.listId && x.IsPublic && x.Id != viewSettings.id);
+                    }
+
+                    if (existingDefault != null) existingDefault.IsDefault = false;
+                }
+
+                // check for a name collision - for any but this view
+
+                bool doesNameExist = false;
+
+                if (viewSettings.isPublic)
+                {
+                    doesNameExist = context.ListViewSettings.Any(x => x.UserId == userId && !x.IsPublic && x.Name == viewSettings.name && x.Id != viewSettings.id);
+                }
+                else
+                {
+                    doesNameExist = context.ListViewSettings.Any(x => x.IsPublic && x.Name == viewSettings.name && x.Id != viewSettings.id);
+                }
+
+                // if there's a name collision, rename the view
+
+                if (doesNameExist) viewSettings.name += String.Format("_{0:yyyy-MM-dd HH:mm}", DateTime.Now);
+
+                // add a new view
+
+                lvs.IsDefault = viewSettings.isDefault;
+                lvs.Name = viewSettings.name;
+                lvs.ViewData = JsonConvert.SerializeObject(viewSettings, new JsonSerializerSettings() { ContractResolver = new IgnoreThisTypePropertyFilterContractResolver<ViewSettings>() });
+
+                // we don't alter active view for the current user as it should remain the same
+
+                context.SaveChanges();
+
+                viewSettings = CreateFromListViewSetting(lvs);
+            }
+
+            return Content(JsonConvert.SerializeObject(viewSettings), "application/json");
         }
 
 

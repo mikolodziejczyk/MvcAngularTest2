@@ -1,8 +1,8 @@
-<p-dialog header="Zapisywanie widoku" [(visible)]="visible" modal=true closeable=false>
+<p-dialog header="{{ isNew ? 'Zapisywanie widoku' : 'Aktualizowanie widoku' }}" [(visible)]="visible" modal=true closeable=false>
   <div *ngIf="isNew" class="info-section">
     Bieżący widok zostanie zapisany jako nowy widok nazwany.
   </div>
-  <div *ngIf="!isNew">
+  <div *ngIf="!isNew" class="info-section">
     Widok nazwany {{ originalViewName }} zostanie zapisany z nowymi ustawieniami.
   </div>
 
@@ -21,7 +21,7 @@
       </div>
 
       <div>
-        <p-checkbox name="isPublic" [(ngModel)]="isViewPublic" binary="true" label="Dostępny dla wszystkich użytkowników" title="Jeśli nie zaznaczysz, widok będzie dostępny tylko dla ciebie, jeśli zaznaczysz - będzie to widok publiczny, dla wszystkich użytkowników."></p-checkbox>
+        <p-checkbox name="isPublic" [disabled]="!isNew" [(ngModel)]="isViewPublic" binary="true" label="Dostępny dla wszystkich użytkowników" title="Jeśli nie zaznaczysz, widok będzie dostępny tylko dla ciebie, jeśli zaznaczysz - będzie to widok publiczny, dla wszystkich użytkowników."></p-checkbox>
       </div>
       <div>
         <p-checkbox name="isDefault" [(ngModel)]="isViewDefault" binary="true" label="Zapisz jako widok domyślny" title="Jeśli zaznaczysz, widok będzie widokiem domyślnym (dla ciebie lub wszystkich użytkowników)."></p-checkbox>

@@ -189,11 +189,32 @@ export class ConnectionIndexComponent implements OnInit {
     this.saveViewDialog.show();
   }
 
-  updateNamedViewOk = () => {
-    alert("Update named view here!");
+  updateNamedViewOk = async () => {
+    // apply to the current view
+    this.currentView.name = this.saveViewDialog.viewName;
+    this.currentView.isDefault = this.saveViewDialog.isViewDefault;
+
+    let viewSettings = this.createViewSettings(this.saveViewDialog.viewName,
+      this.saveViewDialog.isViewPublic, this.saveViewDialog.isViewDefault, false, this.saveViewDialog.saveColumnWidths, this.currentView.id);
+
+    try {
+      let returnedView = await this.viewService.updateNamedView(viewSettings);
+      this.currentView = returnedView;
+      this.messageService.add({ severity: 'info', summary: 'Widok zapisany', detail: `Bieżące ustawienia widoku zostały zaktualizowane.` });
+    }
+    catch (e) {
+      this.messageService.add({ severity: 'error', summary: 'Nieudane', detail: `Nie udało się zaktualizować bieżącego widoku.` });
+    }
+
+    this.refreshNamedViewList();
   }
 
   updateNamedView = () => {
+    if (!this.isCurrentViewNamedView) {
+      return;
+    }
+
+
     if (this.currentView) {
       this.saveViewDialog.isNew = false;
       this.saveViewDialog.viewName = this.currentView.name;
@@ -229,7 +250,7 @@ export class ConnectionIndexComponent implements OnInit {
    * @param isTemporary 
    * @param saveColumnWidths 
    */
-  createViewSettings(name: string, isPublic: boolean, isDefault: boolean, isTemporary: boolean, saveColumnWidths: boolean): ViewSettings {
+  createViewSettings(name: string, isPublic: boolean, isDefault: boolean, isTemporary: boolean, saveColumnWidths: boolean, id?: number): ViewSettings {
     // saving selected columns and their order
     let currentCols = this.selectedColumns.map(x => x.field);
 
@@ -239,6 +260,7 @@ export class ConnectionIndexComponent implements OnInit {
     let relativeWidths: number[] = absoluteWidths.map(x => (x * 100 / arrayWidth).toFixed(3)).map(x => Number(x));
 
     let viewSettings = <ViewSettings>{};
+    viewSettings.id = id;
     viewSettings.name = name;
     viewSettings.listId = this.listId;
     viewSettings.isPublic = isPublic;

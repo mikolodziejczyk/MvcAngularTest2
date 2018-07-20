@@ -19,7 +19,6 @@ export class SaveViewDialogComponent implements OnInit {
   @Input() isViewPublic: boolean = false;
   @Input() isViewDefault: boolean = false;
   @Input() saveColumnWidths: boolean = false;
-  
 
   @Input() ok : () => void = () => {};
   @Input() cancel : () => void = () => {};
