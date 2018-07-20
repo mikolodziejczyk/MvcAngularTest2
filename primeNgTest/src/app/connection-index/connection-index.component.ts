@@ -54,6 +54,11 @@ export class ConnectionIndexComponent implements OnInit {
   visible: boolean = true;
   suspendLoadingData: boolean = false;
 
+  currentView: ViewSettings;
+  get isCurrentViewNamedView(): boolean {
+    // a named view isn't a temporary view and it has its id
+    return !this.currentView.isTemporary && !(this.currentView.id === -1);
+  }
 
   filtersVisible: boolean = false;
 
@@ -98,16 +103,16 @@ export class ConnectionIndexComponent implements OnInit {
     console.log(`The current columns state: ${JSON.stringify(this.selectedColumns)}`);
   }
 
-  namedView: ViewSettings;
+
 
 
   saveCurrentAsTemporaryView = async () => {
     let viewSettings: ViewSettings = this.createViewSettings("Widok tymczasowy", false, false, true, true);
 
     // we must clone the whole object as sort and filters are currently references and can change
-    this.namedView = JSON.parse(JSON.stringify(viewSettings));
+    this.currentView = JSON.parse(JSON.stringify(viewSettings));
 
-    await this.viewService.setTemporaryView(this.namedView);
+    await this.viewService.setTemporaryView(this.currentView);
 
     this.messageService.add({ severity: 'info', summary: 'Widok zapisany', detail: "Bieżące ustawienia widoku zostały zapamiętane." });
   }
@@ -117,7 +122,7 @@ export class ConnectionIndexComponent implements OnInit {
 
     this.applyViewSettings(view);
 
-    if (this.namedView.isTemporary) {
+    if (this.currentView.isTemporary) {
       this.messageService.add({ severity: 'info', summary: 'Widok wczytany', detail: "Ostatnio zapisany tymczasowy widok został przywrócony." });
     }
     else {
@@ -150,17 +155,18 @@ export class ConnectionIndexComponent implements OnInit {
 
   saveNewNamedViewOk = async () => {
     // apply to the current view
-    this.namedView.name = this.saveViewDialog.viewName;
-    this.namedView.isPublic = this.saveViewDialog.isViewPublic;
-    this.namedView.isDefault = this.saveViewDialog.isViewDefault;
+    this.currentView.name = this.saveViewDialog.viewName;
+    this.currentView.isPublic = this.saveViewDialog.isViewPublic;
+    this.currentView.isDefault = this.saveViewDialog.isViewDefault;
 
     let viewSettings = this.createViewSettings(this.saveViewDialog.viewName,
       this.saveViewDialog.isViewPublic, this.saveViewDialog.isViewDefault, false, this.saveViewDialog.saveColumnWidths);
 
     try {
       let returnedView = await this.viewService.saveNewNamedView(viewSettings);
-      this.namedView = returnedView;
-      this.messageService.add({ severity: 'info', summary: 'Widok zapisany', detail: `Bieżące ustawienia widoku zostały zapamiętane jako widok ${this.namedView.name}.` });
+      this.currentView = returnedView;
+      this.messageService.add({ severity: 'info', summary: 'Widok zapisany', detail: `Bieżące ustawienia widoku zostały zapamiętane jako widok ${this.currentView.name}.` });
+      this.refreshNamedViewsSettingsDisabledState();
     }
     catch (e) {
       this.messageService.add({ severity: 'error', summary: 'Nieudane', detail: `Nie udało się zapisać bieżącego widoku.` });
@@ -171,12 +177,12 @@ export class ConnectionIndexComponent implements OnInit {
   }
 
   saveNewNamedView = () => {
-    if (this.namedView) {
+    if (this.currentView) {
       this.saveViewDialog.isNew = true;
-      this.saveViewDialog.viewName = this.namedView.name;
-      this.saveViewDialog.isViewPublic = this.namedView.isPublic;
-      this.saveViewDialog.isViewDefault = this.namedView.isDefault;
-      this.saveViewDialog.saveColumnWidths = !!this.namedView.columnRelativeWidths;
+      this.saveViewDialog.viewName = this.currentView.name;
+      this.saveViewDialog.isViewPublic = this.currentView.isPublic;
+      this.saveViewDialog.isViewDefault = this.currentView.isDefault;
+      this.saveViewDialog.saveColumnWidths = !!this.currentView.columnRelativeWidths;
       this.saveViewDialog.ok = this.saveNewNamedViewOk;
     }
 
@@ -188,27 +194,32 @@ export class ConnectionIndexComponent implements OnInit {
   }
 
   updateNamedView = () => {
-    if (this.namedView) {
+    if (this.currentView) {
       this.saveViewDialog.isNew = false;
-      this.saveViewDialog.viewName = this.namedView.name;
-      this.saveViewDialog.isViewPublic = this.namedView.isPublic;
-      this.saveViewDialog.isViewDefault = this.namedView.isDefault;
-      this.saveViewDialog.saveColumnWidths = !!this.namedView.columnRelativeWidths;
+      this.saveViewDialog.viewName = this.currentView.name;
+      this.saveViewDialog.isViewPublic = this.currentView.isPublic;
+      this.saveViewDialog.isViewDefault = this.currentView.isDefault;
+      this.saveViewDialog.saveColumnWidths = !!this.currentView.columnRelativeWidths;
       this.saveViewDialog.ok = this.updateNamedViewOk;
     }
 
     this.saveViewDialog.show();
   }
 
+  updateViewMenuItem = { label: 'Aktualizuj bieżący', icon: 'fa fa-save', disabled: false, command: () => { this.updateNamedView(); } };
+  removeViewMenuItem = { label: 'Usuń ten widok', icon: 'fa fa-minus-circle', disabled: false, command: () => { this.removeCurrentView(); } };
+
   manageViews: MenuItem[] = [
-    { label: 'Zapisz jako nowy', icon: 'fa fa-plus-circle', command: this.saveNewNamedView },
+    { label: 'Zapisz jako nowy', icon: 'fa fa-plus-circle', command: () => { this.saveNewNamedView(); } },
     { separator: true },
-    { label: 'Aktualizuj bieżący', icon: 'fa fa-save', command: this.updateNamedView },
+    this.updateViewMenuItem,
     { separator: true },
-    { label: 'Usuń ten widok', icon: 'fa fa-minus-circle', command: () => { this.removeCurrentView(); } },
+    this.removeViewMenuItem,
     { separator: true },
     { label: 'Przywróć widok fabryczny', /*, icon: 'fa fa-minus-circle',*/ command: this.restoreBuildInView }
   ];
+
+
 
   /**
    * Creates a ViewSettings instance based on the current view and the specified additional parameters.
@@ -293,8 +304,9 @@ export class ConnectionIndexComponent implements OnInit {
       this.dataTable.reset();
     }
 
-    this.namedView = viewSettings;
+    this.currentView = viewSettings;
 
+    this.refreshNamedViewsSettingsDisabledState();
 
     // restore visible columns and their order
     this.selectedColumns = [];
@@ -383,10 +395,9 @@ export class ConnectionIndexComponent implements OnInit {
 
   async removeCurrentView() {
 
-    let name = this.namedView.name;
+    let name = this.currentView.name;
 
-    if (this.namedView.isTemporary || this.namedView.id === -1) {
-      alert("Nie można usunąć tego widoku");
+    if (!this.isCurrentViewNamedView) {
       return;
     }
 
@@ -397,7 +408,7 @@ export class ConnectionIndexComponent implements OnInit {
     }
 
     try {
-      await this.viewService.removeViewId(this.namedView.id);
+      await this.viewService.removeViewId(this.currentView.id);
       this.messageService.add({ severity: 'info', summary: 'Widok usunięty', detail: `Widok ${name} został usunięty.` });
       this.refreshNamedViewList();
       this.restoreRecentView();
@@ -410,7 +421,7 @@ export class ConnectionIndexComponent implements OnInit {
   confirmRemoveView(): Promise<boolean> {
     let r = new Promise<boolean>((resolve, reject) => {
       this.confirmationService.confirm({
-        message: `Czy na pewno chcesz usunąć widok ${this.namedView.name}?`,
+        message: `Czy na pewno chcesz usunąć widok ${this.currentView.name}?`,
         header: "Usuwanie widoku",
         acceptLabel: "Tak",
         rejectLabel: "Nie",
@@ -423,6 +434,13 @@ export class ConnectionIndexComponent implements OnInit {
       });
     });
     return r;
+  }
+
+  /** Refreshes the disabled state of menu items */
+  refreshNamedViewsSettingsDisabledState() {
+    let isNamed = this.isCurrentViewNamedView;
+    this.updateViewMenuItem.disabled = !isNamed;
+    this.removeViewMenuItem.disabled = !isNamed;
   }
 
 
